@@ -106,8 +106,9 @@ function tipFor(pathname: string): Tip {
 }
 
 /**
- * The mascot + a little speech bubble pinned to the bottom of the sidebar.
- * The pose and the line glide over when the route changes.
+ * The mascot + a cartoon speech balloon pinned to the bottom of the sidebar.
+ * The white bubble sits above Booky's head with a little tail, and both the
+ * pose and the line glide over when the route changes.
  */
 export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
   const routePathname = usePathname();
@@ -115,14 +116,41 @@ export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
   const tip = tipFor(pathname);
 
   return (
-    <div className="flex items-end gap-2.5 px-1" aria-label="Booky says">
-      <div className="relative size-16 shrink-0" role="img" aria-label={tip.alt}>
+    <div
+      className="flex flex-col items-center gap-2 px-1"
+      aria-label="Booky says"
+    >
+      {/* Cartoon balloon — stays white in every theme, like a comic strip. */}
+      <div className="relative w-full rounded-2xl bg-white px-3.5 py-2.5 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.7)]">
+        <AnimatePresence initial={false} mode="wait">
+          <motion.p
+            key={pathname}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18 }}
+            className="text-xs leading-relaxed text-[#472a21]"
+          >
+            {tip.text}
+          </motion.p>
+        </AnimatePresence>
+        <span
+          className="absolute -bottom-[5px] left-1/2 size-2.5 -translate-x-1/2 rotate-45 bg-white"
+          aria-hidden="true"
+        />
+      </div>
+
+      <div
+        className="relative h-28 w-full"
+        role="img"
+        aria-label={tip.alt}
+      >
         <AnimatePresence initial={false} mode="popLayout">
           <motion.span
             key={pathname}
-            initial={{ opacity: 0, y: 8, scale: 0.94 }}
+            initial={{ opacity: 0, y: 10, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.94 }}
+            exit={{ opacity: 0, y: -10, scale: 0.94 }}
             transition={{ type: "spring", stiffness: 420, damping: 30 }}
             className="absolute inset-0"
           >
@@ -132,21 +160,6 @@ export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
               className="size-full object-contain object-bottom"
             />
           </motion.span>
-        </AnimatePresence>
-      </div>
-
-      <div className="relative min-w-0 flex-1 rounded-2xl rounded-bl-md bg-card px-3.5 py-2.5 shadow-shelf ring-1 ring-border">
-        <AnimatePresence initial={false} mode="wait">
-          <motion.p
-            key={pathname}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.18 }}
-            className="relative text-xs leading-relaxed text-foreground"
-          >
-            {tip.text}
-          </motion.p>
         </AnimatePresence>
       </div>
     </div>

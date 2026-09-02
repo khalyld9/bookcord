@@ -20,8 +20,7 @@ begin
       'CANCELLED'
     );
   end if;
-end;
-$$;
+end $$;
 
 create table if not exists public.reservations (
   id uuid primary key default gen_random_uuid(),
@@ -101,8 +100,7 @@ begin
 
   new.claimed_at := null;
   return new;
-end;
-$$;
+end $$;
 
 drop trigger if exists reservations_protect on public.reservations;
 

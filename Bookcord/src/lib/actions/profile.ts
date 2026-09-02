@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { AVATARS_BUCKET, ensureAvatarsBucket } from "@/lib/storage/avatars";
 
 export type ProfileState = {
   error?: string;
@@ -103,8 +104,10 @@ export async function updateProfile(
 
     try {
       const admin = createAdminClient();
+      await ensureAvatarsBucket(admin);
+
       const { error: uploadError } = await admin.storage
-        .from("avatars")
+        .from(AVATARS_BUCKET)
         .upload(path, await file.arrayBuffer(), {
           contentType: file.type,
           upsert: false,
@@ -117,7 +120,7 @@ export async function updateProfile(
       }
 
       const { data: publicUrl } = admin.storage
-        .from("avatars")
+        .from(AVATARS_BUCKET)
         .getPublicUrl(path);
       avatarUpdate = { avatar_url: publicUrl.publicUrl };
     } catch (uploadError) {

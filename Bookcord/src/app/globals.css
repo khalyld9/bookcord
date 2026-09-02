@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #fff5ee;
+  --foreground: #2a1512;
+  --card: #fffaf6;
+  --card-foreground: #2a1512;
+  --popover: #ffffff;
+  --popover-foreground: #2a1512;
+  --primary: #8b0000;
+  --primary-foreground: #fff5ee;
+  --secondary: #f7e6dc;
+  --secondary-foreground: #6d1712;
+  --muted: #f4e9e3;
+  --muted-foreground: #7d625c;
+  --accent: #f9eee7;
+  --accent-foreground: #7a120c;
+  --destructive: #b91c1c;
+  --destructive-foreground: #fff5ee;
+  --border: #ecd8ce;
+  --input: #e5cfc4;
+  --ring: #8b0000;
+  --radius: 0.75rem;
+
+  --sidebar: #fdefe7;
+  --sidebar-foreground: #3c211d;
+  --sidebar-primary: #8b0000;
+  --sidebar-primary-foreground: #fff5ee;
+  --sidebar-accent: #f7e0d6;
+  --sidebar-accent-foreground: #6d1712;
+  --sidebar-border: #ecd8ce;
+  --sidebar-ring: #8b0000;
+}
+
+.dark {
+  --background: #170d0b;
+  --foreground: #f8ece5;
+  --card: #211411;
+  --card-foreground: #f8ece5;
+  --popover: #241713;
+  --popover-foreground: #f8ece5;
+  --primary: #c9382d;
+  --primary-foreground: #fff5ee;
+  --secondary: #351e19;
+  --secondary-foreground: #f1c6b4;
+  --muted: #2d1d18;
+  --muted-foreground: #c9a89a;
+  --accent: #38201b;
+  --accent-foreground: #f3c4b4;
+  --destructive: #e0524a;
+  --destructive-foreground: #fff5ee;
+  --border: #41241e;
+  --input: #4a2a23;
+  --ring: #d75d4f;
+
+  --sidebar: #1d1210;
+  --sidebar-foreground: #f8ece5;
+  --sidebar-primary: #c9382d;
+  --sidebar-primary-foreground: #fff5ee;
+  --sidebar-accent: #3a211d;
+  --sidebar-accent-foreground: #f1c6b4;
+  --sidebar-border: #41241e;
+  --sidebar-ring: #d75d4f;
+}
+
+@theme inline {
+  /* Add these inside your existing @theme inline block in globals.css */
+--font-display: "Manrope", "Avenir Next", Avenir, "Helvetica Neue", sans-serif;
+--font-mono: "JetBrains Mono", ui-monospace, monospace;
+--color-ochre: var(--ochre);
+--color-ochre-deep: var(--ochre-deep);
+--color-sage: var(--sage);
+--color-paper: var(--paper);
+--color-cream: var(--cream);
+--color-espresso: var(--espresso);
+--color-espresso-foreground: var(--espresso-foreground);
+--color-espresso-muted: var(--espresso-muted);
+--shadow-shelf: 0 40px 90px -50px oklch(0.28 0.04 60 / 0.6);
+--shadow-cta: 0 14px 30px -12px oklch(0.62 0.19 38 / 0.55);
+
+/* Add these inside your existing :root block */
+--paper: oklch(0.976 0.014 57.6);
+--cream: oklch(1 0 0);
+--cream-deep: oklch(0.965 0.012 57);
+--ochre: oklch(0.66 0.122 65);
+--ochre-deep: oklch(0.56 0.11 62);
+--sage: oklch(0.56 0.06 140);
+--espresso: oklch(0.4 0.164 29.2);
+--espresso-foreground: oklch(0.976 0.014 57.6);
+--espresso-muted: oklch(0.82 0.02 60);
+--gradient-cta: linear-gradient(
+  100deg,
+  oklch(0.5 0.19 30),
+  oklch(0.45 0.18 29) 55%,
+  oklch(0.4 0.164 29)
+);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}

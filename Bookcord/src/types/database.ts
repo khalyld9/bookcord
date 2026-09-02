@@ -1,0 +1,331 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+export type RoleName = "ADMIN" | "USER";
+export type MovementType = "RESTOCK" | "ISSUE" | "RETURN" | "ADJUSTMENT";
+export type IssueStatus = "ISSUED" | "RETURNED" | "PARTIALLY_RETURNED";
+export type ReturnCondition = "GOOD" | "FAIR" | "DAMAGED" | "LOST";
+
+type Timestamp = string;
+
+type TableRow = T & Record;
+
+export type Database = {
+  public: {
+    Tables: {
+      profiles: {
+        Row: {
+          id: string;
+          auth_user_id: string;
+          full_name: string;
+          student_id: string | null;
+          email: string;
+          year_level_id: string | null;
+          strand_id: string | null;
+          role: RoleName;
+          status: "ACTIVE" | "DISABLED";
+          avatar_url: string | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          auth_user_id: string;
+          full_name: string;
+          student_id?: string | null;
+          email: string;
+          year_level_id?: string | null;
+          strand_id?: string | null;
+          role?: RoleName;
+          status?: "ACTIVE" | "DISABLED";
+          avatar_url?: string | null;
+          created_at?: Timestamp;
+          updated_at?: Timestamp;
+        };
+        Update: Partial>;
+        Relationships: [];
+      };
+      roles: {
+        Row: { id: string; name: RoleName; created_at: Timestamp };
+        Insert: { id?: string; name: RoleName; created_at?: Timestamp };
+        Update: Partial>;
+        Relationships: [];
+      };
+      books: {
+        Row: {
+          id: string;
+          title: string;
+          isbn: string | null;
+          author_id: string | null;
+          subject_id: string | null;
+          description: string | null;
+          cover_image_url: string | null;
+          semester_id: string | null;
+          strand_id: string | null;
+          year_level_id: string | null;
+          minimum_stock: number;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+          archived_at: Timestamp | null;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          isbn?: string | null;
+          author_id?: string | null;
+          subject_id?: string | null;
+          description?: string | null;
+          cover_image_url?: string | null;
+          semester_id?: string | null;
+          strand_id?: string | null;
+          year_level_id?: string | null;
+          minimum_stock?: number;
+          created_at?: Timestamp;
+          updated_at?: Timestamp;
+          archived_at?: Timestamp | null;
+        };
+        Update: Partial>;
+        Relationships: [];
+      };
+      authors: {
+        Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
+        Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
+        Update: Partial>;
+        Relationships: [];
+      };
+      subjects: {
+        Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
+        Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
+        Update: Partial>;
+        Relationships: [];
+      };
+      strands: {
+        Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
+        Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
+        Update: Partial>;
+        Relationships: [];
+      };
+      semesters: {
+        Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
+        Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
+        Update: Partial>;
+        Relationships: [];
+      };
+      year_levels: {
+        Row: { id: string; name: string; sort_order: number; created_at: Timestamp; archived_at: Timestamp | null };
+        Insert: { id?: string; name: string; sort_order?: number; created_at?: Timestamp; archived_at?: Timestamp | null };
+        Update: Partial>;
+        Relationships: [];
+      };
+      inventory: {
+        Row: {
+          id: string;
+          book_id: string;
+          total_stock: number;
+          available_stock: number;
+          issued_stock: number;
+          updated_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          book_id: string;
+          total_stock?: number;
+          available_stock?: number;
+          issued_stock?: number;
+          updated_at?: Timestamp;
+        };
+        Update: Partial>;
+        Relationships: [];
+      };
+      restocks: {
+        Row: {
+          id: string;
+          book_id: string;
+          quantity: number;
+          restock_date: Timestamp;
+          supplier: string | null;
+          reference_number: string | null;
+          cost_per_book: number | null;
+          total_cost: number | null;
+          notes: string | null;
+          added_by: string | null;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          book_id: string;
+          quantity: number;
+          restock_date?: Timestamp;
+          supplier?: string | null;
+          reference_number?: string | null;
+          cost_per_book?: number | null;
+          total_cost?: number | null;
+          notes?: string | null;
+          added_by?: string | null;
+          created_at?: Timestamp;
+        };
+        Update: Partial>;
+        Relationships: [];
+      };
+      stock_movements: {
+        Row: {
+          id: string;
+          book_id: string;
+          movement_type: MovementType;
+          quantity_change: number;
+          reference_id: string | null;
+          reference_table: string | null;
+          reason: string | null;
+          notes: string | null;
+          performed_by: string | null;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          book_id: string;
+          movement_type: MovementType;
+          quantity_change: number;
+          reference_id?: string | null;
+          reference_table?: string | null;
+          reason?: string | null;
+          notes?: string | null;
+          performed_by?: string | null;
+          created_at?: Timestamp;
+        };
+        Update: Partial>;
+        Relationships: [];
+      };
+      book_issues: {
+        Row: {
+          id: string;
+          book_id: string;
+          profile_id: string;
+          quantity: number;
+          returned_quantity: number;
+          date_issued: Timestamp;
+          expected_return_date: string | null;
+          notes: string | null;
+          status: IssueStatus;
+          issued_by: string | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          book_id: string;
+          profile_id: string;
+          quantity: number;
+          returned_quantity?: number;
+          date_issued?: Timestamp;
+          expected_return_date?: string | null;
+          notes?: string | null;
+          status?: IssueStatus;
+          issued_by?: string | null;
+          created_at?: Timestamp;
+          updated_at?: Timestamp;
+        };
+        Update: Partial>;
+        Relationships: [];
+      };
+      book_returns: {
+        Row: {
+          id: string;
+          issue_id: string;
+          book_id: string;
+          profile_id: string;
+          quantity: number;
+          date_returned: Timestamp;
+          condition: ReturnCondition;
+          notes: string | null;
+          processed_by: string | null;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          issue_id: string;
+          book_id: string;
+          profile_id: string;
+          quantity: number;
+          date_returned?: Timestamp;
+          condition?: ReturnCondition;
+          notes?: string | null;
+          processed_by?: string | null;
+          created_at?: Timestamp;
+        };
+        Update: Partial>;
+        Relationships: [];
+      };
+    };
+    Views: Record;
+    Functions: {
+      restock_book: {
+        Args: {
+          p_book_id: string;
+          p_quantity: number;
+          p_supplier?: string;
+          p_reference_number?: string;
+          p_cost_per_book?: number;
+          p_notes?: string;
+          p_restock_date?: string;
+        };
+        Returns: string;
+      };
+      issue_book: {
+        Args: {
+          p_book_id: string;
+          p_profile_id: string;
+          p_quantity: number;
+          p_expected_return_date?: string;
+          p_notes?: string;
+        };
+        Returns: string;
+      };
+      return_book: {
+        Args: {
+          p_issue_id: string;
+          p_quantity: number;
+          p_condition?: ReturnCondition;
+          p_notes?: string;
+        };
+        Returns: string;
+      };
+      adjust_inventory: {
+        Args: {
+          p_book_id: string;
+          p_quantity_change: number;
+          p_reason: string;
+          p_notes?: string;
+        };
+        Returns: string;
+      };
+    };
+    Enums: {
+      role_name: RoleName;
+      movement_type: MovementType;
+      issue_status: IssueStatus;
+      return_condition: ReturnCondition;
+      profile_status: "ACTIVE" | "DISABLED";
+    };
+    CompositeTypes: Record;
+  };
+};
+
+export type Tables =
+  Database["public"]["Tables"][T]["Row"];
+export type Profile = Tables<"profiles">;
+export type Book = Tables<"books">;
+export type Inventory = Tables<"inventory">;
+export type Restock = Tables<"restocks">;
+export type StockMovement = Tables<"stock_movements">;
+export type BookIssue = Tables<"book_issues">;
+export type BookReturn = Tables<"book_returns">;
+export type Subject = Tables<"subjects">;
+export type Strand = Tables<"strands">;
+export type Semester = Tables<"semesters">;
+export type YearLevel = Tables<"year_levels">;
+export type Author = Tables<"authors">;

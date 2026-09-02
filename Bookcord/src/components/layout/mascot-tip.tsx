@@ -8,7 +8,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import pose1 from "@/assets/mascot/pose-1.png";
 import pose2 from "@/assets/mascot/pose-2.png";
 import pose3 from "@/assets/mascot/pose-3.png";
-import pose4 from "@/assets/mascot/pose-4.png";
 import pose5 from "@/assets/mascot/pose-5.png";
 import pose6 from "@/assets/mascot/pose-6.png";
 import pose8 from "@/assets/mascot/pose-8.png";
@@ -35,7 +34,7 @@ const TIPS: Tip[] = [
     mode: "prefix",
     pose: pose3,
     alt: "Booky squinting through a magnifying glass",
-    text: "Ooh, a close look! Check the stock before you borrow.",
+    text: "Ooh, a close look! Check the stock before you reserve.",
   },
   {
     match: "/books",
@@ -57,13 +56,6 @@ const TIPS: Tip[] = [
     pose: pose8,
     alt: "Booky joyfully reading a maroon book",
     text: "A wishlist! Future-you says thank you.",
-  },
-  {
-    match: "/holds",
-    mode: "prefix",
-    pose: pose4,
-    alt: "Booky looking sad in front of an empty shelf",
-    text: "All copies out? Join the queue — I'll save your spot.",
   },
   {
     match: "/syllabi",

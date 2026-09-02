@@ -4,7 +4,6 @@ import { bookRelations, type BookListItem } from "@/lib/data/books";
 import { createClient } from "@/lib/supabase/server";
 import type {
   Book,
-  HoldRequest,
   Profile,
   Reservation,
   ReservationStatus,
@@ -12,13 +11,6 @@ import type {
 } from "@/types/database";
 
 export type SavedBookListItem = SavedBook & { books: BookListItem | null };
-export type HoldRequestListItem = HoldRequest & {
-  books: (Pick<Book, "id" | "title" | "isbn" | "cover_image_url"> & {
-    author: { name: string } | null;
-    subject: { name: string } | null;
-  }) | null;
-};
-
 export type ReservationBookRef = Pick<
   Book,
   "id" | "title" | "isbn" | "cover_image_url"
@@ -81,33 +73,6 @@ export async function getSavedBooks(profile: Profile) {
     .eq("profile_id", profile.id)
     .order("created_at", { ascending: false })
     .overrideTypes<SavedBookListItem[], { merge: false }>();
-
-  if (error) throw error;
-  return data ?? [];
-}
-
-export async function getHoldRequests(profile: Profile) {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("hold_requests")
-    .select(
-      `
-        id,
-        status,
-        needed_by,
-        note,
-        requested_at,
-        fulfilled_at,
-        books:book_id(
-          id, title, isbn, cover_image_url,
-          author:authors!books_author_id_fkey(name),
-          subject:subjects!books_subject_id_fkey(name)
-        )
-      `,
-    )
-    .eq("profile_id", profile.id)
-    .order("requested_at", { ascending: false })
-    .overrideTypes<HoldRequestListItem[], { merge: false }>();
 
   if (error) throw error;
   return data ?? [];
@@ -224,23 +189,16 @@ export async function getSyllabi(profile: Profile): Promise<SyllabiResult> {
   };
 }
 
-/** Wishlist + open-hold + reservation state for a title, used by the book page. */
+/** Wishlist + reservation state for a title, used by the book page. */
 export async function getHubStateForBook(profileId: string, bookId: string) {
   const supabase = await createClient();
 
-  const [saved, hold, reservation] = await Promise.all([
+  const [saved, reservation] = await Promise.all([
     supabase
       .from("saved_books")
       .select("id")
       .eq("profile_id", profileId)
       .eq("book_id", bookId)
-      .maybeSingle(),
-    supabase
-      .from("hold_requests")
-      .select("id")
-      .eq("profile_id", profileId)
-      .eq("book_id", bookId)
-      .in("status", ["PENDING", "READY"])
       .maybeSingle(),
     supabase
       .from("reservations")
@@ -256,7 +214,6 @@ export async function getHubStateForBook(profileId: string, bookId: string) {
 
   return {
     saved: Boolean(saved.data),
-    hasOpenHold: Boolean(hold.data),
     openReservation: reservation.data?.[0] ?? null,
   };
 }

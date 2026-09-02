@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | Bookcord",
   },
   description:
-    "School book stock management system for tracking textbooks, inventory, restocks, and borrowing.",
+    "School library system for checking textbook stock and reserving titles.",
 };
 
 export default function RootLayout({

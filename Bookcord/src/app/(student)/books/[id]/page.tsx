@@ -28,9 +28,8 @@ export default async function BookDetailPage({ params }: PageProps) {
   // them the book page still renders, just without those actions.
   let hub: {
     saved: boolean;
-    hasOpenHold: boolean;
     openReservation: { id: string; status: ReservationStatus } | null;
-  } = { saved: false, hasOpenHold: false, openReservation: null };
+  } = { saved: false, openReservation: null };
   try {
     hub = await getHubStateForBook(profile.id, id);
   } catch (error) {

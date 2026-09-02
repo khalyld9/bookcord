@@ -25,8 +25,8 @@ export default async function HomePage() {
         </h1>
 
         <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-          School book stock management system for tracking textbooks,
-          inventory, restocks, and borrowing.
+          School library system for checking textbook stock and reserving
+          titles.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">

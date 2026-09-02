@@ -38,8 +38,8 @@ export default async function HistoryPage() {
             <TableRow>
               <TableHead>Book</TableHead>
               <TableHead>Quantity</TableHead>
-              <TableHead>Date Issued</TableHead>
-              <TableHead>Expected Return</TableHead>
+              <TableHead>Checked out</TableHead>
+              <TableHead>Due date</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -50,7 +50,7 @@ export default async function HistoryPage() {
                   colSpan={5}
                   className="h-24 text-center text-muted-foreground"
                 >
-                  No borrowing history yet.
+                  No book history yet.
                 </TableCell>
               </TableRow>
             ) : (

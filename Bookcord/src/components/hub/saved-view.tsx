@@ -28,7 +28,7 @@ export function SavedView({
           icon={Bookmark}
           eyebrow="Student hub — Wishlist"
           title="Saved for later"
-          description="Titles you parked while deciding. Check availability here and borrow them when a copy frees up."
+          description="Titles you parked while deciding. Check availability here and reserve one when a copy frees up."
           stats={[
             { label: "Saved", value: items.length },
             { label: "Available now", value: available },

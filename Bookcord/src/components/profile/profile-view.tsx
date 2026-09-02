@@ -177,7 +177,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
           <Panel
             delay={100}
             title="Your details"
-            description="Shown to librarians when you borrow a textbook."
+            description="Shown to librarians when you check out a textbook."
             icon={UserRound}
           >
             <ProfileForm
@@ -240,7 +240,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
               className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"
             >
               <History className="size-4" strokeWidth={1.75} aria-hidden="true" />
-              View borrowing history
+              View book history
             </Link>
           </Panel>
         </div>

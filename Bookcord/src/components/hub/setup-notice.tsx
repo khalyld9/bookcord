@@ -7,7 +7,7 @@ import { DatabaseBackup } from "lucide-react";
 export function HubSetupNotice({
   table,
   migration = "0003_student_hub.sql",
-  detail = "It creates the saved books and hold request tables along with their row level security policies.",
+  detail = "It creates the saved books table along with its row level security policies.",
 }: {
   table: string;
   migration?: string;

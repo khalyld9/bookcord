@@ -39,7 +39,7 @@ export function BookDetail({
   const stock = [
     { label: "Total", value: book.inventory?.total_stock ?? 0 },
     { label: "Available", value: book.inventory?.available_stock ?? 0 },
-    { label: "Issued", value: book.inventory?.issued_stock ?? 0 },
+    { label: "Checked out", value: book.inventory?.issued_stock ?? 0 },
   ];
 
   return (

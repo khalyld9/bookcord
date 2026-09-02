@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { LoaderCircle, Send, X } from "lucide-react";
 
@@ -13,6 +14,7 @@ import {
 } from "@/lib/actions/booky";
 import type { ChatThreadLine } from "@/lib/data/booky";
 import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
 type BotMessage = { id: number; role: "user" | "bot"; text: string };
 
@@ -47,6 +49,9 @@ export function BookyPanel({
   const [message, setMessage] = useState("");
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  // The panel portals to <body> so no ancestor stacking context (the sticky
+  // sidebar, transformed cards) can ever paint above it.
+  const mounted = useMounted();
 
   // Load the librarian thread while the tab is open, and keep polling so
   // replies show up without a refresh.
@@ -127,7 +132,9 @@ export function BookyPanel({
     }
   }
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open ? (
         <motion.div
@@ -137,7 +144,7 @@ export function BookyPanel({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 24, scale: 0.96 }}
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
-          className="fixed bottom-6 left-6 z-50 flex max-h-[min(72vh,42rem)] w-[min(24rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-[#fbf6ef] shadow-shelf ring-1 ring-[#e7d8c9]"
+          className="fixed bottom-6 left-6 z-[70] flex max-h-[min(72vh,42rem)] w-[min(24rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-[#fbf6ef] shadow-shelf ring-1 ring-[#e7d8c9]"
         >
           <header className="flex items-center gap-3 border-b border-[#e7d8c9] px-4 py-3">
             <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white ring-1 ring-[#e7d8c9]">
@@ -299,6 +306,7 @@ export function BookyPanel({
           )}
         </motion.div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

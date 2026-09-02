@@ -57,8 +57,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
               <motion.span
                 layoutId="themePill"
                 transition={{ type: "spring", stiffness: 520, damping: 38, mass: 0.6 }}
-                style={{ backgroundImage: "var(--gradient-cta)" }}
-                className="absolute inset-0 rounded-full shadow-cta"
+                className="absolute inset-0 rounded-full bg-espresso shadow-cta"
               />
             ) : null}
             <Icon

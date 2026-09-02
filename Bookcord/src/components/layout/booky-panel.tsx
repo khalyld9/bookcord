@@ -191,8 +191,7 @@ export function BookyPanel({
                   <motion.span
                     layoutId="bookyTabPill"
                     transition={{ type: "spring", stiffness: 520, damping: 38 }}
-                    style={{ backgroundImage: "var(--gradient-cta)" }}
-                    className="absolute inset-0 rounded-full"
+                    className="absolute inset-0 rounded-full bg-espresso"
                   />
                 ) : null}
                 <span className="relative z-10">{item.label}</span>
@@ -212,13 +211,8 @@ export function BookyPanel({
                       "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
                       item.role === "bot"
                         ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#efe2d4]"
-                        : "self-end rounded-br-md text-[#fff5ee]",
+                        : "self-end rounded-br-md bg-espresso text-[#fff5ee]",
                     )}
-                    style={
-                      item.role === "user"
-                        ? { backgroundImage: "var(--gradient-cta)" }
-                        : undefined
-                    }
                   >
                     {item.text}
                   </div>
@@ -247,13 +241,8 @@ export function BookyPanel({
                           "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
                           line.sender === "ADMIN"
                             ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#efe2d4]"
-                            : "self-end rounded-br-md text-[#fff5ee]",
+                            : "self-end rounded-br-md bg-espresso text-[#fff5ee]",
                         )}
-                        style={
-                          line.sender === "STUDENT"
-                            ? { backgroundImage: "var(--gradient-cta)" }
-                            : undefined
-                        }
                       >
                         {line.body}
                       </div>
@@ -284,8 +273,7 @@ export function BookyPanel({
                 type="submit"
                 disabled={busy || !question.trim()}
                 aria-label="Send question"
-                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-[#fff5ee] disabled:opacity-40"
-                style={{ backgroundImage: "var(--gradient-cta)" }}
+                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-espresso text-[#fff5ee] disabled:opacity-40"
               >
                 <Send className="size-3.5" aria-hidden="true" />
               </button>
@@ -303,8 +291,7 @@ export function BookyPanel({
                 type="submit"
                 disabled={!message.trim()}
                 aria-label="Send message"
-                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-[#fff5ee] disabled:opacity-40"
-                style={{ backgroundImage: "var(--gradient-cta)" }}
+                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-espresso text-[#fff5ee] disabled:opacity-40"
               >
                 <Send className="size-3.5" aria-hidden="true" />
               </button>

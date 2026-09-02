@@ -150,14 +150,9 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
                       className={cn(
                         "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
                         line.sender === "ADMIN"
-                          ? "self-end rounded-br-md text-primary-foreground"
+                          ? "self-end rounded-br-md bg-espresso text-espresso-foreground"
                           : "self-start rounded-bl-md bg-muted text-foreground",
                       )}
-                      style={
-                        line.sender === "ADMIN"
-                          ? { backgroundImage: "var(--gradient-cta)" }
-                          : undefined
-                      }
                     >
                       {line.body}
                       <span
@@ -192,8 +187,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
                   />
                   <button
                     type="submit"
-                    className="self-start rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-cta"
-                    style={{ backgroundImage: "var(--gradient-cta)" }}
+                    className="self-start rounded-full bg-espresso px-5 py-2.5 text-sm font-semibold text-espresso-foreground shadow-cta"
                   >
                     Send reply
                   </button>

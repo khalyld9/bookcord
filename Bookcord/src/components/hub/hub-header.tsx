@@ -18,18 +18,6 @@ export function HubHeader({
 }) {
   return (
     <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8">
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          backgroundImage:
-            "linear-gradient(135deg, oklch(0.44 0.17 29), oklch(0.34 0.15 28) 55%, oklch(0.26 0.11 27))",
-        }}
-      />
-      <div
-        className="absolute -right-16 -top-20 -z-10 size-72 rounded-full opacity-25 blur-3xl"
-        style={{ backgroundColor: "oklch(0.7 0.13 55)" }}
-      />
-
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-espresso-muted">

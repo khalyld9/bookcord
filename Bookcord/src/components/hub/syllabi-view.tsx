@@ -58,8 +58,7 @@ export function SyllabiView({ syllabi }: { syllabi: SyllabiResult }) {
             </div>
             <Link
               href="/profile"
-              className="rounded-full px-5 py-2.5 text-sm font-medium text-primary-foreground"
-              style={{ backgroundImage: "var(--gradient-cta)" }}
+              className="rounded-full bg-espresso px-5 py-2.5 text-sm font-medium text-espresso-foreground"
             >
               Update profile
             </Link>

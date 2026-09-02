@@ -50,28 +50,13 @@ function CoverArt({
     <div className={cn("absolute inset-0", className)} aria-hidden="true">
       <div
         className="absolute inset-0"
-        style={{
-          backgroundImage: `linear-gradient(145deg, ${palette.from}, ${palette.via} 48%, ${palette.to})`,
-        }}
-      />
-      {/* Cloth weave */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `repeating-linear-gradient(135deg, ${palette.accent} 0 1px, transparent 1px 8px)`,
-        }}
-      />
-      {/* Soft light falling across the upper left of the cover */}
-      <div
-        className="absolute -left-1/3 -top-1/4 size-4/5 rounded-full opacity-35 blur-2xl"
-        style={{ backgroundColor: palette.accent }}
+        style={{ backgroundColor: palette.to }}
       />
       {/* Spine */}
       <div
         className="absolute inset-y-0 left-0 w-[11%]"
         style={{
-          backgroundImage:
-            "linear-gradient(90deg, rgba(0,0,0,0.55), rgba(0,0,0,0.12) 70%, transparent)",
+          backgroundColor: "rgba(0,0,0,0.35)",
           borderRight: `1px solid ${palette.accent}44`,
         }}
       />
@@ -98,7 +83,7 @@ function CoverCaption({
   author?: string | null;
 }) {
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/92 via-black/60 to-transparent px-4 pb-4 pt-16">
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/80 px-4 pb-4 pt-5">
       {eyebrow ? (
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/65">
           {eyebrow}
@@ -116,7 +101,7 @@ function CoverCaption({
 
 /**
  * Textbook cover: a scanned image when one exists, generated art otherwise.
- * Both get the same bottom gradient and caption treatment.
+ * Both get the same solid caption band treatment.
  */
 export function BookCover({
   src,

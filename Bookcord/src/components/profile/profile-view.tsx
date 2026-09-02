@@ -89,15 +89,13 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
     .join(" · ");
 
   const stats = [
-    { label: "On loan", value: profile.activity.activeIssues },
-    { label: "Borrowed", value: profile.activity.copiesBorrowed },
+    { label: "Checked out", value: profile.activity.activeIssues },
+    { label: "Copies checked out", value: profile.activity.copiesBorrowed },
     { label: "Returned", value: profile.activity.returned },
   ];
 
   return (
     <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8 lg:p-10">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(120%_120%_at_15%_0%,oklch(0.48_0.17_29)_0%,oklch(0.4_0.164_29.2)_45%,oklch(0.32_0.13_29)_100%)]" />
-
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-5">
           <Avatar className="size-20 rounded-2xl ring-1 ring-espresso-foreground/25">

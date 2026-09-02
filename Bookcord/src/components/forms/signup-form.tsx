@@ -144,7 +144,8 @@ export function SignupForm({
 
           {yearLevels.length === 0 && (
             <p className="text-xs text-destructive">
-              No year levels available.
+              No year levels available yet — the librarian needs to run
+              migration 0005.
             </p>
           )}
         </div>
@@ -175,7 +176,8 @@ export function SignupForm({
 
           {strands.length === 0 && (
             <p className="text-xs text-destructive">
-              No strands available.
+              No strands available yet — the librarian needs to run migration
+              0005 (it adds the ICT strand).
             </p>
           )}
         </div>

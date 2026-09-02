@@ -6,7 +6,7 @@ import type { BookListItem } from "@/lib/data/books";
 
 /**
  * Catalog masthead. Mirrors the brand panel of `AuthShell` (login/signup):
- * espresso surface, hero image, gradient scrim, mono eyebrow and a
+ * espresso surface, hero image, flat scrim, mono eyebrow and a
  * display-face headline.
  */
 export function LibraryHero({ books }: { books: BookListItem[] }) {
@@ -35,7 +35,7 @@ export function LibraryHero({ books }: { books: BookListItem[] }) {
         sizes="(max-width: 1024px) 100vw, 1024px"
         className="absolute inset-0 -z-10 size-full object-cover opacity-70"
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-espresso via-espresso/70 to-espresso/30" />
+      <div className="absolute inset-0 -z-10 bg-espresso/70" />
 
       <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div>

@@ -54,8 +54,7 @@ function NavRow({ link, active }: { link: NavItem; active: boolean }) {
         <motion.span
           layoutId="sidebarPill"
           transition={{ type: "spring", stiffness: 480, damping: 36, mass: 0.7 }}
-          style={{ backgroundImage: "var(--gradient-cta)" }}
-          className="absolute inset-0 rounded-full shadow-cta"
+          className="absolute inset-0 rounded-full bg-espresso shadow-cta"
         />
       ) : null}
       <Icon

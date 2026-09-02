@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import Link from "next/link";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
 
 import { login } from "@/lib/actions/auth";
@@ -68,18 +67,10 @@ export function LoginForm({
         <p className="text-sm text-destructive">{state.error}</p>
       ) : null}
 
-      <Link
-        href="/forgot-password"
-        className="inline-block text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"
-      >
-        Forgot password?
-      </Link>
-
       <button
         type="submit"
         disabled={pending}
-        style={{ backgroundImage: "var(--gradient-cta)" }}
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-primary-foreground shadow-cta transition-all hover:brightness-105 active:translate-y-px disabled:opacity-70"
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-espresso py-3.5 text-sm font-semibold text-espresso-foreground shadow-cta transition-all hover:brightness-110 active:translate-y-px disabled:opacity-70"
       >
         <ArrowRight className="size-4" strokeWidth={2} />
         {pending ? "Signing in…" : "Sign In"}

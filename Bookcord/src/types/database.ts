@@ -10,6 +10,7 @@ export type RoleName = "ADMIN" | "USER";
 export type MovementType = "RESTOCK" | "ISSUE" | "RETURN" | "ADJUSTMENT";
 export type IssueStatus = "ISSUED" | "RETURNED" | "PARTIALLY_RETURNED";
 export type ReturnCondition = "GOOD" | "FAIR" | "DAMAGED" | "LOST";
+export type ChatSender = "STUDENT" | "ADMIN";
 export type HoldStatus =
   | "PENDING"
   | "READY"
@@ -266,6 +267,24 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["book_returns"]["Row"]>;
         Relationships: [];
       };
+      chat_messages: {
+        Row: {
+          id: string;
+          profile_id: string;
+          sender: ChatSender;
+          body: string;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          sender: ChatSender;
+          body: string;
+          created_at?: Timestamp;
+        };
+        Update: Partial<Database["public"]["Tables"]["chat_messages"]["Row"]>;
+        Relationships: [];
+      };
       saved_books: {
         Row: {
           id: string;
@@ -344,6 +363,15 @@ export type Database = {
         };
         Returns: string;
       };
+      upcoming_restocks: {
+        Args: { p_limit?: number };
+        Returns: {
+          title: string;
+          subject: string | null;
+          quantity: number;
+          restock_date: string;
+        }[];
+      };
       adjust_inventory: {
         Args: {
           p_book_id: string;
@@ -360,6 +388,7 @@ export type Database = {
       issue_status: IssueStatus;
       return_condition: ReturnCondition;
       hold_status: HoldStatus;
+      chat_sender: ChatSender;
       profile_status: "ACTIVE" | "DISABLED";
     };
     CompositeTypes: Record<string, never>;
@@ -383,3 +412,4 @@ export type YearLevel = Tables<"year_levels">;
 export type Author = Tables<"authors">;
 export type SavedBook = Tables<"saved_books">;
 export type HoldRequest = Tables<"hold_requests">;
+export type ChatMessage = Tables<"chat_messages">;

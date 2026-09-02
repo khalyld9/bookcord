@@ -93,7 +93,7 @@ const DEFAULT_TIP: Tip = {
   mode: "exact",
   pose: pose10,
   alt: "Booky cheering between two shelves of books",
-  text: "Hi, I'm Booky! I keep the shelves company.",
+  text: "Hi, I'm Booky! Press me to ask about restocks or message the librarian.",
 };
 
 function tipFor(pathname: string): Tip {
@@ -153,7 +153,16 @@ function Typewriter({ text }: { text: string }) {
  * Booky is big enough that the balloon happily overlaps the sidebar divider.
  * The pose glides and the line types itself when the route changes.
  */
-export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
+export function MascotTip({
+  pathnameOverride,
+  onPress,
+  open = false,
+}: {
+  pathnameOverride?: string;
+  /** Makes Booky pressable to open the chat panel. */
+  onPress?: () => void;
+  open?: boolean;
+}) {
   const routePathname = usePathname();
   const pathname = pathnameOverride ?? routePathname;
   const tip = tipFor(pathname);
@@ -171,7 +180,15 @@ export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
         />
       </div>
 
-      <div className="relative h-32 w-full" role="img" aria-label={tip.alt}>
+      <button
+        type="button"
+        onClick={onPress}
+        aria-expanded={open}
+        aria-label={open ? "Close the chat with Booky" : "Press Booky to open the chat"}
+        title="Chat with Booky"
+        className="relative h-32 w-full cursor-pointer transition-transform duration-200 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ochre"
+      >
+        <span className="sr-only">{tip.alt}</span>
         <AnimatePresence initial={false} mode="popLayout">
           <motion.span
             key={pathname}
@@ -188,7 +205,7 @@ export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
             />
           </motion.span>
         </AnimatePresence>
-      </div>
+      </button>
     </div>
   );
 }

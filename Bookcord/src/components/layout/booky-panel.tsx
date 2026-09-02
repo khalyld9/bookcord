@@ -1,0 +1,315 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { LoaderCircle, Send, X } from "lucide-react";
+
+import face from "@/assets/mascot/face.png";
+import {
+  askBooky,
+  fetchChatThread,
+  sendChatMessage,
+} from "@/lib/actions/booky";
+import type { ChatThreadLine } from "@/lib/data/booky";
+import { cn } from "@/lib/utils";
+
+type BotMessage = { id: number; role: "user" | "bot"; text: string };
+
+const GREETING: BotMessage = {
+  id: 0,
+  role: "bot",
+  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how holds work — or flip to the Librarian tab to message a real human.",
+};
+
+const inputClasses =
+  "w-full rounded-full border border-input bg-background px-4 py-2.5 pr-11 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+
+export function BookyPanel({
+  open,
+  onClose,
+  demo = false,
+}: {
+  open: boolean;
+  onClose: () => void;
+  /** Preview mode: renders the UI without talking to the database. */
+  demo?: boolean;
+}) {
+  const [tab, setTab] = useState<"bot" | "librarian">("bot");
+  const [botMessages, setBotMessages] = useState<BotMessage[]>([GREETING]);
+  const [question, setQuestion] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const [thread, setThread] = useState<ChatThreadLine[]>([]);
+  const [needsSetup, setNeedsSetup] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // Load the librarian thread while the tab is open, and keep polling so
+  // replies show up without a refresh.
+  useEffect(() => {
+    if (!open || demo || tab !== "librarian") return;
+
+    let stopped = false;
+
+    async function load() {
+      const result = await fetchChatThread();
+      if (stopped) return;
+      setThread(result.lines);
+      setNeedsSetup(result.needsSetup);
+    }
+
+    void load();
+    const id = setInterval(() => void load(), 8000);
+    return () => {
+      stopped = true;
+      clearInterval(id);
+    };
+  }, [open, tab, demo]);
+
+  // Escape closes the panel.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
+  }, [botMessages, thread, tab, open]);
+
+  async function submitQuestion(event: React.FormEvent) {
+    event.preventDefault();
+    const text = question.trim();
+    if (!text || busy || demo) return;
+
+    setQuestion("");
+    setBusy(true);
+    const id = Date.now();
+    setBotMessages((messages) => [
+      ...messages,
+      { id, role: "user", text },
+    ]);
+
+    const reply = await askBooky(text);
+    if (reply.needsSetup) setNeedsSetup(true);
+    setBotMessages((messages) => [
+      ...messages,
+      { id: id + 1, role: "bot", text: reply.answer },
+    ]);
+    setBusy(false);
+  }
+
+  async function submitMessage(event: React.FormEvent) {
+    event.preventDefault();
+    const text = message.trim();
+    if (!text || demo) return;
+
+    setMessage("");
+    const result = await sendChatMessage(text);
+    if (result.needsSetup) setNeedsSetup(true);
+    if (!result.error) {
+      setThread((lines) => [
+        ...lines,
+        {
+          id: `optimistic-${Date.now()}`,
+          sender: "STUDENT",
+          body: text,
+          created_at: new Date().toISOString(),
+        },
+      ]);
+    }
+  }
+
+  return (
+    <AnimatePresence>
+      {open ? (
+        <motion.div
+          role="dialog"
+          aria-label="Chat with Booky"
+          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+          className="fixed bottom-6 left-6 z-50 flex max-h-[min(72vh,42rem)] w-[min(24rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-card shadow-shelf ring-1 ring-border"
+        >
+          <header className="flex items-center gap-3 border-b border-border px-4 py-3">
+            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-cream ring-1 ring-border">
+              <Image
+                src={face}
+                alt=""
+                width={26}
+                height={22}
+                className="shrink-0"
+              />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="font-display text-base font-medium tracking-[-0.02em]">
+                Booky
+              </p>
+              <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                Library helper
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close chat"
+              className="grid size-8 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <X className="size-4" aria-hidden="true" />
+            </button>
+          </header>
+
+          <div className="flex gap-1 px-3 pt-3" role="tablist" aria-label="Chat mode">
+            {(
+              [
+                { id: "bot", label: "Ask Booky" },
+                { id: "librarian", label: "Librarian" },
+              ] as const
+            ).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={tab === item.id}
+                onClick={() => setTab(item.id)}
+                className={cn(
+                  "relative flex-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+                  tab === item.id
+                    ? "text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {tab === item.id ? (
+                  <motion.span
+                    layoutId="bookyTabPill"
+                    transition={{ type: "spring", stiffness: 520, damping: 38 }}
+                    style={{ backgroundImage: "var(--gradient-cta)" }}
+                    className="absolute inset-0 rounded-full"
+                  />
+                ) : null}
+                <span className="relative z-10">{item.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div
+            ref={scrollRef}
+            className="flex min-h-64 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4"
+          >
+            {tab === "bot"
+              ? botMessages.map((item) => (
+                  <div
+                    key={item.id}
+                    className={cn(
+                      "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
+                      item.role === "bot"
+                        ? "self-start rounded-bl-md bg-white text-[#472a21]"
+                        : "self-end rounded-br-md text-primary-foreground",
+                    )}
+                    style={
+                      item.role === "user"
+                        ? { backgroundImage: "var(--gradient-cta)" }
+                        : undefined
+                    }
+                  >
+                    {item.text}
+                  </div>
+                ))
+              : needsSetup
+                ? (
+                  <p className="rounded-2xl border border-dashed border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                    The chat tables are not in the database yet. Run{" "}
+                    <code className="font-mono">
+                      supabase/migrations/0004_booky_chat.sql
+                    </code>{" "}
+                    in the Supabase SQL editor, then reopen me.
+                  </p>
+                )
+                : thread.length === 0
+                  ? (
+                    <p className="rounded-2xl border border-dashed border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                      No messages yet. Write to the librarian below — replies
+                      show up here.
+                    </p>
+                  )
+                  : thread.map((line) => (
+                      <div
+                        key={line.id}
+                        className={cn(
+                          "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
+                          line.sender === "ADMIN"
+                            ? "self-start rounded-bl-md bg-white text-[#472a21]"
+                            : "self-end rounded-br-md text-primary-foreground",
+                        )}
+                        style={
+                          line.sender === "STUDENT"
+                            ? { backgroundImage: "var(--gradient-cta)" }
+                            : undefined
+                        }
+                      >
+                        {line.body}
+                      </div>
+                    ))}
+
+            {tab === "bot" && busy ? (
+              <div className="flex items-center gap-2 self-start rounded-2xl rounded-bl-md bg-white px-3.5 py-2.5 text-xs text-[#472a21]">
+                <LoaderCircle className="size-3.5 animate-spin" aria-hidden="true" />
+                Booky is flipping through the cards…
+              </div>
+            ) : null}
+          </div>
+
+          {demo ? (
+            <p className="border-t border-border px-4 py-3 text-center text-xs text-muted-foreground">
+              Preview mode — sign in to chat for real.
+            </p>
+          ) : tab === "bot" ? (
+            <form onSubmit={submitQuestion} className="relative border-t border-border p-3">
+              <input
+                value={question}
+                onChange={(event) => setQuestion(event.target.value)}
+                placeholder="Ask about restocks, availability…"
+                aria-label="Ask Booky"
+                className={inputClasses}
+              />
+              <button
+                type="submit"
+                disabled={busy || !question.trim()}
+                aria-label="Send question"
+                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-primary-foreground disabled:opacity-40"
+                style={{ backgroundImage: "var(--gradient-cta)" }}
+              >
+                <Send className="size-3.5" aria-hidden="true" />
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={submitMessage} className="relative border-t border-border p-3">
+              <input
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
+                placeholder="Message the librarian…"
+                aria-label="Message the librarian"
+                className={inputClasses}
+              />
+              <button
+                type="submit"
+                disabled={!message.trim()}
+                aria-label="Send message"
+                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-primary-foreground disabled:opacity-40"
+                style={{ backgroundImage: "var(--gradient-cta)" }}
+              >
+                <Send className="size-3.5" aria-hidden="true" />
+              </button>
+            </form>
+          )}
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  );
+}

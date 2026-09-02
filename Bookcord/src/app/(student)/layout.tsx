@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { BrandMark } from "@/components/layout/brand-mark";
-import { MascotTip } from "@/components/layout/mascot-tip";
+import { BookyWidget } from "@/components/layout/booky-widget";
 import { StudentNav } from "@/components/layout/student-nav";
 import { UserMenu } from "@/components/layout/user-menu";
 import { SignOutButton } from "@/components/layout/sign-out-button";
@@ -31,7 +31,7 @@ export default async function StudentLayout({
         <div className="flex flex-col gap-3 border-t border-border pt-4">
           {/* Booky is deliberately tall — the balloon may straddle the divider. */}
           <div className="relative z-10 -mt-16">
-            <MascotTip />
+            <BookyWidget />
           </div>
           <ThemeSwitcher />
           <div className="flex items-center justify-between gap-2 px-2">

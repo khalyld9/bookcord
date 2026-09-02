@@ -2,7 +2,12 @@ import Link from "next/link";
 import { SearchX } from "lucide-react";
 
 import { BookCard } from "@/components/books/book-card";
+import { Reveal } from "@/components/motion/reveal";
 import type { BookListItem } from "@/lib/data/books";
+
+/** Cards stagger in waves of eight so long catalogs don't wait on a long tail. */
+const STAGGER_STEP = 70;
+const STAGGER_GROUP = 8;
 
 export function BooksGrid({
   books,
@@ -13,7 +18,7 @@ export function BooksGrid({
 }) {
   if (books.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-border bg-card/60 px-6 py-20 text-center">
+      <Reveal className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-border bg-card/60 px-6 py-20 text-center">
         <span className="grid size-12 place-items-center rounded-2xl bg-espresso text-espresso-foreground">
           <SearchX className="size-5" strokeWidth={1.75} aria-hidden="true" />
         </span>
@@ -34,14 +39,20 @@ export function BooksGrid({
         >
           Reset the catalog
         </Link>
-      </div>
+      </Reveal>
     );
   }
 
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {books.map((book) => (
-        <BookCard key={book.id} book={book} />
+      {books.map((book, index) => (
+        <Reveal
+          key={book.id}
+          delay={(index % STAGGER_GROUP) * STAGGER_STEP}
+          className="flex"
+        >
+          <BookCard book={book} />
+        </Reveal>
       ))}
     </div>
   );

@@ -10,6 +10,7 @@ import {
 import { PasswordForm } from "@/components/forms/password-form";
 import { ProfileForm } from "@/components/forms/profile-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Reveal } from "@/components/motion/reveal";
 import { formatDate, initials } from "@/lib/utils";
 
 export type ProfileActivity = {
@@ -43,15 +44,21 @@ function Panel({
   title,
   description,
   icon: Icon,
+  delay = 0,
   children,
 }: {
   title: string;
   description?: string;
   icon?: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  delay?: number;
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border sm:p-8">
+    <Reveal
+      as="section"
+      delay={delay}
+      className="rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border sm:p-8"
+    >
       <header className="mb-6 flex flex-col gap-1.5">
         <h2 className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
           {Icon ? (
@@ -64,7 +71,7 @@ function Panel({
         ) : null}
       </header>
       {children}
-    </section>
+    </Reveal>
   );
 }
 
@@ -163,11 +170,14 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <ProfileHero profile={profile} />
+      <Reveal>
+        <ProfileHero profile={profile} />
+      </Reveal>
 
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <div className="flex flex-col gap-6">
           <Panel
+            delay={100}
             title="Your details"
             description="Shown to librarians when you borrow a textbook."
             icon={UserRound}
@@ -187,6 +197,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
           </Panel>
 
           <Panel
+            delay={200}
             title="Password"
             description="Use at least 8 characters."
             icon={ShieldCheck}
@@ -196,7 +207,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
         </div>
 
         <div className="flex flex-col gap-6">
-          <Panel title="Account" icon={BadgeCheck}>
+          <Panel delay={150} title="Account" icon={BadgeCheck}>
             <dl className="flex flex-col gap-4">
               {account.map((item) => (
                 <div key={item.label} className="flex flex-col gap-1">
@@ -209,7 +220,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
             </dl>
           </Panel>
 
-          <Panel title="Library activity" icon={LibraryBig}>
+          <Panel delay={250} title="Library activity" icon={LibraryBig}>
             <ul className="flex flex-col divide-y divide-border">
               {activityLinks.map((item) => (
                 <li key={item.label} className="flex items-center justify-between gap-3 py-3">

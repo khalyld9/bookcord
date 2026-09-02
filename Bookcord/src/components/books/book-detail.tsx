@@ -3,6 +3,7 @@ import { CalendarDays, Hash, Info } from "lucide-react";
 import { BookCover } from "@/components/books/book-cover";
 import { BookStatusBadge } from "@/components/books/book-status-badge";
 import { Separator } from "@/components/ui/separator";
+import { Reveal } from "@/components/motion/reveal";
 import { formatDate } from "@/lib/utils";
 import type { BookListItem } from "@/lib/data/books";
 
@@ -23,7 +24,7 @@ export function BookDetail({ book }: { book: BookListItem }) {
   ];
 
   return (
-    <div className="overflow-hidden rounded-3xl bg-card shadow-shelf ring-1 ring-border">
+    <Reveal className="overflow-hidden rounded-3xl bg-card shadow-shelf ring-1 ring-border">
       <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[16rem_1fr] lg:gap-10 lg:p-10">
         <div className="flex flex-col items-start gap-4">
           <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-espresso ring-1 ring-border">
@@ -109,6 +110,6 @@ export function BookDetail({ book }: { book: BookListItem }) {
           </section>
         </div>
       </div>
-    </div>
+    </Reveal>
   );
 }

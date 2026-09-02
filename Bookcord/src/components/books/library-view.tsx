@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { BooksFilters } from "@/components/books/books-filters";
 import { BooksGrid } from "@/components/books/books-grid";
 import { LibraryHero } from "@/components/books/library-hero";
+import { Reveal } from "@/components/motion/reveal";
 import type { BookListItem } from "@/lib/data/books";
 
 export type LibraryOption = { id: string; name: string };
@@ -48,9 +49,13 @@ export function LibraryView({
 
   return (
     <div className="flex flex-col gap-8">
-      <LibraryHero books={books} />
+      <Reveal>
+        <LibraryHero books={books} />
+      </Reveal>
 
-      <section
+      <Reveal
+        as="section"
+        delay={100}
         aria-label="Search and filter the catalog"
         className="rounded-3xl bg-card p-5 shadow-shelf ring-1 ring-border sm:p-6"
       >
@@ -63,10 +68,14 @@ export function LibraryView({
             basePath={basePath}
           />
         </Suspense>
-      </section>
+      </Reveal>
 
       <section aria-label="Catalog results" className="flex flex-col gap-5">
-        <header className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
+        <Reveal
+          as="header"
+          delay={150}
+          className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4"
+        >
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
               Catalog
@@ -78,7 +87,7 @@ export function LibraryView({
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
             Newest additions first
           </p>
-        </header>
+        </Reveal>
 
         <BooksGrid books={books} />
       </section>

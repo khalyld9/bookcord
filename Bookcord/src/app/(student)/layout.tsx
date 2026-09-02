@@ -15,7 +15,7 @@ export default async function StudentLayout({
   const { profile } = await requireUser();
 
   return (
-    <div className="flex min-h-screen w-full overflow-x-hidden bg-paper dark:bg-background">
+    <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
       {/* Sidebar */}
       <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm">
         <Link href="/books" className="flex items-center gap-2.5 px-2">

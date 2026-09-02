@@ -10,6 +10,12 @@ export type RoleName = "ADMIN" | "USER";
 export type MovementType = "RESTOCK" | "ISSUE" | "RETURN" | "ADJUSTMENT";
 export type IssueStatus = "ISSUED" | "RETURNED" | "PARTIALLY_RETURNED";
 export type ReturnCondition = "GOOD" | "FAIR" | "DAMAGED" | "LOST";
+export type HoldStatus =
+  | "PENDING"
+  | "READY"
+  | "FULFILLED"
+  | "CANCELLED"
+  | "EXPIRED";
 
 type Timestamp = string;
 
@@ -260,6 +266,50 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["book_returns"]["Row"]>;
         Relationships: [];
       };
+      saved_books: {
+        Row: {
+          id: string;
+          profile_id: string;
+          book_id: string;
+          note: string | null;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          book_id: string;
+          note?: string | null;
+          created_at?: Timestamp;
+        };
+        Update: Partial<Database["public"]["Tables"]["saved_books"]["Row"]>;
+        Relationships: [];
+      };
+      hold_requests: {
+        Row: {
+          id: string;
+          profile_id: string;
+          book_id: string;
+          status: HoldStatus;
+          needed_by: string | null;
+          note: string | null;
+          requested_at: Timestamp;
+          updated_at: Timestamp;
+          fulfilled_at: Timestamp | null;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          book_id: string;
+          status?: HoldStatus;
+          needed_by?: string | null;
+          note?: string | null;
+          requested_at?: Timestamp;
+          updated_at?: Timestamp;
+          fulfilled_at?: Timestamp | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["hold_requests"]["Row"]>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -309,6 +359,7 @@ export type Database = {
       movement_type: MovementType;
       issue_status: IssueStatus;
       return_condition: ReturnCondition;
+      hold_status: HoldStatus;
       profile_status: "ACTIVE" | "DISABLED";
     };
     CompositeTypes: Record<string, never>;
@@ -330,3 +381,5 @@ export type Strand = Tables<"strands">;
 export type Semester = Tables<"semesters">;
 export type YearLevel = Tables<"year_levels">;
 export type Author = Tables<"authors">;
+export type SavedBook = Tables<"saved_books">;
+export type HoldRequest = Tables<"hold_requests">;

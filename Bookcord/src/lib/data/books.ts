@@ -20,14 +20,19 @@ export type BookListItem = Book & {
   inventory: Inventory | null;
 };
 
-const bookSelect = `
-  *,
+/** Relations every book list needs, reusable inside nested embeds. */
+export const bookRelations = `
   author:authors!books_author_id_fkey(id, name),
   subject:subjects!books_subject_id_fkey(id, name),
   semester:semesters!books_semester_id_fkey(id, name),
   strand:strands!books_strand_id_fkey(id, name),
   year_level:year_levels!books_year_level_id_fkey(id, name),
   inventory:inventory(*)
+`;
+
+const bookSelect = `
+  *,
+  ${bookRelations}
 `;
 
 export type BookFilters = {

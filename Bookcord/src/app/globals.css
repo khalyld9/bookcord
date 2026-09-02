@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, .oled *));
 
 :root {
   --background: #fff5ee;
@@ -55,6 +55,8 @@
 }
 
 .dark {
+  color-scheme: dark;
+
   --background: #170d0b;
   --foreground: #f8ece5;
   --card: #211411;
@@ -84,6 +86,53 @@
   --sidebar-border: #41241e;
   --sidebar-ring: #d75d4f;
 }
+
+/* OLED pitch-black: a true #000 field so panel pixels switch off entirely.
+   Surfaces sit one step above black with hairline borders so cards stay
+   separable without any glow. */
+.oled {
+  color-scheme: dark;
+
+  --background: #000000;
+  --foreground: #f2ece8;
+  --card: #050505;
+  --card-foreground: #f2ece8;
+  --popover: #0a0a0a;
+  --popover-foreground: #f2ece8;
+  --primary: #d13f33;
+  --primary-foreground: #fff5ee;
+  --secondary: #141414;
+  --secondary-foreground: #e8ded8;
+  --muted: #121212;
+  --muted-foreground: #a89a93;
+  --accent: #1b1b1b;
+  --accent-foreground: #f0e4dd;
+  --destructive: #ff5a4d;
+  --destructive-foreground: #1a0402;
+  --border: #1f1f1f;
+  --input: #2a2a2a;
+  --ring: #d13f33;
+
+  --sidebar: #000000;
+  --sidebar-foreground: #f2ece8;
+  --sidebar-primary: #d13f33;
+  --sidebar-primary-foreground: #fff5ee;
+  --sidebar-accent: #141414;
+  --sidebar-accent-foreground: #e8ded8;
+  --sidebar-border: #1f1f1f;
+  --sidebar-ring: #d13f33;
+
+  /* Brand surfaces go black too, otherwise light panels float on the field. */
+  --paper: #000000;
+  --cream: #0a0a0a;
+  --cream-deep: #050505;
+  --espresso: #0d0906;
+  --espresso-foreground: #f4ece6;
+  --espresso-muted: #b9a79d;
+  --shadow-shelf: 0 40px 90px -50px rgb(0 0 0 / 0.9);
+  --shadow-cta: 0 14px 30px -12px rgb(209 63 51 / 0.4);
+}
+
 
 @theme inline {
   /* Add these inside your existing @theme inline block in globals.css */
@@ -158,5 +207,94 @@ body {
   ::selection {
     background: var(--primary);
     color: var(--primary-foreground);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Loading state: a minimal book that opens and closes.
+   --------------------------------------------------------------- */
+.book-opening {
+  position: relative;
+  width: 3.5rem;
+  height: 2.75rem;
+  transform-style: preserve-3d;
+}
+
+.book-opening__pages {
+  position: absolute;
+  inset: 8% 14%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #f7efe6, #e5d6c6);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+.book-opening__cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-image: var(--gradient-cta);
+  box-shadow: 0 12px 26px -16px rgb(0 0 0 / 0.8);
+}
+
+.book-opening__cover--left {
+  left: 0;
+  transform-origin: right center;
+  border-radius: 4px 2px 2px 4px;
+  animation: book-opening-left 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.book-opening__cover--right {
+  right: 0;
+  transform-origin: left center;
+  border-radius: 2px 4px 4px 2px;
+  animation: book-opening-right 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.book-opening__spine {
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: rgb(0 0 0 / 0.35);
+}
+
+@keyframes book-opening-left {
+  0%,
+  100% {
+    transform: perspective(320px) rotateY(0deg);
+  }
+
+  45%,
+  55% {
+    transform: perspective(320px) rotateY(-152deg);
+  }
+}
+
+@keyframes book-opening-right {
+  0%,
+  100% {
+    transform: perspective(320px) rotateY(0deg);
+  }
+
+  45%,
+  55% {
+    transform: perspective(320px) rotateY(152deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-opening__cover {
+    animation: none;
+  }
+
+  .book-opening__cover--left {
+    transform: perspective(320px) rotateY(-38deg);
+  }
+
+  .book-opening__cover--right {
+    transform: perspective(320px) rotateY(38deg);
   }
 }

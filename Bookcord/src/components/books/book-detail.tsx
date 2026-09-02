@@ -2,12 +2,28 @@ import { CalendarDays, Hash, Info } from "lucide-react";
 
 import { BookCover } from "@/components/books/book-cover";
 import { BookStatusBadge } from "@/components/books/book-status-badge";
+import { HoldRequestForm } from "@/components/hub/hold-request-form";
+import { SaveBookButton } from "@/components/hub/save-book-button";
 import { Separator } from "@/components/ui/separator";
 import { Reveal } from "@/components/motion/reveal";
 import { formatDate } from "@/lib/utils";
 import type { BookListItem } from "@/lib/data/books";
 
-export function BookDetail({ book }: { book: BookListItem }) {
+export function BookDetail({
+  book,
+  saved = false,
+  hasOpenHold = false,
+  showHubActions = false,
+}: {
+  book: BookListItem;
+  /** Already on the student's wishlist. */
+  saved?: boolean;
+  /** An open hold request already exists for this title. */
+  hasOpenHold?: boolean;
+  /** Hidden on the unauthenticated preview route. */
+  showHubActions?: boolean;
+}) {
+  const availableStock = book.inventory?.available_stock ?? 0;
   const details = [
     { label: "ISBN", value: book.isbn ?? "—" },
     { label: "Author", value: book.author?.name ?? "Unknown author" },
@@ -31,6 +47,9 @@ export function BookDetail({ book }: { book: BookListItem }) {
             <BookCover
               src={book.cover_image_url}
               title={book.title}
+              eyebrow={book.subject?.name}
+              author={book.author?.name}
+              caption={false}
               sizes="(max-width: 1024px) 100vw, 16rem"
             />
           </div>
@@ -108,6 +127,45 @@ export function BookDetail({ book }: { book: BookListItem }) {
               {formatDate(book.inventory?.updated_at, "MMM d, yyyy")}
             </p>
           </section>
+
+          {showHubActions ? (
+            <>
+              <Separator />
+
+              <section className="flex flex-col gap-4">
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                  Your actions
+                </h2>
+
+                <SaveBookButton bookId={book.id} saved={saved} />
+
+                {availableStock === 0 ? (
+                  hasOpenHold ? (
+                    <p className="rounded-2xl border border-border bg-muted/50 px-5 py-4 text-sm text-muted-foreground">
+                      You are already in the queue for this title. Track it under{" "}
+                      <span className="font-medium text-foreground">
+                        Hold Requests
+                      </span>
+                      .
+                    </p>
+                  ) : (
+                    <div className="flex flex-col gap-4 rounded-2xl border border-border bg-muted/40 p-5">
+                      <div>
+                        <p className="font-display text-base font-medium tracking-[-0.02em]">
+                          Every copy is out
+                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          Join the queue and the librarian will set a copy aside
+                          for you when one comes back.
+                        </p>
+                      </div>
+                      <HoldRequestForm bookId={book.id} />
+                    </div>
+                  )
+                ) : null}
+              </section>
+            </>
+          ) : null}
         </div>
       </div>
     </Reveal>

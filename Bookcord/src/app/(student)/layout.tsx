@@ -4,7 +4,7 @@ import { BookOpen } from "lucide-react";
 import { StudentNav } from "@/components/layout/student-nav";
 import { UserMenu } from "@/components/layout/user-menu";
 import { SignOutButton } from "@/components/layout/sign-out-button";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 import { requireUser } from "@/lib/auth";
 
 export default async function StudentLayout({
@@ -30,11 +30,11 @@ export default async function StudentLayout({
         </div>
 
         <div className="flex flex-col gap-3 border-t border-border pt-4">
-          <div className="flex items-center justify-between px-2">
+          <ThemeSwitcher />
+          <div className="flex items-center justify-between gap-2 px-2">
             <UserMenu profile={profile} />
-            <ThemeToggle />
+            <SignOutButton />
           </div>
-          <SignOutButton />
         </div>
       </aside>
 

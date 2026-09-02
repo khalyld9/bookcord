@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { BookDetail } from "@/components/books/book-detail";
+import { requireUser } from "@/lib/auth";
 import { getBook } from "@/lib/data/books";
+import { getHubStateForBook, isMissingTable } from "@/lib/data/hub";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -16,9 +18,19 @@ export const metadata: Metadata = {
 
 export default async function BookDetailPage({ params }: PageProps) {
   const { id } = await params;
+  const { profile } = await requireUser();
   const book = await getBook(id);
 
   if (!book) notFound();
+
+  // Wishlist / hold state lives in migration 0003; without it the book page
+  // still renders, just without those two actions.
+  let hub = { saved: false, hasOpenHold: false };
+  try {
+    hub = await getHubStateForBook(profile.id, id);
+  } catch (error) {
+    if (!isMissingTable(error)) throw error;
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,7 +46,12 @@ export default async function BookDetailPage({ params }: PageProps) {
         Back to catalog
       </Link>
 
-      <BookDetail book={book} />
+      <BookDetail
+        book={book}
+        saved={hub.saved}
+        hasOpenHold={hub.hasOpenHold}
+        showHubActions
+      />
     </div>
   );
 }

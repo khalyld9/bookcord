@@ -1,7 +1,25 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
-import type { Profile } from "@/types/database";
+import type { BookIssue, Profile } from "@/types/database";
+
+export type IssueListItem = Pick<
+  BookIssue,
+  | "id"
+  | "quantity"
+  | "returned_quantity"
+  | "date_issued"
+  | "expected_return_date"
+  | "status"
+> & {
+  books: {
+    id: string;
+    title: string;
+    isbn: string | null;
+    cover_image_url: string | null;
+    author: { name: string } | null;
+  } | null;
+};
 
 export async function getMyIssues(profile: Profile) {
   const supabase = await createClient();
@@ -20,7 +38,8 @@ export async function getMyIssues(profile: Profile) {
       )
     `)
     .eq("profile_id", profile.id)
-    .order("date_issued", { ascending: false });
+    .order("date_issued", { ascending: false })
+    .overrideTypes<IssueListItem[], { merge: false }>();
 
   if (error) throw error;
   return data ?? [];

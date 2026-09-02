@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { LoaderCircle, UserPlus } from "lucide-react";
 
-import { signup } from "@/lib/actions/auth";
+import { signup, type SignupState } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,7 +21,7 @@ type SignupFormProps = {
   }[];
 };
 
-const initialState = {
+const initialState: SignupState = {
   error: "",
   success: false,
   message: "",

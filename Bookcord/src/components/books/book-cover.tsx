@@ -1,23 +1,30 @@
 import Image from "next/image";
-import { BookOpen } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Book cover with an espresso "blank book" fallback that matches the brand
+ * panel used on the login page, so cards without cover art still look
+ * intentional instead of empty.
+ */
 export function BookCover({
   src,
   title,
   className,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw",
 }: {
   src?: string | null;
   title: string;
   className?: string;
+  sizes?: string;
 }) {
   if (src) {
     return (
       <Image
         src={src}
-        alt={title}
+        alt={`Cover of ${title}`}
         fill
+        sizes={sizes}
         className={cn("object-cover", className)}
       />
     );
@@ -26,12 +33,14 @@ export function BookCover({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center",
+        "flex h-full w-full flex-col justify-end gap-2 bg-espresso p-4 text-espresso-foreground",
         className,
       )}
     >
-      <BookOpen className="size-8 text-muted-foreground" />
-      <span className="line-clamp-3 text-xs text-muted-foreground">
+      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-espresso-muted">
+        Bookcord
+      </span>
+      <span className="line-clamp-4 font-display text-base font-medium leading-snug tracking-[-0.02em] text-balance">
         {title}
       </span>
     </div>

@@ -12,11 +12,11 @@ import type {
 } from "@/types/database";
 
 export type BookListItem = Book & {
-  author: Pick | null;
-  subject: Pick | null;
-  semester: Pick | null;
-  strand: Pick | null;
-  year_level: Pick | null;
+  author: Pick<Author, "id" | "name"> | null;
+  subject: Pick<Subject, "id" | "name"> | null;
+  semester: Pick<Semester, "id" | "name"> | null;
+  strand: Pick<Strand, "id" | "name"> | null;
+  year_level: Pick<YearLevel, "id" | "name"> | null;
   inventory: Inventory | null;
 };
 
@@ -40,6 +40,14 @@ export type BookFilters = {
   includeArchived?: boolean;
 };
 
+/**
+ * PostgREST `or=()` filters are comma separated, so punctuation from the raw
+ * search string would be read as filter syntax. Keep only word characters.
+ */
+function sanitizeSearchTerm(value: string) {
+  return value.replace(/[(),]/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export async function getBooks(filters: BookFilters = {}) {
   const supabase = await createClient();
   let query = supabase
@@ -51,12 +59,32 @@ export async function getBooks(filters: BookFilters = {}) {
     query = query.is("archived_at", null);
   }
 
-  if (filters.search) {
-    const text = `%${filters.search.trim()}%`;
-    query = query.or(
-      `title.ilike.${text},isbn.ilike.${text},authors.name.ilike.${text},subjects.name.ilike.${text}`,
-    );
+  const search = filters.search ? sanitizeSearchTerm(filters.search) : "";
+
+  if (search) {
+    const pattern = `%${search}%`;
+
+    // Embedded tables cannot be mixed into a top-level `or=()` filter, so
+    // resolve author/subject matches to ids first and OR those in.
+    const [authors, subjects] = await Promise.all([
+      supabase.from("authors").select("id").ilike("name", pattern),
+      supabase.from("subjects").select("id").ilike("name", pattern),
+    ]);
+
+    const authorIds = (authors.data ?? []).map((row) => row.id);
+    const subjectIds = (subjects.data ?? []).map((row) => row.id);
+
+    const conditions = [
+      `title.ilike.${pattern}`,
+      `isbn.ilike.${pattern}`,
+      `description.ilike.${pattern}`,
+    ];
+    if (authorIds.length > 0) conditions.push(`author_id.in.(${authorIds.join(",")})`);
+    if (subjectIds.length > 0) conditions.push(`subject_id.in.(${subjectIds.join(",")})`);
+
+    query = query.or(conditions.join(","));
   }
+
   if (filters.semesterId) query = query.eq("semester_id", filters.semesterId);
   if (filters.strandId) query = query.eq("strand_id", filters.strandId);
   if (filters.yearLevelId) query = query.eq("year_level_id", filters.yearLevelId);
@@ -72,20 +100,22 @@ export async function getBooks(filters: BookFilters = {}) {
     query = query.eq("inventory.available_stock", 0);
   }
 
-  const { data, error } = await query.returns();
+  const { data, error } = await query.overrideTypes<BookListItem[], { merge: false }>();
   if (error) throw error;
   return data ?? [];
 }
 
 export async function getBook(id: string) {
   const supabase = await createClient();
+  // Typed as a list (rather than `.single()`) so the hand-mapped relations in
+  // `BookListItem` stay intact; the first row is the single match for this id.
   const { data, error } = await supabase
     .from("books")
     .select(bookSelect)
     .eq("id", id)
-    .single();
+    .overrideTypes<BookListItem[], { merge: false }>();
   if (error) return null;
-  return data;
+  return data?.[0] ?? null;
 }
 
 export async function getBookForAdmin(id: string) {

@@ -16,7 +16,7 @@ export function StudentNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex w-full flex-col gap-1">
+    <nav aria-label="Student" className="flex w-full flex-col gap-1">
       {links.map((link) => {
         const active =
           link.href === "/books"
@@ -27,14 +27,16 @@ export function StudentNav() {
           <Link
             key={link.href}
             href={link.href}
+            aria-current={active ? "page" : undefined}
+            style={active ? { backgroundImage: "var(--gradient-cta)" } : undefined}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+              "flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium transition-all",
               active
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                ? "text-primary-foreground shadow-cta"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
             )}
           >
-            <Icon className="size-4 shrink-0" />
+            <Icon className="size-4 shrink-0" strokeWidth={1.75} />
             {link.label}
           </Link>
         );

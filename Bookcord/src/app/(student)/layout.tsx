@@ -15,21 +15,21 @@ export default async function StudentLayout({
   const { profile } = await requireUser();
 
   return (
-    <div className="flex min-h-screen w-full overflow-x-hidden bg-background">
+    <div className="flex min-h-screen w-full overflow-x-hidden bg-paper dark:bg-background">
       {/* Sidebar */}
-      <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r bg-card/40 px-4 py-6">
-        <Link href="/books" className="flex items-center gap-2 px-2 font-semibold">
-          <div className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <BookOpen className="size-4" />
-          </div>
-          Bookcord
+      <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm">
+        <Link href="/books" className="flex items-center gap-2.5 px-2">
+          <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
+            <BookOpen className="size-4.5" strokeWidth={1.75} />
+          </span>
+          <span className="font-display text-2xl tracking-tight">Bookcord</span>
         </Link>
 
         <div className="mt-8 flex-1">
           <StudentNav />
         </div>
 
-        <div className="flex flex-col gap-3 border-t pt-4">
+        <div className="flex flex-col gap-3 border-t border-border pt-4">
           <div className="flex items-center justify-between px-2">
             <UserMenu profile={profile} />
             <ThemeToggle />

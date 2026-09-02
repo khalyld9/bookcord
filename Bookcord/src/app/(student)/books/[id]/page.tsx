@@ -1,13 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { BookDetail } from "@/components/books/book-detail";
-import { Button } from "@/components/ui/button";
 import { getBook } from "@/lib/data/books";
 
 type PageProps = {
   params: Promise<{ id: string }>;
+};
+
+export const metadata: Metadata = {
+  title: "Book details",
 };
 
 export default async function BookDetailPage({ params }: PageProps) {
@@ -17,14 +21,20 @@ export default async function BookDetailPage({ params }: PageProps) {
   if (!book) notFound();
 
   return (
-    
-      
-        
-          
-          Back to catalog
-        
-      
-      
-    
+    <div className="flex flex-col gap-6">
+      <Link
+        href="/books"
+        className="group inline-flex w-fit items-center gap-2 text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"
+      >
+        <ArrowLeft
+          className="size-4 transition-transform duration-300 group-hover:-translate-x-0.5"
+          strokeWidth={1.75}
+          aria-hidden="true"
+        />
+        Back to catalog
+      </Link>
+
+      <BookDetail book={book} />
+    </div>
   );
 }

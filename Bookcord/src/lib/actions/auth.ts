@@ -106,12 +106,14 @@ const signupSchema = z
     },
   );
 
+export type SignupState = {
+  error?: string;
+  success?: boolean;
+  message?: string;
+};
+
 export async function signup(
-  _prevState: {
-    error: string;
-    success: boolean;
-    message: string;
-  },
+  _prevState: SignupState,
   formData: FormData,
 ) {
   const parsed = signupSchema.safeParse({

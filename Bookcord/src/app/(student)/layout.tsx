@@ -28,11 +28,11 @@ export default async function StudentLayout({
           <StudentNav />
         </div>
 
-        <div className="mt-4 shrink-0">
-          <MascotTip />
-        </div>
-
         <div className="flex flex-col gap-3 border-t border-border pt-4">
+          {/* Booky is deliberately tall — the balloon may straddle the divider. */}
+          <div className="relative z-10 -mt-16">
+            <MascotTip />
+          </div>
           <ThemeSwitcher />
           <div className="flex items-center justify-between gap-2 px-2">
             <UserMenu profile={profile} />

@@ -2,6 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { usePathname } from "next/navigation";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import pose1 from "@/assets/mascot/pose-1.png";
@@ -105,10 +106,52 @@ function tipFor(pathname: string): Tip {
   );
 }
 
+const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+
+function subscribeToMotionPreference(onChange: () => void) {
+  const query = window.matchMedia(REDUCED_MOTION);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function getMotionPreference() {
+  return window.matchMedia(REDUCED_MOTION).matches;
+}
+
 /**
- * The mascot + a cartoon speech balloon pinned to the bottom of the sidebar.
- * The white bubble sits above Booky's head with a little tail, and both the
- * pose and the line glide over when the route changes.
+ * Types the line out letter by letter. Keyed by route from the parent so the
+ * count restarts on navigation; reduced-motion users get the whole line at
+ * once.
+ */
+function Typewriter({ text }: { text: string }) {
+  const reduced = useSyncExternalStore(
+    subscribeToMotionPreference,
+    getMotionPreference,
+    () => false,
+  );
+  const [shown, setShown] = useState(0);
+
+  useEffect(() => {
+    if (reduced) return;
+
+    let index = 0;
+    const id = setInterval(() => {
+      index += 1;
+      setShown(index);
+      if (index >= text.length) clearInterval(id);
+    }, 26);
+
+    return () => clearInterval(id);
+  }, [text, reduced]);
+
+  if (reduced) return <>{text}</>;
+  return <>{text.slice(0, shown)}</>;
+}
+
+/**
+ * The mascot + a white cartoon balloon pinned to the bottom of the sidebar.
+ * Booky is big enough that the balloon happily overlaps the sidebar divider.
+ * The pose glides and the line types itself when the route changes.
  */
 export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
   const routePathname = usePathname();
@@ -116,35 +159,19 @@ export function MascotTip({ pathnameOverride }: { pathnameOverride?: string }) {
   const tip = tipFor(pathname);
 
   return (
-    <div
-      className="flex flex-col items-center gap-2 px-1"
-      aria-label="Booky says"
-    >
+    <div className="flex flex-col items-center gap-2 px-1" aria-label="Booky says">
       {/* Cartoon balloon — stays white in every theme, like a comic strip. */}
       <div className="relative w-full rounded-2xl bg-white px-3.5 py-2.5 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.7)]">
-        <AnimatePresence initial={false} mode="wait">
-          <motion.p
-            key={pathname}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.18 }}
-            className="text-xs leading-relaxed text-[#472a21]"
-          >
-            {tip.text}
-          </motion.p>
-        </AnimatePresence>
+        <p className="min-h-10 text-xs leading-relaxed text-[#472a21]">
+          <Typewriter key={pathname} text={tip.text} />
+        </p>
         <span
           className="absolute -bottom-[5px] left-1/2 size-2.5 -translate-x-1/2 rotate-45 bg-white"
           aria-hidden="true"
         />
       </div>
 
-      <div
-        className="relative h-28 w-full"
-        role="img"
-        aria-label={tip.alt}
-      >
+      <div className="relative h-32 w-full" role="img" aria-label={tip.alt}>
         <AnimatePresence initial={false} mode="popLayout">
           <motion.span
             key={pathname}

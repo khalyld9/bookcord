@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
+import { BrandMark } from "@/components/layout/brand-mark";
 import heroImage from "@/assets/bookcord-hero.jpg";
 
 export function AuthShell({
@@ -47,9 +48,7 @@ export function AuthShell({
         <section className="flex flex-col bg-card p-8 sm:p-12">
           <header className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
-              <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
-                <BookOpen className="size-4.5" strokeWidth={1.75} />
-              </span>
+              <BrandMark />
               <span className="font-display text-2xl tracking-tight">
                 Bookcord
               </span>

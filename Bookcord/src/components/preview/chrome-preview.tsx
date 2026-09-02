@@ -3,6 +3,7 @@
 import { LayoutGroup } from "framer-motion";
 
 import { BookOpening } from "@/components/loading/book-opening";
+import { MascotTip } from "@/components/layout/mascot-tip";
 import { StudentNav } from "@/components/layout/student-nav";
 import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 
@@ -31,6 +32,10 @@ export function ChromePreview() {
 
             <div className="mt-6 border-t border-border pt-4">
               <ThemeSwitcher />
+            </div>
+
+            <div className="mt-6 border-t border-border pt-4">
+              <MascotTip pathnameOverride={href} />
             </div>
           </div>
         ))}

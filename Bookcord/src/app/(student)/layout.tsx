@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
 
+import { BrandMark } from "@/components/layout/brand-mark";
+import { MascotTip } from "@/components/layout/mascot-tip";
 import { StudentNav } from "@/components/layout/student-nav";
 import { UserMenu } from "@/components/layout/user-menu";
 import { SignOutButton } from "@/components/layout/sign-out-button";
@@ -19,14 +20,16 @@ export default async function StudentLayout({
       {/* Sidebar */}
       <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm">
         <Link href="/books" className="flex items-center gap-2.5 px-2">
-          <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
-            <BookOpen className="size-4.5" strokeWidth={1.75} />
-          </span>
+          <BrandMark />
           <span className="font-display text-2xl tracking-tight">Bookcord</span>
         </Link>
 
-        <div className="mt-8 flex-1">
+        <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
           <StudentNav />
+        </div>
+
+        <div className="mt-4 shrink-0">
+          <MascotTip />
         </div>
 
         <div className="flex flex-col gap-3 border-t border-border pt-4">

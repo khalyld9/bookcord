@@ -163,8 +163,8 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
   ];
 
   const activityLinks = [
-    { href: "/my-books", label: "Currently borrowed", value: profile.activity.activeIssues },
-    { href: "/history", label: "Copies borrowed all time", value: profile.activity.copiesBorrowed },
+    { href: "/my-books", label: "Currently checked out", value: profile.activity.activeIssues },
+    { href: "/history", label: "Copies checked out all time", value: profile.activity.copiesBorrowed },
     { href: "/history", label: "Returned", value: profile.activity.returned },
   ];
 

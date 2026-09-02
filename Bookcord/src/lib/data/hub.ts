@@ -2,7 +2,14 @@ import "server-only";
 
 import { bookRelations, type BookListItem } from "@/lib/data/books";
 import { createClient } from "@/lib/supabase/server";
-import type { Book, HoldRequest, Profile, SavedBook } from "@/types/database";
+import type {
+  Book,
+  HoldRequest,
+  Profile,
+  Reservation,
+  ReservationStatus,
+  SavedBook,
+} from "@/types/database";
 
 export type SavedBookListItem = SavedBook & { books: BookListItem | null };
 export type HoldRequestListItem = HoldRequest & {
@@ -10,6 +17,24 @@ export type HoldRequestListItem = HoldRequest & {
     author: { name: string } | null;
     subject: { name: string } | null;
   }) | null;
+};
+
+export type ReservationBookRef = Pick<
+  Book,
+  "id" | "title" | "isbn" | "cover_image_url"
+> & {
+  author: { name: string } | null;
+  subject: { name: string } | null;
+};
+
+export type ReservationListItem = Reservation & {
+  books: ReservationBookRef | null;
+};
+
+/** Full row for the librarian claim desk, resolved from a scanned QR code. */
+export type ReservationClaimDetail = Reservation & {
+  books: ReservationBookRef | null;
+  profile: Pick<Profile, "id" | "full_name" | "student_id" | "email"> | null;
 };
 
 export type SyllabusGroup = {
@@ -88,6 +113,53 @@ export async function getHoldRequests(profile: Profile) {
   return data ?? [];
 }
 
+/** Every reservation the student has made, newest first. */
+export async function getReservations(profile: Profile) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("reservations")
+    .select(
+      `
+        *,
+        books:book_id(
+          id, title, isbn, cover_image_url,
+          author:authors!books_author_id_fkey(name),
+          subject:subjects!books_subject_id_fkey(name)
+        )
+      `,
+    )
+    .eq("profile_id", profile.id)
+    .order("created_at", { ascending: false })
+    .overrideTypes<ReservationListItem[], { merge: false }>();
+
+  if (error) throw error;
+  return data ?? [];
+}
+
+/** Claim-desk lookup: the exact reservation behind a scanned QR code. */
+export async function getReservationByCode(code: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("reservations")
+    .select(
+      `
+        *,
+        books:book_id(
+          id, title, isbn, cover_image_url,
+          author:authors!books_author_id_fkey(name),
+          subject:subjects!books_subject_id_fkey(name)
+        ),
+        profile:profiles!reservations_profile_id_fkey(id, full_name, student_id, email)
+      `,
+    )
+    .eq("code", code.trim().toUpperCase())
+    .limit(1)
+    .overrideTypes<ReservationClaimDetail[], { merge: false }>();
+
+  if (error) throw error;
+  return data?.[0] ?? null;
+}
+
 /**
  * Course syllabi are derived from the catalog: every live textbook filed under
  * the student's own strand and year level, grouped by subject.
@@ -152,11 +224,11 @@ export async function getSyllabi(profile: Profile): Promise<SyllabiResult> {
   };
 }
 
-/** Wishlist + open-hold state for a single title, used by the book page. */
+/** Wishlist + open-hold + reservation state for a title, used by the book page. */
 export async function getHubStateForBook(profileId: string, bookId: string) {
   const supabase = await createClient();
 
-  const [saved, hold] = await Promise.all([
+  const [saved, hold, reservation] = await Promise.all([
     supabase
       .from("saved_books")
       .select("id")
@@ -170,7 +242,21 @@ export async function getHubStateForBook(profileId: string, bookId: string) {
       .eq("book_id", bookId)
       .in("status", ["PENDING", "READY"])
       .maybeSingle(),
+    supabase
+      .from("reservations")
+      .select("id, status")
+      .eq("profile_id", profileId)
+      .eq("book_id", bookId)
+      .in("status", ["PENDING", "READY"])
+      .limit(1)
+      .overrideTypes<{ id: string; status: ReservationStatus }[], {
+        merge: false;
+      }>(),
   ]);
 
-  return { saved: Boolean(saved.data), hasOpenHold: Boolean(hold.data) };
+  return {
+    saved: Boolean(saved.data),
+    hasOpenHold: Boolean(hold.data),
+    openReservation: reservation.data?.[0] ?? null,
+  };
 }

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { ACTIVE_STRAND, ACTIVE_YEAR_LEVELS } from "@/lib/data/books";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile, Strand, YearLevel } from "@/types/database";
 
@@ -40,8 +41,14 @@ export async function getProfileOptions() {
       .from("year_levels")
       .select("id, name")
       .is("archived_at", null)
+      .in("name", ACTIVE_YEAR_LEVELS)
       .order("sort_order"),
-    supabase.from("strands").select("id, name").is("archived_at", null).order("name"),
+    supabase
+      .from("strands")
+      .select("id, name")
+      .is("archived_at", null)
+      .eq("name", ACTIVE_STRAND)
+      .order("name"),
   ]);
 
   return {

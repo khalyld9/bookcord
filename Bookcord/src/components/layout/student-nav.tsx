@@ -6,9 +6,8 @@ import { motion } from "framer-motion";
 import {
   BookOpen,
   Bookmark,
-  CalendarClock,
-  History,
   LibraryBig,
+  QrCode,
   User,
 } from "lucide-react";
 
@@ -22,13 +21,12 @@ type NavItem = {
 
 const primaryLinks: NavItem[] = [
   { href: "/books", label: "Books", icon: BookOpen },
-  { href: "/my-books", label: "My Books", icon: History },
+  { href: "/my-books", label: "My Reservations", icon: QrCode },
   { href: "/profile", label: "Profile", icon: User },
 ];
 
 const hubLinks: NavItem[] = [
   { href: "/saved", label: "Saved / Wishlist", icon: Bookmark },
-  { href: "/holds", label: "Hold Requests", icon: CalendarClock },
   { href: "/syllabi", label: "Course Syllabi", icon: LibraryBig },
 ];
 

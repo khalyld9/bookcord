@@ -1,25 +1,28 @@
+import Link from "next/link";
 import { CalendarDays, Hash, Info } from "lucide-react";
 
 import { BookCover } from "@/components/books/book-cover";
 import { BookStatusBadge } from "@/components/books/book-status-badge";
-import { HoldRequestForm } from "@/components/hub/hold-request-form";
+import { ReserveBookButton } from "@/components/hub/reserve-book-button";
+import { ReservationStatusChip } from "@/components/hub/reservation-status-chip";
 import { SaveBookButton } from "@/components/hub/save-book-button";
 import { Separator } from "@/components/ui/separator";
 import { Reveal } from "@/components/motion/reveal";
 import { formatDate } from "@/lib/utils";
 import type { BookListItem } from "@/lib/data/books";
+import type { ReservationStatus } from "@/types/database";
 
 export function BookDetail({
   book,
   saved = false,
-  hasOpenHold = false,
+  openReservation = null,
   showHubActions = false,
 }: {
   book: BookListItem;
   /** Already on the student's wishlist. */
   saved?: boolean;
-  /** An open hold request already exists for this title. */
-  hasOpenHold?: boolean;
+  /** An open reservation already exists for this title. */
+  openReservation?: { id: string; status: ReservationStatus } | null;
   /** Hidden on the unauthenticated preview route. */
   showHubActions?: boolean;
 }) {
@@ -139,30 +142,31 @@ export function BookDetail({
 
                 <SaveBookButton bookId={book.id} saved={saved} />
 
-                {availableStock === 0 ? (
-                  hasOpenHold ? (
-                    <p className="rounded-2xl border border-border bg-muted/50 px-5 py-4 text-sm text-muted-foreground">
-                      You are already in the queue for this title. Track it under{" "}
-                      <span className="font-medium text-foreground">
-                        Hold Requests
+                {openReservation ? (
+                  <div className="flex flex-col gap-3 rounded-2xl border border-border bg-muted/50 px-5 py-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <ReservationStatusChip status={openReservation.status} />
+                      <span className="text-sm font-medium text-foreground">
+                        You already reserved this title
                       </span>
-                      .
-                    </p>
-                  ) : (
-                    <div className="flex flex-col gap-4 rounded-2xl border border-border bg-muted/40 p-5">
-                      <div>
-                        <p className="font-display text-base font-medium tracking-[-0.02em]">
-                          Every copy is out
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          Join the queue and the librarian will set a copy aside
-                          for you when one comes back.
-                        </p>
-                      </div>
-                      <HoldRequestForm bookId={book.id} />
                     </div>
-                  )
-                ) : null}
+                    <p className="text-sm text-muted-foreground">
+                      Open{" "}
+                      <Link
+                        href="/my-books"
+                        className="font-medium text-ochre-deep underline-offset-4 transition-colors hover:text-ochre hover:underline"
+                      >
+                        My Reservations
+                      </Link>{" "}
+                      to show your QR code at the counter and check it out.
+                    </p>
+                  </div>
+                ) : (
+                  <ReserveBookButton
+                    bookId={book.id}
+                    availableStock={availableStock}
+                  />
+                )}
               </section>
             </>
           ) : null}

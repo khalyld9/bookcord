@@ -82,7 +82,7 @@ async function answerAvailability(question: string): Promise<BookyReply> {
     .slice(0, 4)
     .map((book) => `• ${book.title}${book.subject ? ` (${book.subject})` : ""}`);
   return {
-    answer: `These are out of stock right now (perfect candidates for a hold):\n${lines.join("\n")}`,
+    answer: `These are out of stock right now (perfect ones to reserve):\n${lines.join("\n")}`,
   };
 }
 
@@ -97,15 +97,15 @@ export async function askBooky(question: string): Promise<BookyReply> {
     return answerRestocks();
   }
 
-  if (/(avail|stock|out of|cop(y|ies)|borrow|reserve)/.test(q)) {
-    return answerAvailability(question);
-  }
-
-  if (/hold/.test(q)) {
+  if (/(reserv|claim|qr|check ?out|pick ?up|hold)/.test(q)) {
     return {
       answer:
-        "If every copy is out, open the book's page and press “Join the queue”. You'll see it move to Ready for pickup under Hold Requests.",
+        "Open the book's page and press “Reserve this book” — that creates your claim QR. Find it under My Reservations, show it at the counter, and the librarian scans it and hands your copy over. It goes from Pending to Claimed right there!",
     };
+  }
+
+  if (/(avail|stock|out of|cop(y|ies)|borrow)/.test(q)) {
+    return answerAvailability(question);
   }
 
   if (/(save|wishlist)/.test(q)) {
@@ -118,7 +118,7 @@ export async function askBooky(question: string): Promise<BookyReply> {
   if (/(return|due|overdue)/.test(q)) {
     return {
       answer:
-        "Your expected return dates live under My Books. Bring them back on time and the shelf stays happy!",
+        "Your checkouts and due dates live under History. Bring books back on time and the shelf stays happy!",
     };
   }
 
@@ -150,13 +150,13 @@ export async function askBooky(question: string): Promise<BookyReply> {
   if (/(^(hi|hello|hey|yo)\b|good (morning|afternoon|evening)|kumusta)/.test(q)) {
     return {
       answer:
-        "Hello hello! Ask me what's restocking, what's available, or how holds work — or message the librarian in the other tab.",
+        "Hello hello! Ask me what's restocking, what's available, or how reserving works — or message the librarian in the other tab.",
     };
   }
 
   return {
     answer:
-      "Hmm, that one's above my pay grade. I'm best at restocks, availability and holds — or send it to the librarian in the Librarian tab!",
+      "Hmm, that one's above my pay grade. I'm best at restocks, availability and reserving — or send it to the librarian in the Librarian tab!",
   };
 }
 

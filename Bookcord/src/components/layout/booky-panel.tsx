@@ -19,11 +19,13 @@ type BotMessage = { id: number; role: "user" | "bot"; text: string };
 const GREETING: BotMessage = {
   id: 0,
   role: "bot",
-  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how holds work — or flip to the Librarian tab to message a real human.",
+  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works — or flip to the Librarian tab to message a real human.",
 };
 
+/* The panel is intentionally light in every theme (light, dark, OLED), so
+   all colors below are literal — no tokens that could invert. */
 const inputClasses =
-  "w-full rounded-full border border-input bg-background px-4 py-2.5 pr-11 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+  "w-full rounded-full border border-[#e5cfc4] bg-white px-4 py-2.5 pr-11 text-sm text-[#2a1512] outline-none transition-all placeholder:text-[#a08579] focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 export function BookyPanel({
   open,
@@ -135,10 +137,10 @@ export function BookyPanel({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 24, scale: 0.96 }}
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
-          className="fixed bottom-6 left-6 z-50 flex max-h-[min(72vh,42rem)] w-[min(24rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-card shadow-shelf ring-1 ring-border"
+          className="fixed bottom-6 left-6 z-50 flex max-h-[min(72vh,42rem)] w-[min(24rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-[#fbf6ef] shadow-shelf ring-1 ring-[#e7d8c9]"
         >
-          <header className="flex items-center gap-3 border-b border-border px-4 py-3">
-            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-cream ring-1 ring-border">
+          <header className="flex items-center gap-3 border-b border-[#e7d8c9] px-4 py-3">
+            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white ring-1 ring-[#e7d8c9]">
               <Image
                 src={face}
                 alt=""
@@ -148,10 +150,10 @@ export function BookyPanel({
               />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="font-display text-base font-medium tracking-[-0.02em]">
+              <p className="font-display text-base font-medium tracking-[-0.02em] text-[#472a21]">
                 Booky
               </p>
-              <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-[#a08579]">
                 Library helper
               </p>
             </div>
@@ -159,7 +161,7 @@ export function BookyPanel({
               type="button"
               onClick={onClose}
               aria-label="Close chat"
-              className="grid size-8 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              className="grid size-8 place-items-center rounded-full text-[#a08579] transition-colors hover:bg-[#472a21]/10 hover:text-[#472a21]"
             >
               <X className="size-4" aria-hidden="true" />
             </button>
@@ -181,8 +183,8 @@ export function BookyPanel({
                 className={cn(
                   "relative flex-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
                   tab === item.id
-                    ? "text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground",
+                    ? "text-[#fff5ee]"
+                    : "text-[#8d6a5e] hover:text-[#472a21]",
                 )}
               >
                 {tab === item.id ? (
@@ -209,8 +211,8 @@ export function BookyPanel({
                     className={cn(
                       "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
                       item.role === "bot"
-                        ? "self-start rounded-bl-md bg-white text-[#472a21]"
-                        : "self-end rounded-br-md text-primary-foreground",
+                        ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#efe2d4]"
+                        : "self-end rounded-br-md text-[#fff5ee]",
                     )}
                     style={
                       item.role === "user"
@@ -223,7 +225,7 @@ export function BookyPanel({
                 ))
               : needsSetup
                 ? (
-                  <p className="rounded-2xl border border-dashed border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                  <p className="rounded-2xl border border-dashed border-[#e0cdbd] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">
                     The chat tables are not in the database yet. Run{" "}
                     <code className="font-mono">
                       supabase/migrations/0004_booky_chat.sql
@@ -233,7 +235,7 @@ export function BookyPanel({
                 )
                 : thread.length === 0
                   ? (
-                    <p className="rounded-2xl border border-dashed border-border px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+                    <p className="rounded-2xl border border-dashed border-[#e0cdbd] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">
                       No messages yet. Write to the librarian below — replies
                       show up here.
                     </p>
@@ -244,8 +246,8 @@ export function BookyPanel({
                         className={cn(
                           "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
                           line.sender === "ADMIN"
-                            ? "self-start rounded-bl-md bg-white text-[#472a21]"
-                            : "self-end rounded-br-md text-primary-foreground",
+                            ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#efe2d4]"
+                            : "self-end rounded-br-md text-[#fff5ee]",
                         )}
                         style={
                           line.sender === "STUDENT"
@@ -258,7 +260,7 @@ export function BookyPanel({
                     ))}
 
             {tab === "bot" && busy ? (
-              <div className="flex items-center gap-2 self-start rounded-2xl rounded-bl-md bg-white px-3.5 py-2.5 text-xs text-[#472a21]">
+              <div className="flex items-center gap-2 self-start rounded-2xl rounded-bl-md bg-white px-3.5 py-2.5 text-xs text-[#472a21] ring-1 ring-[#efe2d4]">
                 <LoaderCircle className="size-3.5 animate-spin" aria-hidden="true" />
                 Booky is flipping through the cards…
               </div>
@@ -266,11 +268,11 @@ export function BookyPanel({
           </div>
 
           {demo ? (
-            <p className="border-t border-border px-4 py-3 text-center text-xs text-muted-foreground">
+            <p className="border-t border-[#e7d8c9] px-4 py-3 text-center text-xs text-[#a08579]">
               Preview mode — sign in to chat for real.
             </p>
           ) : tab === "bot" ? (
-            <form onSubmit={submitQuestion} className="relative border-t border-border p-3">
+            <form onSubmit={submitQuestion} className="relative border-t border-[#e7d8c9] p-3">
               <input
                 value={question}
                 onChange={(event) => setQuestion(event.target.value)}
@@ -282,14 +284,14 @@ export function BookyPanel({
                 type="submit"
                 disabled={busy || !question.trim()}
                 aria-label="Send question"
-                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-primary-foreground disabled:opacity-40"
+                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-[#fff5ee] disabled:opacity-40"
                 style={{ backgroundImage: "var(--gradient-cta)" }}
               >
                 <Send className="size-3.5" aria-hidden="true" />
               </button>
             </form>
           ) : (
-            <form onSubmit={submitMessage} className="relative border-t border-border p-3">
+            <form onSubmit={submitMessage} className="relative border-t border-[#e7d8c9] p-3">
               <input
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
@@ -301,7 +303,7 @@ export function BookyPanel({
                 type="submit"
                 disabled={!message.trim()}
                 aria-label="Send message"
-                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-primary-foreground disabled:opacity-40"
+                className="absolute right-5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-[#fff5ee] disabled:opacity-40"
                 style={{ backgroundImage: "var(--gradient-cta)" }}
               >
                 <Send className="size-3.5" aria-hidden="true" />

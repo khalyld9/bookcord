@@ -11,6 +11,12 @@ export type MovementType = "RESTOCK" | "ISSUE" | "RETURN" | "ADJUSTMENT";
 export type IssueStatus = "ISSUED" | "RETURNED" | "PARTIALLY_RETURNED";
 export type ReturnCondition = "GOOD" | "FAIR" | "DAMAGED" | "LOST";
 export type ChatSender = "STUDENT" | "ADMIN";
+export type ReservationStatus =
+  | "PENDING"
+  | "READY"
+  | "CLAIMED"
+  | "RETURNED"
+  | "CANCELLED";
 export type HoldStatus =
   | "PENDING"
   | "READY"
@@ -19,8 +25,6 @@ export type HoldStatus =
   | "EXPIRED";
 
 type Timestamp = string;
-
-type TableRow<T> = T & Record<string, unknown>;
 
 export type Database = {
   public: {
@@ -285,6 +289,32 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["chat_messages"]["Row"]>;
         Relationships: [];
       };
+      reservations: {
+        Row: {
+          id: string;
+          profile_id: string;
+          book_id: string;
+          status: ReservationStatus;
+          code: string;
+          quantity: number;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+          claimed_at: Timestamp | null;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          book_id: string;
+          status?: ReservationStatus;
+          code?: string;
+          quantity?: number;
+          created_at?: Timestamp;
+          updated_at?: Timestamp;
+          claimed_at?: Timestamp | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["reservations"]["Row"]>;
+        Relationships: [];
+      };
       saved_books: {
         Row: {
           id: string;
@@ -412,4 +442,5 @@ export type YearLevel = Tables<"year_levels">;
 export type Author = Tables<"authors">;
 export type SavedBook = Tables<"saved_books">;
 export type HoldRequest = Tables<"hold_requests">;
+export type Reservation = Tables<"reservations">;
 export type ChatMessage = Tables<"chat_messages">;

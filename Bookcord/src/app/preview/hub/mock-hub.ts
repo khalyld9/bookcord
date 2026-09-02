@@ -54,7 +54,7 @@ export const syllabi: SyllabiResult = (() => {
       .map(([subject, books]) => ({ subject, books }))
       .sort((a, b) => a.subject.localeCompare(b.subject)),
     totalBooks: catalog.length,
-    strandName: "STEM",
+    strandName: "ICT",
     yearLevelName: "Grade 12",
     profileIncomplete: false,
   };

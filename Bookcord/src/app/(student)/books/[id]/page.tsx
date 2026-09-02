@@ -7,6 +7,7 @@ import { BookDetail } from "@/components/books/book-detail";
 import { requireUser } from "@/lib/auth";
 import { getBook } from "@/lib/data/books";
 import { getHubStateForBook, isMissingTable } from "@/lib/data/hub";
+import type { ReservationStatus } from "@/types/database";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -23,9 +24,13 @@ export default async function BookDetailPage({ params }: PageProps) {
 
   if (!book) notFound();
 
-  // Wishlist / hold state lives in migration 0003; without it the book page
-  // still renders, just without those two actions.
-  let hub = { saved: false, hasOpenHold: false };
+  // Wishlist / reservation state lives in migrations 0003 + 0005; without
+  // them the book page still renders, just without those actions.
+  let hub: {
+    saved: boolean;
+    hasOpenHold: boolean;
+    openReservation: { id: string; status: ReservationStatus } | null;
+  } = { saved: false, hasOpenHold: false, openReservation: null };
   try {
     hub = await getHubStateForBook(profile.id, id);
   } catch (error) {
@@ -49,7 +54,7 @@ export default async function BookDetailPage({ params }: PageProps) {
       <BookDetail
         book={book}
         saved={hub.saved}
-        hasOpenHold={hub.hasOpenHold}
+        openReservation={hub.openReservation}
         showHubActions
       />
     </div>

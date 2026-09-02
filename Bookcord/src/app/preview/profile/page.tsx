@@ -44,17 +44,13 @@ export default function ProfilePreviewPage() {
             memberSince: "2026-06-02T08:00:00Z",
             yearLevelId: "yl-11",
             yearLevelName: "Grade 11",
-            strandId: "strand-stem",
-            strandName: "STEM",
+            strandId: "strand-ict",
+            strandName: "ICT",
             yearLevels: [
               { id: "yl-11", name: "Grade 11" },
               { id: "yl-12", name: "Grade 12" },
             ],
-            strands: [
-              { id: "strand-stem", name: "STEM" },
-              { id: "strand-abm", name: "ABM" },
-              { id: "strand-humss", name: "HUMSS" },
-            ],
+            strands: [{ id: "strand-ict", name: "ICT" }],
             activity: { activeIssues: 2, copiesBorrowed: 7, returned: 5 },
             revision: "2026-08-24T09:15:00Z",
           }}

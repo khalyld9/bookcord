@@ -48,8 +48,8 @@ const TIPS: Tip[] = [
     match: "/my-books",
     mode: "prefix",
     pose: pose6,
-    alt: "Booky holding the borrowed ledger open",
-    text: "That's your stack! Mind the return dates, okay?",
+    alt: "Booky holding up a QR ticket",
+    text: "Reserve a book, then flash your QR at the counter!",
   },
   {
     match: "/saved",

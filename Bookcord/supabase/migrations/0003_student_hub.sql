@@ -120,8 +120,7 @@ begin
 
   new.fulfilled_at := null;
   return new;
-end;
-$$;
+end $$;
 
 drop trigger if exists hold_requests_protect on public.hold_requests;
 

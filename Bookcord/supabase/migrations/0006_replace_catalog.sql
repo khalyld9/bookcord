@@ -7,16 +7,23 @@
 -- Booky placeholder stays visible.
 -- ===============================================================
 
--- Clear dependent rows first (FKs use restrict/cascade in places).
-delete from public.saved_books;
-delete from public.hold_requests;
-delete from public.reservations;
-delete from public.stock_movements;
-delete from public.book_returns;
-delete from public.book_issues;
-delete from public.restocks;
-delete from public.inventory;
-delete from public.books;
+-- Clear dependent rows first (children before parents). Tables from
+-- optional migrations may not exist in older projects, so every delete
+-- is guarded.
+do $$
+declare
+  t text;
+begin
+  foreach t in array array[
+    'public.saved_books', 'public.hold_requests', 'public.reservations',
+    'public.stock_movements', 'public.book_returns', 'public.book_issues',
+    'public.restocks', 'public.inventory', 'public.books'
+  ] loop
+    if to_regclass(t) is not null then
+      execute format('delete from %s', t);
+    end if;
+  end loop;
+end $$;
 
 -- Reference data used by the new titles.
 insert into public.strands (name)

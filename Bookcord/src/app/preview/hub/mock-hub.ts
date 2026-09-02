@@ -1,6 +1,7 @@
 import { catalog } from "@/app/preview/library/mock-catalog";
 import type {
   HoldRequestListItem,
+  ReservationListItem,
   SavedBookListItem,
   SyllabiResult,
 } from "@/lib/data/hub";
@@ -59,3 +60,28 @@ export const syllabi: SyllabiResult = (() => {
     profileIncomplete: false,
   };
 })();
+
+export const reservationItems: ReservationListItem[] = ([
+  { status: "PENDING", claimed: null, code: "AB12CD34" },
+  { status: "READY", claimed: null, code: "EF56GH78" },
+  { status: "CLAIMED", claimed: "2026-08-30T02:00:00.000Z", code: "IJ90KL12" },
+  { status: "CANCELLED", claimed: null, code: "MN34OP56" },
+] as const).map((seed, index) => ({
+  id: `reservation-${index}`,
+  profile_id: "profile-1",
+  book_id: book(index + 2).id,
+  status: seed.status,
+  code: seed.code,
+  quantity: 1,
+  created_at: `2026-08-${20 + index}T02:00:00.000Z`,
+  updated_at: `2026-08-${20 + index}T02:00:00.000Z`,
+  claimed_at: seed.claimed,
+  books: {
+    id: book(index + 2).id,
+    title: book(index + 2).title,
+    isbn: book(index + 2).isbn,
+    cover_image_url: book(index + 2).cover_image_url,
+    author: book(index + 2).author,
+    subject: book(index + 2).subject,
+  },
+}));

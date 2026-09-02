@@ -11,6 +11,12 @@ import { requireUser } from "@/lib/auth";
 import { getMyIssues } from "@/lib/data/issues";
 import { formatDate } from "@/lib/utils";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Book History",
+};
+
 export default async function HistoryPage() {
   const { profile } = await requireUser();
   const issues = await getMyIssues(profile);
@@ -19,10 +25,10 @@ export default async function HistoryPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <h1 className="font-display text-3xl font-medium tracking-[-0.03em]">
-          Borrowing History
+          Book History
         </h1>
         <p className="text-sm text-muted-foreground">
-          A complete record of books you have borrowed.
+          A complete record of the books checked out to you.
         </p>
       </div>
 

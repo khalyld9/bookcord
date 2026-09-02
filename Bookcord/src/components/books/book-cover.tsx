@@ -1,77 +1,35 @@
 import Image from "next/image";
 
+import mascotFace from "@/assets/mascot/face.png";
 import { cn } from "@/lib/utils";
 
-type CoverPalette = {
-  from: string;
-  via: string;
-  to: string;
-  accent: string;
-};
-
 /**
- * Deterministic cover art. There is no cover image stored for most textbook
- * records, so instead of a flat colour block each book renders a generated
- * cover: the palette is derived from the title, which keeps the same book
- * looking the same on every visit without storing anything new.
+ * Solid grey placeholder for textbooks without a scanned cover: Booky the
+ * mascot, desaturated, on a flat grey ground.
  */
-const PALETTES: CoverPalette[] = [
-  { from: "#7a150e", via: "#570f09", to: "#330a06", accent: "#e8a13a" }, // ember
-  { from: "#a3711f", via: "#7a5216", to: "#472f0c", accent: "#f2cf7a" }, // ochre
-  { from: "#2f5a44", via: "#21422f", to: "#132819", accent: "#8fc3a4" }, // sage
-  { from: "#26355c", via: "#1a2542", to: "#0e1524", accent: "#8fa8e0" }, // ink
-  { from: "#5b1f3a", via: "#411427", to: "#260b17", accent: "#e2a0bd" }, // plum
-  { from: "#1d4b52", via: "#14353a", to: "#0a2023", accent: "#7fc4c9" }, // teal
-  { from: "#5a3524", via: "#3e231a", to: "#221310", accent: "#d9b184" }, // espresso
-];
-
-/** FNV-1a, so the palette choice is stable across renders and machines. */
-function hashSeed(value: string) {
-  let hash = 2166136261;
-  for (let index = 0; index < value.length; index += 1) {
-    hash ^= value.charCodeAt(index);
-    hash = Math.imul(hash, 16777619);
-  }
-  return Math.abs(hash);
-}
-
-export function coverPalette(seed: string) {
-  return PALETTES[hashSeed(seed) % PALETTES.length];
-}
-
-function CoverArt({
-  palette,
-  className,
-}: {
-  palette: CoverPalette;
-  className?: string;
-}) {
+function CoverPlaceholder({ className }: { className?: string }) {
   return (
-    <div className={cn("absolute inset-0", className)} aria-hidden="true">
-      <div
-        className="absolute inset-0"
-        style={{ backgroundColor: palette.to }}
-      />
-      {/* Spine */}
-      <div
-        className="absolute inset-y-0 left-0 w-[11%]"
-        style={{
-          backgroundColor: "rgba(0,0,0,0.35)",
-          borderRight: `1px solid ${palette.accent}44`,
-        }}
-      />
-      {/* Printed border, the way textbooks frame their titles */}
-      <div
-        className="absolute inset-[7%] rounded-[4px] opacity-45"
-        style={{ border: `1px solid ${palette.accent}66` }}
+    <div
+      className={cn(
+        "absolute inset-0 grid place-items-center bg-[#e7e2de]",
+        className,
+      )}
+      aria-hidden="true"
+    >
+      <Image
+        src={mascotFace}
+        alt=""
+        width={250}
+        height={200}
+        className="w-3/5 max-w-[7rem] opacity-50 grayscale"
       />
     </div>
   );
 }
 
 /**
- * Dark scrim along the bottom edge so the title stays legible whether it sits
- * over generated art or a scanned cover photo.
+ * Solid band along the bottom edge so the title stays legible whether it
+ * sits over the placeholder art or a scanned cover photo.
  */
 function CoverCaption({
   title,
@@ -100,8 +58,8 @@ function CoverCaption({
 }
 
 /**
- * Textbook cover: a scanned image when one exists, generated art otherwise.
- * Both get the same solid caption band treatment.
+ * Textbook cover: a scanned image when one exists, a grey Booky placeholder
+ * otherwise. Both get the same solid caption band treatment.
  */
 export function BookCover({
   src,
@@ -121,8 +79,6 @@ export function BookCover({
   className?: string;
   sizes?: string;
 }) {
-  const palette = coverPalette(title);
-
   return (
     <>
       {src ? (
@@ -134,7 +90,7 @@ export function BookCover({
           className={cn("object-cover", className)}
         />
       ) : (
-        <CoverArt palette={palette} className={className} />
+        <CoverPlaceholder className={className} />
       )}
 
       {caption ? (

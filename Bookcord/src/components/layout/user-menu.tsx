@@ -59,7 +59,7 @@ export function UserMenu({ profile }: { profile: Profile }) {
         <DropdownMenuItem asChild>
           <Link href="/history" className="flex items-center gap-2">
             <History className="size-4" />
-            Borrowing history
+            Book history
           </Link>
         </DropdownMenuItem>
 

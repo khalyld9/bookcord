@@ -50,7 +50,7 @@ export function LibraryView({
   return (
     <div className="flex flex-col gap-8">
       <Reveal>
-        <LibraryHero books={books} />
+        <LibraryHero />
       </Reveal>
 
       <Reveal

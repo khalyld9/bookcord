@@ -2,29 +2,13 @@ import Image from "next/image";
 import { LibraryBig } from "lucide-react";
 
 import heroImage from "@/assets/bookcord-hero.jpg";
-import type { BookListItem } from "@/lib/data/books";
 
 /**
  * Catalog masthead. Mirrors the brand panel of `AuthShell` (login/signup):
  * espresso surface, hero image, flat scrim, mono eyebrow and a
  * display-face headline.
  */
-export function LibraryHero({ books }: { books: BookListItem[] }) {
-  const onShelf = books.reduce(
-    (sum, book) => sum + (book.inventory?.available_stock ?? 0),
-    0,
-  );
-  const onLoan = books.reduce(
-    (sum, book) => sum + (book.inventory?.issued_stock ?? 0),
-    0,
-  );
-
-  const stats = [
-    { label: "Titles in view", value: books.length },
-    { label: "On the shelf", value: onShelf },
-    { label: "On loan", value: onLoan },
-  ];
-
+export function LibraryHero() {
   return (
     <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8 lg:p-10">
       <Image
@@ -55,22 +39,6 @@ export function LibraryHero({ books }: { books: BookListItem[] }) {
             strand, year level and subject.
           </p>
         </div>
-
-        <dl className="grid shrink-0 grid-cols-3 gap-px overflow-hidden rounded-2xl bg-espresso-foreground/20 ring-1 ring-espresso-foreground/20">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-espresso/70 px-4 py-4 backdrop-blur-sm sm:px-5"
-            >
-              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted">
-                {stat.label}
-              </dt>
-              <dd className="mt-2 font-display text-3xl font-medium tracking-[-0.03em] tabular-nums">
-                {stat.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );

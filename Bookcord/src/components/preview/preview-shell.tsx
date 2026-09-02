@@ -4,6 +4,7 @@ const routes = [
   { href: "/preview/library", label: "Catalog" },
   { href: "/preview/hub/saved", label: "Saved" },
   { href: "/preview/hub/holds", label: "Holds" },
+  { href: "/preview/hub/reservations", label: "Reservations" },
   { href: "/preview/hub/syllabi", label: "Syllabi" },
   { href: "/preview/chrome", label: "Sidebar / Themes" },
 ];

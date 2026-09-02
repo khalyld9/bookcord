@@ -43,6 +43,8 @@ create unique index if not exists reservations_one_open_per_book
 create index if not exists reservations_book_idx on public.reservations(book_id);
 create index if not exists reservations_profile_status_idx on public.reservations(profile_id, status);
 
+drop trigger if exists reservations_set_updated_at on public.reservations;
+
 create trigger reservations_set_updated_at
 before update on public.reservations
 for each row execute function public.set_updated_at();

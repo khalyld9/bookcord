@@ -30,14 +30,17 @@ create index if not exists chat_messages_profile_time
 
 alter table public.chat_messages enable row level security;
 
+drop policy if exists "chat read own or admin" on public.chat_messages;
 create policy "chat read own or admin"
   on public.chat_messages for select
   using (public.is_admin() or public.is_self(profile_id));
 
+drop policy if exists "chat student sends own" on public.chat_messages;
 create policy "chat student sends own"
   on public.chat_messages for insert
   with check (public.is_self(profile_id) and sender = 'STUDENT');
 
+drop policy if exists "chat admin sends" on public.chat_messages;
 create policy "chat admin sends"
   on public.chat_messages for insert
   with check (public.is_admin() and sender = 'ADMIN');

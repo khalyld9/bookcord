@@ -1,10 +1,16 @@
 import type { LibraryOptions } from "@/components/books/library-view";
-import type { BookListItem } from "@/lib/data/books";
 import type { Inventory } from "@/types/database";
 
+/**
+ * Sample catalog for the design previews. Mirrors the production catalog
+ * created by supabase/migrations/0006_replace_catalog.sql: the two Lyceum of
+ * Alabang learning modules plus one coverless test title (grey Booky
+ * placeholder).
+ */
+
 export const semesters = [
-  { id: "sem-1", name: "First Semester 2026" },
-  { id: "sem-2", name: "Second Semester 2026" },
+  { id: "sem-1", name: "1st Semester" },
+  { id: "sem-2", name: "2nd Semester" },
 ];
 export const strands = [{ id: "strand-ict", name: "ICT" }];
 export const yearLevels = [
@@ -12,10 +18,8 @@ export const yearLevels = [
   { id: "yl-12", name: "Grade 12" },
 ];
 export const subjects = [
-  { id: "sub-math", name: "Mathematics" },
-  { id: "sub-sci", name: "Science" },
-  { id: "sub-eng", name: "English" },
-  { id: "sub-hist", name: "History" },
+  { id: "sub-fil", name: "Filipino" },
+  { id: "sub-lit", name: "Literature" },
 ];
 
 export const options: LibraryOptions = {
@@ -27,122 +31,67 @@ export const options: LibraryOptions = {
 
 type Seed = {
   title: string;
-  author: string;
-  subject: string;
+  author: string | null;
+  subject: string | null;
   strand: string;
   yearLevel: string;
-  semester: string;
-  isbn: string;
+  semester: string | null;
+  isbn: string | null;
   total: number;
   available: number;
   minimum: number;
   description?: string;
+  cover?: string | null;
 };
 
 const seeds: Seed[] = [
   {
-    title: "General Mathematics for Senior High",
-    author: "Lourdes Ramirez",
-    subject: "Mathematics",
+    title: "Filipino sa Piling Larang Tech-Voc",
+    author: "Shermaine E. De Castro",
+    subject: "Filipino",
     strand: "ICT",
     yearLevel: "Grade 11",
-    semester: "First Semester 2026",
-    isbn: "978-621-0145-02-7",
-    total: 40,
-    available: 26,
-    minimum: 8,
+    semester: "1st Semester",
+    isbn: "978-621-8000-01-1",
+    total: 10,
+    available: 10,
+    minimum: 2,
+    cover: "/covers/filipino-sa-piling-larang-tech-voc.png",
     description:
-      "Functions, polynomials and an introduction to calculus, written for the Grade 11 general mathematics track.",
+      "Learning module, 2020 edition, exclusively for Lyceum of Alabang students.",
   },
   {
-    title: "Earth and Life Science",
-    author: "Andres Villanueva",
-    subject: "Science",
-    strand: "ICT",
-    yearLevel: "Grade 11",
-    semester: "First Semester 2026",
-    isbn: "978-621-0145-19-5",
-    total: 32,
-    available: 5,
-    minimum: 6,
-  },
-  {
-    title: "Philippine Literature in English",
-    author: "Maria Clara Santos",
-    subject: "English",
+    title: "21st Century Literature from the Philippines and the World",
+    author: "Thomas Eric C. Paulin",
+    subject: "Literature",
     strand: "ICT",
     yearLevel: "Grade 12",
-    semester: "Second Semester 2026",
-    isbn: "978-621-0145-33-1",
-    total: 24,
-    available: 18,
-    minimum: 4,
-  },
-  {
-    title: "Readings in Philippine History",
-    author: "Jose Bautista",
-    subject: "History",
-    strand: "ICT",
-    yearLevel: "Grade 11",
-    semester: "First Semester 2026",
-    isbn: "978-621-0145-47-8",
-    total: 30,
-    available: 0,
-    minimum: 5,
-  },
-  {
-    title: "Fundamentals of Accountancy",
-    author: "Patricia Dela Cruz",
-    subject: "Mathematics",
-    strand: "ICT",
-    yearLevel: "Grade 12",
-    semester: "Second Semester 2026",
-    isbn: "978-621-0145-58-4",
-    total: 28,
-    available: 21,
-    minimum: 6,
-  },
-  {
-    title: "General Chemistry 1",
-    author: "Rafael Mendoza",
-    subject: "Science",
-    strand: "ICT",
-    yearLevel: "Grade 11",
-    semester: "First Semester 2026",
-    isbn: "978-621-0145-66-9",
-    total: 36,
-    available: 30,
-    minimum: 8,
+    semester: "1st Semester",
+    isbn: "978-621-8000-02-8",
+    total: 10,
+    available: 7,
+    minimum: 2,
+    cover: "/covers/21st-century-literature-ph-world.png",
     description:
-      "Laboratory-aligned chemistry text covering atomic structure, stoichiometry and chemical bonding.",
+      "Learning module, 2020 edition, exclusively for Lyceum of Alabang students.",
   },
   {
-    title: "Oral Communication in Context",
-    author: "Angela Reyes",
-    subject: "English",
+    title: "Blank Test Book",
+    author: null,
+    subject: null,
     strand: "ICT",
     yearLevel: "Grade 11",
-    semester: "First Semester 2026",
-    isbn: "978-621-0145-71-3",
-    total: 26,
-    available: 2,
-    minimum: 4,
-  },
-  {
-    title: "World History: Patterns of Interaction",
-    author: "Miguel Torres",
-    subject: "History",
-    strand: "ICT",
-    yearLevel: "Grade 12",
-    semester: "Second Semester 2026",
-    isbn: "978-621-0145-88-1",
-    total: 20,
-    available: 14,
-    minimum: 3,
+    semester: null,
+    isbn: null,
+    total: 10,
+    available: 10,
+    minimum: 0,
+    cover: null,
+    description: "Coverless placeholder used to test the grey Booky cover.",
   },
 ];
 
-function buildBook(seed: Seed, index: number): BookListItem {
+function buildBook(seed: Seed, index: number) {
   const id = `preview-book-${index + 1}`;
   const inventory: Inventory = {
     id: `preview-inventory-${index + 1}`,
@@ -157,20 +106,22 @@ function buildBook(seed: Seed, index: number): BookListItem {
     id,
     title: seed.title,
     isbn: seed.isbn,
-    author_id: `${id}-author`,
-    subject_id: `${id}-subject`,
+    author_id: seed.author ? `${id}-author` : null,
+    subject_id: seed.subject ? `${id}-subject` : null,
     description: seed.description ?? null,
-    cover_image_url: null,
-    semester_id: `${id}-semester`,
+    cover_image_url: seed.cover ?? null,
+    semester_id: seed.semester ? `${id}-semester` : null,
     strand_id: `${id}-strand`,
     year_level_id: `${id}-year-level`,
     minimum_stock: seed.minimum,
     created_at: "2026-06-02T08:00:00Z",
     updated_at: "2026-08-24T09:15:00Z",
     archived_at: null,
-    author: { id: `${id}-author`, name: seed.author },
-    subject: { id: `${id}-subject`, name: seed.subject },
-    semester: { id: `${id}-semester`, name: seed.semester },
+    author: seed.author ? { id: `${id}-author`, name: seed.author } : null,
+    subject: seed.subject ? { id: `${id}-subject`, name: seed.subject } : null,
+    semester: seed.semester
+      ? { id: `${id}-semester`, name: seed.semester }
+      : null,
     strand: { id: `${id}-strand`, name: seed.strand },
     year_level: { id: `${id}-year-level`, name: seed.yearLevel },
     inventory,

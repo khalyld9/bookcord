@@ -239,3 +239,61 @@ export async function signOut() {
 
   redirect("/login");
 }
+
+const completeProfileSchema = z.object({
+  full_name: z.string().trim().min(2, "Enter your full name"),
+  student_id: z.string().trim().min(1, "Student ID is required"),
+  year_level_id: z.string().min(1, "Select a year level"),
+  strand_id: z.string().min(1, "Select a strand"),
+});
+
+/**
+ * First Google sign-in creates the auth account but no student profile.
+ * The visitor (now signed in) completes it here; the "profiles insert
+ * self" policy covers the insert.
+ */
+export async function completeProfile(
+  _prevState: SignupState | null,
+  formData: FormData,
+) {
+  const parsed = completeProfileSchema.safeParse({
+    full_name: formData.get("full_name"),
+    student_id: formData.get("student_id"),
+    year_level_id: formData.get("year_level_id"),
+    strand_id: formData.get("strand_id"),
+  });
+
+  if (!parsed.success) {
+    return {
+      error: parsed.error.issues[0]?.message ?? "Invalid details",
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Sign in with Google first, then finish your profile." };
+  }
+
+  const { error } = await supabase.from("profiles").insert({
+    auth_user_id: user.id,
+    full_name: parsed.data.full_name,
+    student_id: parsed.data.student_id,
+    email: (user.email ?? "").toLowerCase(),
+    year_level_id: parsed.data.year_level_id,
+    strand_id: parsed.data.strand_id,
+  });
+
+  if (error) {
+    if (error.code === "23505") {
+      redirect("/books");
+    }
+    return { error: error.message };
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/books");
+}

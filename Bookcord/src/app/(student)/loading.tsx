@@ -1,4 +1,4 @@
-import { BookOpening } from "@/components/loading/book-opening";
+import { WalkingBooky } from "@/components/loading/walking-booky";
 
 /**
  * Route-level boundary: the sidebar stays mounted while the page streams in,
@@ -7,7 +7,7 @@ import { BookOpening } from "@/components/loading/book-opening";
 export default function StudentLoading() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
-      <BookOpening label="Fetching your shelf" />
+      <WalkingBooky label="Fetching your shelf" />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { AuthShell } from "@/components/layout/auth-shell";
+import { GoogleSignInButton } from "@/components/forms/oauth-buttons";
 import { LoginForm } from "@/components/forms/login-form";
 import { getSessionProfile } from "@/lib/auth";
 
@@ -18,6 +19,14 @@ export default async function LoginPage() {
       actionLink={{ href: "/signup", label: "Create account" }}
       switchPrompt="New to Bookcord?"
     >
+      <GoogleSignInButton />
+
+      <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
+        <span className="h-px flex-1 bg-border" aria-hidden="true" />
+        or with email
+        <span className="h-px flex-1 bg-border" aria-hidden="true" />
+      </div>
+
       <LoginForm />
     </AuthShell>
   );

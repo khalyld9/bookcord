@@ -1,9 +1,9 @@
-import { BookOpening } from "@/components/loading/book-opening";
+import { WalkingBooky } from "@/components/loading/walking-booky";
 
 export default function Loading() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-paper dark:bg-background">
-      <BookOpening label="Opening Bookcord" />
+      <WalkingBooky label="Opening Bookcord" />
     </div>
   );
 }

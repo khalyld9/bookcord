@@ -3,47 +3,47 @@
 @custom-variant dark (&:is(.dark *, .oled *));
 
 :root {
-  --background: #fff5ee;
+  --background: #ffffff;
   --foreground: #2a1512;
-  --card: #fffaf6;
+  --card: #ffffff;
   --card-foreground: #2a1512;
   --popover: #ffffff;
   --popover-foreground: #2a1512;
   --primary: #8b0000;
-  --primary-foreground: #fff5ee;
-  --secondary: #f7e6dc;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
   --secondary-foreground: #6d1712;
-  --muted: #f4e9e3;
-  --muted-foreground: #7d625c;
-  --accent: #f9eee7;
+  --muted: #f5f5f5;
+  --muted-foreground: #6e6e6e;
+  --accent: #f5f5f5;
   --accent-foreground: #7a120c;
   --destructive: #b91c1c;
-  --destructive-foreground: #fff5ee;
-  --border: #ecd8ce;
-  --input: #e5cfc4;
+  --destructive-foreground: #ffffff;
+  --border: #e7e7e7;
+  --input: #d6d6d6;
   --ring: #8b0000;
   --radius: 0.75rem;
 
-  --sidebar: #fdefe7;
+  --sidebar: #ffffff;
   --sidebar-foreground: #3c211d;
   --sidebar-primary: #8b0000;
   --sidebar-primary-foreground: #fff5ee;
-  --sidebar-accent: #f7e0d6;
+  --sidebar-accent: #f5f5f5;
   --sidebar-accent-foreground: #6d1712;
-  --sidebar-border: #ecd8ce;
+  --sidebar-border: #e7e7e7;
   --sidebar-ring: #8b0000;
 
   /* Bookcord brand palette.
      These live in :root (not only in `@theme`) so they survive Tailwind's
      unused-variable tree shaking and stay available to inline styles. */
-  --paper: oklch(0.976 0.014 57.6);
-  --cream: oklch(1 0 0);
-  --cream-deep: oklch(0.965 0.012 57);
+  --paper: #ffffff;
+  --cream: #ffffff;
+  --cream-deep: #f5f5f5;
   --ochre: oklch(0.66 0.122 65);
   --ochre-deep: oklch(0.56 0.11 62);
   --sage: oklch(0.56 0.06 140);
   --espresso: oklch(0.4 0.164 29.2);
-  --espresso-foreground: oklch(0.976 0.014 57.6);
+  --espresso-foreground: #ffffff;
   --espresso-muted: oklch(0.82 0.02 60);
 }
 
@@ -129,8 +129,8 @@
 
 @theme inline {
   /* Add these inside your existing @theme inline block in globals.css */
---font-display: "Manrope", "Avenir Next", Avenir, "Helvetica Neue", sans-serif;
---font-mono: "JetBrains Mono", ui-monospace, monospace;
+--font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+--font-mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 --color-ochre: var(--ochre);
 --color-ochre-deep: var(--ochre-deep);
 --color-sage: var(--sage);
@@ -173,8 +173,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -290,4 +289,14 @@ body {
   .book-opening__cover--right {
     transform: perspective(320px) rotateY(38deg);
   }
+}
+
+/* Walking-mascot loading animation. */
+@keyframes booky-walk-across {
+  from { transform: translateX(-130%); }
+  to { transform: translateX(130%); }
+}
+@keyframes booky-step {
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50% { transform: translateY(-7px) rotate(2.5deg); }
 }

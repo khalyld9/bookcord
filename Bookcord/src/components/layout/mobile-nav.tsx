@@ -29,7 +29,7 @@ export function MobileNav({
 
   return (
     <>
-      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border bg-card/85 px-4 backdrop-blur md:hidden">
+      <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border bg-card/85 px-4 backdrop-blur sm:hidden">
         <Link href={homeHref} className="flex items-center gap-2.5">
           <BrandMark />
           <span className="font-display text-xl tracking-tight">Bookcords</span>
@@ -47,7 +47,7 @@ export function MobileNav({
 
       {open && (
         <div
-          className="fixed inset-0 z-[60] md:hidden"
+          className="fixed inset-0 z-[60] sm:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Navigation"

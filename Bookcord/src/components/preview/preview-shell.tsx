@@ -1,7 +1,6 @@
 import { AdminNav } from "@/components/layout/admin-nav";
 import { BookyWidget } from "@/components/layout/booky-widget";
 import { BrandMark } from "@/components/layout/brand-mark";
-import { MobileNav } from "@/components/layout/mobile-nav";
 import { StudentNav } from "@/components/layout/student-nav";
 import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 
@@ -67,7 +66,7 @@ export function PreviewShell({
   return (
     <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
       {/* Sidebar — same shell as the live app, guest session. */}
-      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm min-[480px]:flex md:w-64">
+      <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm">
         <a href={homeHref} className="flex items-center gap-2.5 px-2">
           <BrandMark />
           <span className="font-display text-2xl tracking-tight">Bookcords</span>
@@ -88,7 +87,6 @@ export function PreviewShell({
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <MobileNav nav={nav} footer={guestFooter} homeHref={homeHref} />
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6 md:py-8">
           {children}
         </main>

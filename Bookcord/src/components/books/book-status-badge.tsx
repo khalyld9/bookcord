@@ -38,7 +38,7 @@ export function BookStatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-white shadow-sm ring-1 ring-white/20",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs font-medium uppercase tracking-[0.16em] text-white shadow-sm ring-1 ring-white/20",
         statusStyles[status],
         className,
       )}

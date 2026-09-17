@@ -47,7 +47,7 @@ export function BookCard({
           <p className="line-clamp-1 text-sm font-medium">
             {book.author?.name ?? "Unknown author"}
           </p>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          <p className="mt-1 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
             {book.isbn ?? "No ISBN on record"}
           </p>
         </div>
@@ -57,7 +57,7 @@ export function BookCard({
             {tags.map((tag) => (
               <li
                 key={tag}
-                className="rounded-full border border-border bg-paper/70 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground dark:bg-card"
+                className="rounded-full border border-border bg-paper/70 px-2.5 py-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground dark:bg-card"
               >
                 {tag}
               </li>
@@ -67,7 +67,7 @@ export function BookCard({
 
         <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-4">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
               Available
             </p>
             <p className="mt-1 font-display text-xl font-semibold tracking-[-0.02em] tabular-nums">

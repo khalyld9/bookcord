@@ -24,7 +24,7 @@ export function BookOpening({
         <span className="book-opening__cover book-opening__cover--right" />
         <span className="book-opening__spine" />
       </div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+      <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
         {label}
       </p>
     </div>

@@ -79,14 +79,14 @@ export function LibraryView({
           className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4"
         >
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+            <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
               Catalog
             </p>
             <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em]">
               {count} {count === 1 ? "title" : "titles"}
             </h2>
           </div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-muted-foreground">
             Newest additions first
           </p>
         </Reveal>

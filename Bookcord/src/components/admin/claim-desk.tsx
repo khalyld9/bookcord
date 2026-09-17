@@ -43,7 +43,7 @@ export function ClaimDesk({
         <div className="flex flex-1 flex-col gap-1.5">
           <label
             htmlFor="claim-code"
-            className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+            className="font-mono text-[13px] uppercase tracking-[0.2em] text-muted-foreground"
           >
             Claim code
           </label>
@@ -102,7 +102,7 @@ export function ClaimDesk({
 
           <dl className="grid gap-4 text-sm sm:grid-cols-2">
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <dt className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
                 Student
               </dt>
               <dd className="mt-1">
@@ -115,7 +115,7 @@ export function ClaimDesk({
               </dd>
             </div>
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <dt className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
                 Reservation
               </dt>
               <dd className="mt-1 font-mono text-xs uppercase tracking-[0.18em]">

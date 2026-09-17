@@ -95,7 +95,7 @@ export function SyllabiView({
                 <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                   {group.subject}
                 </h2>
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   {group.books.length}{" "}
                   {group.books.length === 1 ? "textbook" : "textbooks"}
                 </p>
@@ -134,7 +134,7 @@ export function SyllabiView({
                         </span>
                         <span
                           className={cn(
-                            "shrink-0 font-mono text-[10px] uppercase tracking-[0.16em]",
+                            "shrink-0 font-mono text-xs uppercase tracking-[0.16em]",
                             TONE[availability.tone],
                           )}
                         >

@@ -45,7 +45,7 @@ export function ClaimQr({
         fgColor="#3d0a14"
         bgColor="#ffffff"
       />
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#7d625c]">
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#7d625c]">
         Show at the counter
       </p>
     </div>

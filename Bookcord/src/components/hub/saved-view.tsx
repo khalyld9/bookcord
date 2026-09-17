@@ -99,7 +99,7 @@ export function SavedView({
                     <p className="line-clamp-1 text-sm font-medium">
                       {item.books?.author?.name ?? "Unknown author"}
                     </p>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <p className="mt-1 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
                       Saved {formatDate(item.created_at, "MMM d, yyyy")}
                     </p>
                   </div>

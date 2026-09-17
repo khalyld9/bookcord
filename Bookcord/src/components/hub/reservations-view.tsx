@@ -115,7 +115,7 @@ export function ReservationsView({
                         .filter(Boolean)
                         .join(" · ") || "Unknown author"}
                     </p>
-                    <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <p className="mt-1.5 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
                       Reserved {formatDate(item.created_at, "MMM d, yyyy")}
                       {item.status === "CLAIMED" && item.claimed_at
                         ? ` · claimed ${formatDate(item.claimed_at, "MMM d, yyyy")}`
@@ -129,7 +129,7 @@ export function ReservationsView({
                     {isOpen ? (
                       <div className="flex flex-col items-start gap-3 sm:items-end">
                         <ClaimQr code={item.code} size={112} />
-                        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                        <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-muted-foreground">
                           Code {item.code}
                         </p>
                         <CancelReservationButton reservationId={item.id} />

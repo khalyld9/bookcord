@@ -65,7 +65,7 @@ export function BookDetail({
 
         <div className="flex min-w-0 flex-col gap-6">
           <header className="flex flex-col gap-3">
-            <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+            <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
               <Hash className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
               {book.isbn ?? "No ISBN on record"}
             </p>
@@ -81,7 +81,7 @@ export function BookDetail({
 
           {book.description ? (
             <section className="flex flex-col gap-2">
-              <h2 className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              <h2 className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
                 <Info className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
                 About this book
               </h2>
@@ -96,7 +96,7 @@ export function BookDetail({
           <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
             {details.map((item) => (
               <div key={item.label} className="flex flex-col gap-1">
-                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                <dt className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   {item.label}
                 </dt>
                 <dd className="text-sm font-medium">{item.value}</dd>
@@ -107,14 +107,14 @@ export function BookDetail({
           <Separator />
 
           <section className="flex flex-col gap-4">
-            <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+            <h2 className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
               Stock information
             </h2>
 
             <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-2xl bg-border ring-1 ring-border">
               {stock.map((item) => (
                 <div key={item.label} className="bg-card px-4 py-4">
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <dt className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     {item.label}
                   </dt>
                   <dd className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em] tabular-nums">
@@ -136,7 +136,7 @@ export function BookDetail({
               <Separator />
 
               <section className="flex flex-col gap-4">
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                <h2 className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
                   Your actions
                 </h2>
 

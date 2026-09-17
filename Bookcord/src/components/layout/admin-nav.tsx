@@ -87,13 +87,13 @@ export function AdminNav({
 
   return (
     <nav className="flex flex-col gap-1" aria-label="Librarian navigation">
-      <p className="px-4 pb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+      <p className="px-4 pb-1 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         Manage
       </p>
       {manageLinks.map((link) => (
         <NavRow key={link.href} link={link} active={isActive(link.href, pathname)} remap={remap} />
       ))}
-      <p className="px-4 pb-1 pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+      <p className="px-4 pb-1 pt-4 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         Desk
       </p>
       {deskLinks.map((link) => (

@@ -20,7 +20,7 @@ export function HubHeader({
     <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-espresso-muted">
+          <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
             <Icon className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
             {eyebrow}
           </p>
@@ -41,7 +41,7 @@ export function HubHeader({
                 key={stat.label}
                 className="bg-espresso/70 px-4 py-4 backdrop-blur-sm sm:px-5"
               >
-                <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted">
+                <dt className="font-mono text-xs uppercase tracking-[0.18em] text-espresso-muted">
                   {stat.label}
                 </dt>
                 <dd className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] tabular-nums">

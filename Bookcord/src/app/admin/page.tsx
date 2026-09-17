@@ -22,7 +22,7 @@ function StatCard({
 }) {
   return (
     <div className="flex flex-col gap-1 rounded-2xl bg-card p-5 ring-1 ring-border">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </p>
       <p

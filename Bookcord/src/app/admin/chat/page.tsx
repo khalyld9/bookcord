@@ -135,7 +135,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
                   <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                     {active.name}
                   </h2>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <p className="mt-0.5 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     {active.studentId ?? "No student ID on file"} ·{" "}
                     {active.lines.length}{" "}
                     {active.lines.length === 1 ? "message" : "messages"}

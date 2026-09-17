@@ -23,7 +23,7 @@ export function ChromePreview() {
             key={href}
             className="flex flex-col rounded-3xl border border-border bg-card/70 p-4"
           >
-            <p className="mb-4 px-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="mb-4 px-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
               Active: {href}
             </p>
             <LayoutGroup id={`nav-${href}`}>

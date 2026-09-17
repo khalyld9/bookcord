@@ -60,7 +60,7 @@ function Panel({
       className="rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border sm:p-8"
     >
       <header className="mb-6 flex flex-col gap-1.5">
-        <h2 className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+        <h2 className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
           {Icon ? (
             <Icon className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
           ) : null}
@@ -77,7 +77,7 @@ function Panel({
 
 function HeroChip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-espresso-foreground/25 bg-espresso-foreground/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-espresso-muted">
+    <span className="inline-flex items-center rounded-full border border-espresso-foreground/25 bg-espresso-foreground/10 px-3 py-1 font-mono text-xs uppercase tracking-[0.16em] text-espresso-muted">
       {children}
     </span>
   );
@@ -108,7 +108,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
           </Avatar>
 
           <div className="min-w-0">
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-espresso-muted">
+            <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
               Account — Profile
             </p>
             <h1 className="mt-2 truncate font-display text-3xl font-bold leading-tight tracking-[-0.04em] sm:text-4xl">
@@ -136,7 +136,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
               key={stat.label}
               className="bg-espresso/70 px-4 py-4 backdrop-blur-sm sm:px-5"
             >
-              <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted">
+              <dt className="font-mono text-xs uppercase tracking-[0.18em] text-espresso-muted">
                 {stat.label}
               </dt>
               <dd className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] tabular-nums">
@@ -209,7 +209,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
             <dl className="flex flex-col gap-4">
               {account.map((item) => (
                 <div key={item.label} className="flex flex-col gap-1">
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <dt className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     {item.label}
                   </dt>
                   <dd className="text-sm font-medium break-words">{item.value}</dd>

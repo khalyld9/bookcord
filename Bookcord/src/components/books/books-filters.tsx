@@ -136,7 +136,7 @@ export function BooksFilters({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="flex items-center gap-2 pr-1 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+        <span className="flex items-center gap-2 pr-1 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
           <SlidersHorizontal className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
           Refine
         </span>

@@ -25,7 +25,7 @@ export function LibraryHero() {
 
       <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-espresso-muted">
+          <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
             <LibraryBig className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
             Library — Book catalog
           </p>

@@ -101,7 +101,7 @@ export function StudentNav({
       </nav>
 
       <nav aria-label="Library" className="flex w-full flex-col gap-1">
-        <p className="px-4 pb-1 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground/80">
+        <p className="px-4 pb-1 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground/80">
           Library
         </p>
         {hubLinks.map((link) => (

@@ -160,7 +160,7 @@ export function BookyPanel({
               <p className="font-display text-base font-medium tracking-[-0.02em] text-[#472a21]">
                 Booky
               </p>
-              <p className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-[#a08579]">
+              <p className="truncate font-mono text-xs uppercase tracking-[0.18em] text-[#a08579]">
                 Library helper
               </p>
             </div>

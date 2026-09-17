@@ -15,7 +15,7 @@ export function HubSetupNotice({
 }) {
   return (
     <div className="rounded-3xl border border-dashed border-border bg-card/60 p-6 sm:p-8">
-      <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+      <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
         <DatabaseBackup className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
         Migration needed
       </p>

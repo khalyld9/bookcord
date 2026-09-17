@@ -43,7 +43,7 @@ function CoverCaption({
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/80 px-4 pb-4 pt-5">
       {eyebrow ? (
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/65">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-white/65">
           {eyebrow}
         </p>
       ) : null}

@@ -41,7 +41,7 @@ export function WalkingBooky({ label = "Loading" }: { label?: string }) {
           aria-hidden="true"
         />
       </div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+      <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
         {label}
         <span className="animate-pulse">…</span>
       </p>

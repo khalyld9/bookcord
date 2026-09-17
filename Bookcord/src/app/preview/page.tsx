@@ -14,7 +14,7 @@ export default function PreviewIndexPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-paper px-6 dark:bg-background">
       <div className="w-full max-w-md">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+        <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
           Guest preview · sample data
         </p>
         <h1 className="mt-2 font-display text-4xl font-bold tracking-[-0.04em]">

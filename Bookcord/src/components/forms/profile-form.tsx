@@ -28,7 +28,7 @@ const fieldClasses =
   "w-full rounded-xl border border-input bg-background px-5 py-3.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 const labelClasses =
-  "mb-2 block font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground";
+  "mb-2 block font-mono text-[13px] uppercase tracking-[0.18em] text-muted-foreground";
 
 export function ProfileForm({
   defaultValues,

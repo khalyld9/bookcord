@@ -127,11 +127,47 @@
 }
 
 
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Regular"),
+    url("/fonts/SFProDisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Medium"),
+    url("/fonts/SFProDisplay-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Semibold"),
+    url("/fonts/SFProDisplay-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Bold"),
+    url("/fonts/SFProDisplay-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   /* Add these inside your existing @theme inline block in globals.css */
 --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
---font-mono: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro",
-    sans-serif;
+--font-mono: "SF Pro Display", "SF Pro Text", -apple-system,
+    BlinkMacSystemFont, sans-serif;
 --color-ochre: var(--ochre);
 --color-ochre-deep: var(--ochre-deep);
 --color-sage: var(--sage);
@@ -174,7 +210,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", sans-serif;
+  --font-sans: "SF Pro Display", "SF Pro Text", -apple-system,
+    BlinkMacSystemFont, sans-serif;
 }
 
 * {

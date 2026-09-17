@@ -1,11 +1,13 @@
 import Link from "next/link";
 
 const routes = [
+  { href: "/preview", label: "Guest home" },
   { href: "/preview/library", label: "Catalog" },
-  { href: "/preview/hub/saved", label: "Saved" },
-  { href: "/preview/hub/reservations", label: "Reservations" },
-  { href: "/preview/hub/syllabi", label: "Syllabi" },
-  { href: "/preview/chrome", label: "Sidebar / Themes" },
+  { href: "/preview/hub/reservations", label: "My Reservations" },
+  { href: "/preview/admin", label: "Librarian" },
+  { href: "/preview/admin/reservations", label: "Reservations" },
+  { href: "/preview/admin/inventory", label: "Inventory" },
+  { href: "/preview/admin/checkouts", label: "Checkouts" },
 ];
 
 /**
@@ -22,7 +24,7 @@ export function PreviewShell({
   return (
     <div className="min-h-screen bg-paper dark:bg-background">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-8">
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-full border border-border bg-card px-5 py-3 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card px-5 py-3 text-xs text-muted-foreground">
           <span className="font-mono uppercase tracking-[0.18em]">{label}</span>
           <span className="flex flex-wrap items-center gap-4">
             {routes.map((route) => (

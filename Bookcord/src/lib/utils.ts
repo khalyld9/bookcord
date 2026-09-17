@@ -16,7 +16,7 @@ export function formatDate(
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
-  const parts: Record = {
+  const parts: Record<string, string> = {
     MMM: months[date.getMonth()] ?? "",
     MMMM: date.toLocaleDateString("en-US", { month: "long" }),
     MM: String(date.getMonth() + 1).padStart(2, "0"),

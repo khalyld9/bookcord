@@ -10,10 +10,21 @@ export type RoleName = "ADMIN" | "USER";
 export type MovementType = "RESTOCK" | "ISSUE" | "RETURN" | "ADJUSTMENT";
 export type IssueStatus = "ISSUED" | "RETURNED" | "PARTIALLY_RETURNED";
 export type ReturnCondition = "GOOD" | "FAIR" | "DAMAGED" | "LOST";
+export type ChatSender = "STUDENT" | "ADMIN";
+export type ReservationStatus =
+  | "PENDING"
+  | "READY"
+  | "CLAIMED"
+  | "RETURNED"
+  | "CANCELLED";
+export type HoldStatus =
+  | "PENDING"
+  | "READY"
+  | "FULFILLED"
+  | "CANCELLED"
+  | "EXPIRED";
 
 type Timestamp = string;
-
-type TableRow = T & Record;
 
 export type Database = {
   public: {
@@ -47,13 +58,13 @@ export type Database = {
           created_at?: Timestamp;
           updated_at?: Timestamp;
         };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["profiles"]["Row"]>;
         Relationships: [];
       };
       roles: {
         Row: { id: string; name: RoleName; created_at: Timestamp };
         Insert: { id?: string; name: RoleName; created_at?: Timestamp };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["roles"]["Row"]>;
         Relationships: [];
       };
       books: {
@@ -89,37 +100,37 @@ export type Database = {
           updated_at?: Timestamp;
           archived_at?: Timestamp | null;
         };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["books"]["Row"]>;
         Relationships: [];
       };
       authors: {
         Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
         Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["authors"]["Row"]>;
         Relationships: [];
       };
       subjects: {
         Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
         Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["subjects"]["Row"]>;
         Relationships: [];
       };
       strands: {
         Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
         Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["strands"]["Row"]>;
         Relationships: [];
       };
       semesters: {
         Row: { id: string; name: string; created_at: Timestamp; archived_at: Timestamp | null };
         Insert: { id?: string; name: string; created_at?: Timestamp; archived_at?: Timestamp | null };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["semesters"]["Row"]>;
         Relationships: [];
       };
       year_levels: {
         Row: { id: string; name: string; sort_order: number; created_at: Timestamp; archived_at: Timestamp | null };
         Insert: { id?: string; name: string; sort_order?: number; created_at?: Timestamp; archived_at?: Timestamp | null };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["year_levels"]["Row"]>;
         Relationships: [];
       };
       inventory: {
@@ -139,7 +150,7 @@ export type Database = {
           issued_stock?: number;
           updated_at?: Timestamp;
         };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["inventory"]["Row"]>;
         Relationships: [];
       };
       restocks: {
@@ -169,7 +180,7 @@ export type Database = {
           added_by?: string | null;
           created_at?: Timestamp;
         };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["restocks"]["Row"]>;
         Relationships: [];
       };
       stock_movements: {
@@ -197,7 +208,7 @@ export type Database = {
           performed_by?: string | null;
           created_at?: Timestamp;
         };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["stock_movements"]["Row"]>;
         Relationships: [];
       };
       book_issues: {
@@ -229,7 +240,7 @@ export type Database = {
           created_at?: Timestamp;
           updated_at?: Timestamp;
         };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["book_issues"]["Row"]>;
         Relationships: [];
       };
       book_returns: {
@@ -257,11 +268,99 @@ export type Database = {
           processed_by?: string | null;
           created_at?: Timestamp;
         };
-        Update: Partial>;
+        Update: Partial<Database["public"]["Tables"]["book_returns"]["Row"]>;
+        Relationships: [];
+      };
+      chat_messages: {
+        Row: {
+          id: string;
+          profile_id: string;
+          sender: ChatSender;
+          body: string;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          sender: ChatSender;
+          body: string;
+          created_at?: Timestamp;
+        };
+        Update: Partial<Database["public"]["Tables"]["chat_messages"]["Row"]>;
+        Relationships: [];
+      };
+      reservations: {
+        Row: {
+          id: string;
+          profile_id: string;
+          book_id: string;
+          status: ReservationStatus;
+          code: string;
+          quantity: number;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+          claimed_at: Timestamp | null;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          book_id: string;
+          status?: ReservationStatus;
+          code?: string;
+          quantity?: number;
+          created_at?: Timestamp;
+          updated_at?: Timestamp;
+          claimed_at?: Timestamp | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["reservations"]["Row"]>;
+        Relationships: [];
+      };
+      saved_books: {
+        Row: {
+          id: string;
+          profile_id: string;
+          book_id: string;
+          note: string | null;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          book_id: string;
+          note?: string | null;
+          created_at?: Timestamp;
+        };
+        Update: Partial<Database["public"]["Tables"]["saved_books"]["Row"]>;
+        Relationships: [];
+      };
+      hold_requests: {
+        Row: {
+          id: string;
+          profile_id: string;
+          book_id: string;
+          status: HoldStatus;
+          needed_by: string | null;
+          note: string | null;
+          requested_at: Timestamp;
+          updated_at: Timestamp;
+          fulfilled_at: Timestamp | null;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          book_id: string;
+          status?: HoldStatus;
+          needed_by?: string | null;
+          note?: string | null;
+          requested_at?: Timestamp;
+          updated_at?: Timestamp;
+          fulfilled_at?: Timestamp | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["hold_requests"]["Row"]>;
         Relationships: [];
       };
     };
-    Views: Record;
+    Views: Record<string, never>;
     Functions: {
       restock_book: {
         Args: {
@@ -294,6 +393,15 @@ export type Database = {
         };
         Returns: string;
       };
+      upcoming_restocks: {
+        Args: { p_limit?: number };
+        Returns: {
+          title: string;
+          subject: string | null;
+          quantity: number;
+          restock_date: string;
+        }[];
+      };
       adjust_inventory: {
         Args: {
           p_book_id: string;
@@ -309,14 +417,17 @@ export type Database = {
       movement_type: MovementType;
       issue_status: IssueStatus;
       return_condition: ReturnCondition;
+      hold_status: HoldStatus;
+      chat_sender: ChatSender;
       profile_status: "ACTIVE" | "DISABLED";
     };
-    CompositeTypes: Record;
+    CompositeTypes: Record<string, never>;
   };
 };
 
-export type Tables =
-  Database["public"]["Tables"][T]["Row"];
+export type Tables<
+  T extends keyof Database["public"]["Tables"],
+> = Database["public"]["Tables"][T]["Row"];
 export type Profile = Tables<"profiles">;
 export type Book = Tables<"books">;
 export type Inventory = Tables<"inventory">;
@@ -329,3 +440,7 @@ export type Strand = Tables<"strands">;
 export type Semester = Tables<"semesters">;
 export type YearLevel = Tables<"year_levels">;
 export type Author = Tables<"authors">;
+export type SavedBook = Tables<"saved_books">;
+export type HoldRequest = Tables<"hold_requests">;
+export type Reservation = Tables<"reservations">;
+export type ChatMessage = Tables<"chat_messages">;

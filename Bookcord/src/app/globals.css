@@ -1,40 +1,55 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, .oled *));
 
 :root {
-  --background: #fff5ee;
+  --background: #ffffff;
   --foreground: #2a1512;
-  --card: #fffaf6;
+  --card: #ffffff;
   --card-foreground: #2a1512;
   --popover: #ffffff;
   --popover-foreground: #2a1512;
   --primary: #8b0000;
-  --primary-foreground: #fff5ee;
-  --secondary: #f7e6dc;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
   --secondary-foreground: #6d1712;
-  --muted: #f4e9e3;
-  --muted-foreground: #7d625c;
-  --accent: #f9eee7;
+  --muted: #f5f5f5;
+  --muted-foreground: #6e6e6e;
+  --accent: #f5f5f5;
   --accent-foreground: #7a120c;
   --destructive: #b91c1c;
-  --destructive-foreground: #fff5ee;
-  --border: #ecd8ce;
-  --input: #e5cfc4;
+  --destructive-foreground: #ffffff;
+  --border: #e7e7e7;
+  --input: #d6d6d6;
   --ring: #8b0000;
   --radius: 0.75rem;
 
-  --sidebar: #fdefe7;
+  --sidebar: #ffffff;
   --sidebar-foreground: #3c211d;
   --sidebar-primary: #8b0000;
   --sidebar-primary-foreground: #fff5ee;
-  --sidebar-accent: #f7e0d6;
+  --sidebar-accent: #f5f5f5;
   --sidebar-accent-foreground: #6d1712;
-  --sidebar-border: #ecd8ce;
+  --sidebar-border: #e7e7e7;
   --sidebar-ring: #8b0000;
+
+  /* Bookcord brand palette.
+     These live in :root (not only in `@theme`) so they survive Tailwind's
+     unused-variable tree shaking and stay available to inline styles. */
+  --paper: #ffffff;
+  --cream: #ffffff;
+  --cream-deep: #f5f5f5;
+  --ochre: oklch(0.66 0.122 65);
+  --ochre-deep: oklch(0.56 0.11 62);
+  --sage: oklch(0.56 0.06 140);
+  --espresso: oklch(0.4 0.164 29.2);
+  --espresso-foreground: #ffffff;
+  --espresso-muted: oklch(0.82 0.02 60);
 }
 
 .dark {
+  color-scheme: dark;
+
   --background: #170d0b;
   --foreground: #f8ece5;
   --card: #211411;
@@ -65,10 +80,94 @@
   --sidebar-ring: #d75d4f;
 }
 
+/* OLED pitch-black: a true #000 field so panel pixels switch off entirely.
+   Surfaces sit one step above black with hairline borders so cards stay
+   separable without any glow. */
+.oled {
+  color-scheme: dark;
+
+  --background: #000000;
+  --foreground: #f2ece8;
+  --card: #050505;
+  --card-foreground: #f2ece8;
+  --popover: #0a0a0a;
+  --popover-foreground: #f2ece8;
+  --primary: #d13f33;
+  --primary-foreground: #fff5ee;
+  --secondary: #141414;
+  --secondary-foreground: #e8ded8;
+  --muted: #121212;
+  --muted-foreground: #a89a93;
+  --accent: #1b1b1b;
+  --accent-foreground: #f0e4dd;
+  --destructive: #ff5a4d;
+  --destructive-foreground: #1a0402;
+  --border: #1f1f1f;
+  --input: #2a2a2a;
+  --ring: #d13f33;
+
+  --sidebar: #000000;
+  --sidebar-foreground: #f2ece8;
+  --sidebar-primary: #d13f33;
+  --sidebar-primary-foreground: #fff5ee;
+  --sidebar-accent: #141414;
+  --sidebar-accent-foreground: #e8ded8;
+  --sidebar-border: #1f1f1f;
+  --sidebar-ring: #d13f33;
+
+  /* Brand surfaces go black too, otherwise light panels float on the field. */
+  --paper: #000000;
+  --cream: #0a0a0a;
+  --cream-deep: #050505;
+  --espresso: #0d0906;
+  --espresso-foreground: #f4ece6;
+  --espresso-muted: #b9a79d;
+  --shadow-shelf: 0 24px 60px -48px rgb(0 0 0 / 0.5);
+  --shadow-cta: 0 6px 16px -10px rgb(0 0 0 / 0.4);
+}
+
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Regular"),
+    url("/fonts/SFProDisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Medium"),
+    url("/fonts/SFProDisplay-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Semibold"),
+    url("/fonts/SFProDisplay-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: local("SF Pro Display"), local("SFProDisplay-Bold"),
+    url("/fonts/SFProDisplay-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   /* Add these inside your existing @theme inline block in globals.css */
---font-display: "Manrope", "Avenir Next", Avenir, "Helvetica Neue", sans-serif;
---font-mono: "JetBrains Mono", ui-monospace, monospace;
+--font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+--font-mono: "SF Pro Display", "SF Pro Text", -apple-system,
+    BlinkMacSystemFont, sans-serif;
 --color-ochre: var(--ochre);
 --color-ochre-deep: var(--ochre-deep);
 --color-sage: var(--sage);
@@ -77,25 +176,9 @@
 --color-espresso: var(--espresso);
 --color-espresso-foreground: var(--espresso-foreground);
 --color-espresso-muted: var(--espresso-muted);
---shadow-shelf: 0 40px 90px -50px oklch(0.28 0.04 60 / 0.6);
---shadow-cta: 0 14px 30px -12px oklch(0.62 0.19 38 / 0.55);
+--shadow-shelf: 0 24px 60px -48px rgb(0 0 0 / 0.28);
+--shadow-cta: 0 6px 16px -10px rgb(0 0 0 / 0.22);
 
-/* Add these inside your existing :root block */
---paper: oklch(0.976 0.014 57.6);
---cream: oklch(1 0 0);
---cream-deep: oklch(0.965 0.012 57);
---ochre: oklch(0.66 0.122 65);
---ochre-deep: oklch(0.56 0.11 62);
---sage: oklch(0.56 0.06 140);
---espresso: oklch(0.4 0.164 29.2);
---espresso-foreground: oklch(0.976 0.014 57.6);
---espresso-muted: oklch(0.82 0.02 60);
---gradient-cta: linear-gradient(
-  100deg,
-  oklch(0.5 0.19 30),
-  oklch(0.45 0.18 29) 55%,
-  oklch(0.4 0.164 29)
-);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -127,8 +210,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "SF Pro Display", "SF Pro Text", -apple-system,
+    BlinkMacSystemFont, sans-serif;
 }
 
 * {
@@ -142,7 +225,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 @layer base {
@@ -156,3 +239,112 @@ body {
     color: var(--primary-foreground);
   }
 }
+
+/* ---------------------------------------------------------------
+   Loading state: a minimal book that opens and closes.
+   --------------------------------------------------------------- */
+.book-opening {
+  position: relative;
+  width: 3.5rem;
+  height: 2.75rem;
+  transform-style: preserve-3d;
+}
+
+.book-opening__pages {
+  position: absolute;
+  inset: 8% 14%;
+  border-radius: 2px;
+  background: #f7efe6;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+.book-opening__cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: oklch(0.4 0.164 29.2);
+  box-shadow: 0 12px 26px -16px rgb(0 0 0 / 0.8);
+}
+
+.book-opening__cover--left {
+  left: 0;
+  transform-origin: right center;
+  border-radius: 4px 2px 2px 4px;
+  animation: book-opening-left 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.book-opening__cover--right {
+  right: 0;
+  transform-origin: left center;
+  border-radius: 2px 4px 4px 2px;
+  animation: book-opening-right 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.book-opening__spine {
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: rgb(0 0 0 / 0.35);
+}
+
+@keyframes book-opening-left {
+  0%,
+  100% {
+    transform: perspective(320px) rotateY(0deg);
+  }
+
+  45%,
+  55% {
+    transform: perspective(320px) rotateY(-152deg);
+  }
+}
+
+@keyframes book-opening-right {
+  0%,
+  100% {
+    transform: perspective(320px) rotateY(0deg);
+  }
+
+  45%,
+  55% {
+    transform: perspective(320px) rotateY(152deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-opening__cover {
+    animation: none;
+  }
+
+  .book-opening__cover--left {
+    transform: perspective(320px) rotateY(-38deg);
+  }
+
+  .book-opening__cover--right {
+    transform: perspective(320px) rotateY(38deg);
+  }
+}
+
+/* Walking-mascot loading animation. */
+@keyframes booky-walk-across {
+  from { transform: translateX(-130%); }
+  to { transform: translateX(130%); }
+}
+@keyframes booky-step {
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50% { transform: translateY(-7px) rotate(2.5deg); }
+}
+@keyframes booky-page-flip {
+  0% { transform: rotateY(-8deg); opacity: 1; }
+  55% { transform: rotateY(-165deg); opacity: 1; }
+  70% { transform: rotateY(-170deg); opacity: 0; }
+  100% { transform: rotateY(-8deg); opacity: 0; }
+}
+
+/* SF Pro typography rhythm: tight leading for display sizes. */
+h1 { line-height: 1.02; }
+h2 { line-height: 1.1; }

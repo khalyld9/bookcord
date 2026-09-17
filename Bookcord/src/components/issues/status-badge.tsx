@@ -8,5 +8,5 @@ export function IssueStatusBadge({ status }: { status: IssueStatus }) {
   if (status === "PARTIALLY_RETURNED") {
     return <Badge variant="warning">Partially Returned</Badge>;
   }
-  return <Badge>Issued</Badge>;
+  return <Badge>Checked out</Badge>;
 }

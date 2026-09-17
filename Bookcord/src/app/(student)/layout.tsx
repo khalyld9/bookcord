@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
 
+import { BrandMark } from "@/components/layout/brand-mark";
+import { BookyWidget } from "@/components/layout/booky-widget";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { StudentNav } from "@/components/layout/student-nav";
 import { UserMenu } from "@/components/layout/user-menu";
 import { SignOutButton } from "@/components/layout/sign-out-button";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 import { requireUser } from "@/lib/auth";
 
 export default async function StudentLayout({
@@ -15,32 +17,35 @@ export default async function StudentLayout({
   const { profile } = await requireUser();
 
   return (
-    <div className="flex min-h-screen w-full overflow-x-hidden bg-background">
+    <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
       {/* Sidebar */}
-      <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r bg-card/40 px-4 py-6">
-        <Link href="/books" className="flex items-center gap-2 px-2 font-semibold">
-          <div className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <BookOpen className="size-4" />
-          </div>
-          Bookcord
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm md:flex [@media(pointer:fine)]:flex">
+        <Link href="/books" className="flex items-center gap-2.5 px-2">
+          <BrandMark />
+          <span className="font-display text-2xl tracking-tight">Bookcords</span>
         </Link>
 
-        <div className="mt-8 flex-1">
+        <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
           <StudentNav />
         </div>
 
-        <div className="flex flex-col gap-3 border-t pt-4">
-          <div className="flex items-center justify-between px-2">
-            <UserMenu profile={profile} />
-            <ThemeToggle />
+        <div className="flex flex-col gap-3 border-t border-border pt-4">
+          {/* Booky is deliberately tall — the balloon may straddle the divider. */}
+          <div className="relative z-10 -mt-16">
+            <BookyWidget />
           </div>
-          <SignOutButton />
+          <ThemeSwitcher />
+          <div className="flex items-center justify-between gap-2 px-2">
+            <UserMenu profile={profile} />
+            <SignOutButton />
+          </div>
         </div>
       </aside>
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
+        <BottomNav />
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-24 md:px-6 md:py-8 md:pb-8">
           {children}
         </main>
       </div>

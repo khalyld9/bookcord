@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { BookMarked, History, LayoutDashboard, User } from "lucide-react";
+import { BookMarked, History, LayoutDashboard, QrCode, User } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,8 +18,15 @@ export function UserMenu({ profile }: { profile: Profile }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex size-8 items-center justify-center rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        <button className="flex size-8 items-center justify-center rounded-lg outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
           <Avatar className="size-8">
+            {profile.avatar_url ? (
+              <AvatarImage
+                src={profile.avatar_url}
+                alt={profile.full_name}
+                className="object-cover"
+              />
+            ) : null}
             <AvatarFallback>{initials(profile.full_name)}</AvatarFallback>
           </Avatar>
         </button>
@@ -45,14 +52,14 @@ export function UserMenu({ profile }: { profile: Profile }) {
         <DropdownMenuItem asChild>
           <Link href="/my-books" className="flex items-center gap-2">
             <BookMarked className="size-4" />
-            My books
+            My reservations
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
           <Link href="/history" className="flex items-center gap-2">
             <History className="size-4" />
-            Borrowing history
+            Book history
           </Link>
         </DropdownMenuItem>
 
@@ -70,6 +77,12 @@ export function UserMenu({ profile }: { profile: Profile }) {
               <Link href="/admin" className="flex items-center gap-2">
                 <LayoutDashboard className="size-4" />
                 Admin dashboard
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/admin/claim" className="flex items-center gap-2">
+                <QrCode className="size-4" />
+                Claim desk
               </Link>
             </DropdownMenuItem>
           </>

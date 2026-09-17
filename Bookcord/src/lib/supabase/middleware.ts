@@ -4,6 +4,15 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
+  // Without credentials (fresh checkout, sandboxed preview) let every page
+  // render instead of crashing the middleware — guests never need a session.
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return supabaseResponse;
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -46,7 +55,11 @@ export async function updateSession(request: NextRequest) {
       .eq("auth_user_id", user.id)
       .single();
     const url = request.nextUrl.clone();
-    url.pathname = profile?.role === "ADMIN" ? "/admin" : "/books";
+    url.pathname = !profile
+      ? "/complete-profile"
+      : profile.role === "ADMIN"
+        ? "/admin"
+        : "/books";
     url.search = "";
     return NextResponse.redirect(url);
   }

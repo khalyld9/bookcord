@@ -8,7 +8,16 @@ export async function getInventoryOverview() {
     supabase.from("books").select("id", { count: "exact", head: true }).is("archived_at", null),
     supabase
       .from("inventory")
-      .select("total_stock,available_stock,issued_stock,books!inner(minimum_stock,archived_at)"),
+      .select("total_stock,available_stock,issued_stock,books!inner(minimum_stock,archived_at)")
+      .overrideTypes<
+        {
+          total_stock: number;
+          available_stock: number;
+          issued_stock: number;
+          books: { minimum_stock: number; archived_at: string | null } | null;
+        }[],
+        { merge: false }
+      >(),
     supabase.from("book_issues").select("id", { count: "exact", head: true }).eq("status", "ISSUED"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("status", "ACTIVE"),
   ]);

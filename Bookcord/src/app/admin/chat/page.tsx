@@ -186,7 +186,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
                   />
                   <button
                     type="submit"
-                    className="self-start rounded-full bg-espresso px-5 py-2.5 text-sm font-semibold text-espresso-foreground shadow-cta"
+                    className="self-start rounded-xl bg-espresso px-5 py-2.5 text-sm font-semibold text-espresso-foreground shadow-cta"
                   >
                     Send reply
                   </button>

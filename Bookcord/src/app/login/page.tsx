@@ -19,7 +19,7 @@ export default async function LoginPage() {
     >
       <GoogleSignInButton />
 
-      <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
+      <div className="my-8 flex items-center gap-3 text-xs text-muted-foreground">
         <span className="h-px flex-1 bg-border" aria-hidden="true" />
         or with email
         <span className="h-px flex-1 bg-border" aria-hidden="true" />

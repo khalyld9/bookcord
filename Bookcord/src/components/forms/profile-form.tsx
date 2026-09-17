@@ -25,7 +25,7 @@ type ProfileFormProps = {
 const initialState: ProfileState = {};
 
 const fieldClasses =
-  "w-full rounded-full border border-input bg-background px-5 py-3.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+  "w-full rounded-xl border border-input bg-background px-5 py-3.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 const labelClasses =
   "mb-2 block font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground";
@@ -76,7 +76,7 @@ export function ProfileForm({
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <label
             htmlFor="profile-avatar"
-            className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-ochre"
+            className="flex w-fit cursor-pointer items-center gap-2 rounded-xl border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-ochre"
           >
             <Upload className="size-4" aria-hidden="true" />
             Choose a photo
@@ -203,7 +203,7 @@ export function ProfileForm({
       <button
         type="submit"
         disabled={pending}
-        className="flex w-full items-center justify-center gap-2 rounded-full bg-espresso py-3.5 text-sm font-semibold text-espresso-foreground shadow-cta transition-all hover:brightness-110 active:translate-y-px disabled:opacity-70 sm:w-auto sm:px-8"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-espresso py-3.5 text-sm font-semibold text-espresso-foreground shadow-cta transition-all hover:brightness-110 active:translate-y-px disabled:opacity-70 sm:w-auto sm:px-8"
       >
         {pending ? (
           <LoaderCircle className="size-4 animate-spin" strokeWidth={2} />

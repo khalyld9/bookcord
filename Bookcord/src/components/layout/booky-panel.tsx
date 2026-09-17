@@ -27,7 +27,7 @@ const GREETING: BotMessage = {
 /* The panel is intentionally light in every theme (light, dark, OLED), so
    all colors below are literal — no tokens that could invert. */
 const inputClasses =
-  "w-full rounded-full border border-[#e5cfc4] bg-white px-4 py-2.5 pr-11 text-sm text-[#2a1512] outline-none transition-all placeholder:text-[#a08579] focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+  "w-full rounded-xl border border-[#e5cfc4] bg-white px-4 py-2.5 pr-11 text-sm text-[#2a1512] outline-none transition-all placeholder:text-[#a08579] focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 export function BookyPanel({
   open,
@@ -168,7 +168,7 @@ export function BookyPanel({
               type="button"
               onClick={onClose}
               aria-label="Close chat"
-              className="grid size-8 place-items-center rounded-full text-[#a08579] transition-colors hover:bg-[#472a21]/10 hover:text-[#472a21]"
+              className="grid size-8 place-items-center rounded-lg text-[#a08579] transition-colors hover:bg-[#472a21]/10 hover:text-[#472a21]"
             >
               <X className="size-4" aria-hidden="true" />
             </button>
@@ -188,7 +188,7 @@ export function BookyPanel({
                 aria-selected={tab === item.id}
                 onClick={() => setTab(item.id)}
                 className={cn(
-                  "relative flex-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+                  "relative flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
                   tab === item.id
                     ? "text-[#fff5ee]"
                     : "text-[#8d6a5e] hover:text-[#472a21]",
@@ -198,7 +198,7 @@ export function BookyPanel({
                   <motion.span
                     layoutId="bookyTabPill"
                     transition={{ type: "spring", stiffness: 520, damping: 38 }}
-                    className="absolute inset-0 rounded-full bg-espresso"
+                    className="absolute inset-0 rounded-lg bg-espresso"
                   />
                 ) : null}
                 <span className="relative z-10">{item.label}</span>

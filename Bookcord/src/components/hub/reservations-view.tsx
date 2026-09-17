@@ -72,7 +72,7 @@ export function ReservationsView({
             </div>
             <Link
               href="/books"
-              className="rounded-full bg-espresso px-5 py-2.5 text-sm font-medium text-espresso-foreground"
+              className="rounded-xl bg-espresso px-5 py-2.5 text-sm font-semibold text-espresso-foreground"
             >
               Browse the catalog
             </Link>

@@ -58,7 +58,7 @@ export default async function AdminReservationsPage({ searchParams }: PageProps)
               key={filter.label}
               href={filter.value ? `/admin/reservations?status=${filter.value}` : "/admin/reservations"}
               className={cn(
-                "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+                "rounded-xl px-4 py-1.5 text-sm font-semibold transition-colors",
                 active === filter.value
                   ? "bg-espresso text-primary-foreground shadow-cta"
                   : "bg-card text-muted-foreground ring-1 ring-border hover:text-accent-foreground",

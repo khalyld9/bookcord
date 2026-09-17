@@ -58,7 +58,7 @@ export function SyllabiView({ syllabi }: { syllabi: SyllabiResult }) {
             </div>
             <Link
               href="/profile"
-              className="rounded-full bg-espresso px-5 py-2.5 text-sm font-medium text-espresso-foreground"
+              className="rounded-xl bg-espresso px-5 py-2.5 text-sm font-semibold text-espresso-foreground"
             >
               Update profile
             </Link>

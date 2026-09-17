@@ -8,7 +8,7 @@ import { updatePassword, type ProfileState } from "@/lib/actions/profile";
 const initialState: ProfileState = {};
 
 const fieldClasses =
-  "w-full rounded-full border border-input bg-background px-5 py-3.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+  "w-full rounded-xl border border-input bg-background px-5 py-3.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 const labelClasses =
   "mb-2 block font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground";
@@ -69,7 +69,7 @@ export function PasswordForm() {
       <button
         type="submit"
         disabled={pending}
-        className="flex w-full items-center justify-center gap-2 rounded-full border border-input bg-background py-3.5 text-sm font-semibold text-foreground transition-all hover:border-ochre hover:text-ochre-deep active:translate-y-px disabled:opacity-70 sm:w-auto sm:px-8"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-input bg-background py-3.5 text-sm font-semibold text-foreground transition-all hover:border-ochre hover:text-ochre-deep active:translate-y-px disabled:opacity-70 sm:w-auto sm:px-8"
       >
         {pending ? (
           <LoaderCircle className="size-4 animate-spin" strokeWidth={2} />

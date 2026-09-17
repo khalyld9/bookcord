@@ -16,7 +16,7 @@ type BooksFiltersProps = {
 };
 
 const controlClasses =
-  "h-10 appearance-none rounded-full border border-input bg-background pl-4 pr-9 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+  "h-10 appearance-none rounded-xl border border-input bg-background pl-4 pr-9 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 function FilterSelect({
   label,
@@ -121,7 +121,7 @@ export function BooksFilters({
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search by title, author, ISBN or subject…"
-          className="h-12 w-full rounded-full border border-input bg-background pl-11 pr-24 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15 [&::-webkit-search-cancel-button]:appearance-none"
+          className="h-12 w-full rounded-xl border border-input bg-background pl-11 pr-24 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15 [&::-webkit-search-cancel-button]:appearance-none"
         />
         {search ? (
           <button
@@ -208,7 +208,7 @@ export function BooksFilters({
           <button
             type="button"
             onClick={clearAll}
-            className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl px-4 text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"
           >
             <X className="size-3.5" strokeWidth={2} aria-hidden="true" />
             Clear {activeFilterCount === 1 ? "filter" : `${activeFilterCount} filters`}

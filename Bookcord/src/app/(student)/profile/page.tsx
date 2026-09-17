@@ -7,7 +7,7 @@ import { getProfileDetail, getProfileOptions } from "@/lib/data/profiles";
 
 export const metadata: Metadata = {
   title: "Profile",
-  description: "Your Bookcord account details and library activity.",
+  description: "Your Bookcords account details and library activity.",
 };
 
 export default async function ProfilePage() {

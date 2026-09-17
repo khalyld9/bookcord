@@ -7,6 +7,13 @@ import { signup, type SignupState } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type SignupFormProps = {
   yearLevels: {
@@ -48,6 +55,7 @@ export function SignupForm({
           placeholder="Juan Dela Cruz"
           required
           autoComplete="name"
+          className="h-12 rounded-xl text-base"
         />
       </div>
 
@@ -61,6 +69,7 @@ export function SignupForm({
           type="text"
           placeholder="2026-00001"
           required
+          className="h-12 rounded-xl text-base"
         />
       </div>
 
@@ -75,6 +84,7 @@ export function SignupForm({
           placeholder="you@example.com"
           required
           autoComplete="email"
+          className="h-12 rounded-xl text-base"
         />
       </div>
 
@@ -91,6 +101,7 @@ export function SignupForm({
             required
             minLength={8}
             autoComplete="new-password"
+            className="h-12 rounded-xl text-base"
           />
 
           <p className="text-xs text-muted-foreground">
@@ -111,6 +122,7 @@ export function SignupForm({
             required
             minLength={8}
             autoComplete="new-password"
+            className="h-12 rounded-xl text-base"
           />
         </div>
       </div>
@@ -123,23 +135,18 @@ export function SignupForm({
             Year Level / Grade Level
           </Label>
 
-          <select
-            id="year_level_id"
-            name="year_level_id"
-            required
-            defaultValue=""
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            <option value="" disabled>
-              Select
-            </option>
-
-            {yearLevels.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+          <Select name="year_level_id" required defaultValue="">
+            <SelectTrigger id="year_level_id" className="h-12 rounded-xl text-base">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border p-1">
+              {yearLevels.map((item) => (
+                <SelectItem key={item.id} value={item.id} className="rounded-lg px-3 py-2 text-base">
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {yearLevels.length === 0 && (
             <p className="text-xs text-destructive">
@@ -155,23 +162,18 @@ export function SignupForm({
             Strand
           </Label>
 
-          <select
-            id="strand_id"
-            name="strand_id"
-            required
-            defaultValue=""
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            <option value="" disabled>
-              Select
-            </option>
-
-            {strands.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+          <Select name="strand_id" required defaultValue="">
+            <SelectTrigger id="strand_id" className="h-12 rounded-xl text-base">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border p-1">
+              {strands.map((item) => (
+                <SelectItem key={item.id} value={item.id} className="rounded-lg px-3 py-2 text-base">
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {strands.length === 0 && (
             <p className="text-xs text-destructive">
@@ -199,7 +201,7 @@ export function SignupForm({
       {/* SUBMIT */}
       <Button
         type="submit"
-        className="w-full"
+        className="h-12 w-full text-base"
         disabled={pending}
       >
         {pending ? (

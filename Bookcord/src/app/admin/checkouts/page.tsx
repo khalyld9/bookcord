@@ -33,7 +33,7 @@ export default async function AdminCheckoutsPage() {
   return (
     <div className="flex flex-col gap-6">
       <header>
-        <h1 className="font-display text-3xl font-medium tracking-[-0.03em]">
+        <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Checkouts
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">

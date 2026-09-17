@@ -70,7 +70,7 @@ export function BookDetail({
               {book.isbn ?? "No ISBN on record"}
             </p>
 
-            <h1 className="font-display text-3xl font-medium leading-tight tracking-[-0.04em] text-balance sm:text-4xl">
+            <h1 className="font-display text-3xl font-bold leading-tight tracking-[-0.04em] text-balance sm:text-4xl">
               {book.title}
             </h1>
 
@@ -117,7 +117,7 @@ export function BookDetail({
                   <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                     {item.label}
                   </dt>
-                  <dd className="mt-2 font-display text-2xl font-medium tracking-[-0.03em] tabular-nums">
+                  <dd className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em] tabular-nums">
                     {item.value}
                   </dd>
                 </div>

@@ -58,7 +58,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="font-display text-3xl font-medium tracking-[-0.03em]">
+            <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
               Librarian inbox
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -80,7 +80,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
 
         {needsSetup ? (
           <div className="rounded-3xl border border-dashed border-border bg-card/60 p-6 sm:p-8">
-            <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+            <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
               Chat tables are missing
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
@@ -132,7 +132,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
             {active ? (
               <section className="flex flex-col gap-4 rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border">
                 <header className="border-b border-border pb-4">
-                  <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+                  <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                     {active.name}
                   </h2>
                   <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">

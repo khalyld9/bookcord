@@ -15,9 +15,7 @@ export default async function LoginPage() {
   return (
     <AuthShell
       title="Welcome back"
-      description="Sign in to check textbook stock and reserve titles."
       actionLink={{ href: "/signup", label: "Create account" }}
-      switchPrompt="New to Bookcord?"
     >
       <GoogleSignInButton />
 

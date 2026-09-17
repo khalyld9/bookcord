@@ -1,106 +1,144 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 
-import { cn } from "@/lib/utils";
-
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-function subscribeToMotionPreference(onChange: () => void) {
-  const query = window.matchMedia(REDUCED_MOTION_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-}
-
-function getMotionPreference() {
-  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
-}
-
-/** Server render never animates; the client value takes over after hydration. */
-function getServerMotionPreference() {
-  return false;
-}
-
-type RevealProps = React.HTMLAttributes<HTMLElement> & {
+type RevealProps = {
   children: React.ReactNode;
-  /** Stagger in milliseconds. */
+  className?: string;
+  style?: React.CSSProperties;
+  id?: string;
+  "aria-label"?: string;
+  /** Stagger in milliseconds; shifts the scroll point where the reveal completes. */
   delay?: number;
   /** Render as a different element. */
   as?: "div" | "section" | "article" | "li" | "header" | "aside";
-  /** Re-run the animation when the element scrolls back out of view. */
+  /** Kept for API compatibility; reveals are scroll-driven both ways. */
   repeat?: boolean;
 };
 
+const TAGS = ["div", "section", "article", "li", "header", "aside"] as const;
+type Tag = (typeof TAGS)[number];
+
+// Created once at module scope so component identity is stable per tag.
+const MOTION_TAGS = {
+  div: motion.create("div"),
+  section: motion.create("section"),
+  article: motion.create("article"),
+  li: motion.create("li"),
+  header: motion.create("header"),
+  aside: motion.create("aside"),
+} as const;
+
 /**
- * Scroll reveal: content enters blurred, translated and transparent, then
- * settles into place.
- *
- * Reduced-motion users are handled in CSS (`motion-reduce:` below) so nothing
- * has to be toggled from an effect; the same utilities cover the case where
- * the observer never runs.
+ * Scroll-driven reveal: while the element enters the viewport its opacity
+ * eases to 1, a 12px blur eases to 0, it rises 40px and scales 0.98 → 1 —
+ * all mapped to scroll progress, so the motion stays glued to the scroll
+ * position instead of firing once. `delay` staggers siblings by moving the
+ * completion point later along the scroll. Reduced-motion users get the
+ * content statically.
  */
 export function Reveal({
   children,
   className,
   delay = 0,
-  as: Tag = "div",
-  repeat = false,
+  as = "div",
+  repeat: _repeat,
   style,
-  ...props
+  id,
+  "aria-label": ariaLabel,
 }: RevealProps) {
+  const tag: Tag = TAGS.includes(as as Tag) ? (as as Tag) : "div";
   const ref = useRef<HTMLElement | null>(null);
-  const [visible, setVisible] = useState(false);
-  const reducedMotion = useSyncExternalStore(
-    subscribeToMotionPreference,
-    getMotionPreference,
-    getServerMotionPreference,
-  );
+  const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || reducedMotion) return;
+  const end = Math.min(0.85, Math.max(0.4, 0.8 - delay * 0.0008));
+  const { scrollYProgress } = useScroll({
+    target: ref as React.RefObject<HTMLElement>,
+    offset: ["start end", `start ${end}`],
+  });
 
-    // Browsers without IntersectionObserver: reveal on the next tick rather
-    // than leaving the content hidden forever.
-    if (typeof IntersectionObserver === "undefined") {
-      const fallback = setTimeout(() => setVisible(true), 0);
-      return () => clearTimeout(fallback);
-    }
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.98, 1]);
+  const blur = useTransform(scrollYProgress, [0, 1], [12, 0]);
+  const filter = useTransform(blur, (v) => `blur(${v.toFixed(2)}px)`);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            if (!repeat) observer.unobserve(entry.target);
-          } else if (repeat) {
-            setVisible(false);
-          }
-        }
-      },
-      // Trigger a little before the element actually arrives.
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+  const MotionTag = MOTION_TAGS[tag];
+
+  if (reduced) {
+    return (
+      <MotionTag
+        ref={ref as React.Ref<never>}
+        style={style}
+        className={className}
+        id={id}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </MotionTag>
     );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [reducedMotion, repeat]);
+  }
 
   return (
-    <Tag
+    <MotionTag
       ref={ref as React.Ref<never>}
-      style={delay ? { ...style, transitionDelay: `${delay}ms` } : style}
-      className={cn(
-        "transition duration-700 ease-out",
-        "motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none",
-        visible
-          ? "translate-y-0 opacity-100 blur-none"
-          : "translate-y-5 opacity-0 blur-md",
-        className,
-      )}
-      {...props}
+      style={{
+        ...style,
+        opacity,
+        y,
+        scale,
+        filter,
+        willChange: "transform, opacity, filter",
+      }}
+      className={className}
+      id={id}
+      aria-label={ariaLabel}
     >
       {children}
-    </Tag>
+    </MotionTag>
+  );
+}
+
+/**
+ * Very subtle parallax for imagery: drifts slightly slower than the page,
+ * a touch of scale and blur while off-center, completely sharp in the
+ * middle of the viewport.
+ */
+export function Parallax({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const reduced = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [18, -18]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.985, 1, 0.995]);
+  const blur = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [5, 0, 0, 5]);
+  const filter = useTransform(blur, (v) => `blur(${v.toFixed(2)}px)`);
+
+  if (reduced) return <div className={className}>{children}</div>;
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      style={{ y, scale, filter, willChange: "transform, filter" }}
+    >
+      {children}
+    </motion.div>
   );
 }

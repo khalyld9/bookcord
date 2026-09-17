@@ -27,7 +27,7 @@ export default async function AdminInventoryPage() {
   return (
     <div className="flex flex-col gap-6">
       <header>
-        <h1 className="font-display text-3xl font-medium tracking-[-0.03em]">
+        <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Inventory
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -102,7 +102,7 @@ export default async function AdminInventoryPage() {
       </div>
 
       <section className="rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
-        <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+        <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
           Add a title
         </h2>
         <p className="mb-5 mt-1 text-sm text-muted-foreground">

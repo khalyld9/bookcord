@@ -21,7 +21,7 @@ export default async function StudentLayout({
       <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm">
         <Link href="/books" className="flex items-center gap-2.5 px-2">
           <BrandMark />
-          <span className="font-display text-2xl tracking-tight">Bookcord</span>
+          <span className="font-display text-2xl tracking-tight">Bookcords</span>
         </Link>
 
         <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">

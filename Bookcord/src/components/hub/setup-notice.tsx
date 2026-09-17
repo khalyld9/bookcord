@@ -19,7 +19,7 @@ export function HubSetupNotice({
         <DatabaseBackup className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
         Migration needed
       </p>
-      <h2 className="mt-3 font-display text-xl font-medium tracking-[-0.02em]">
+      <h2 className="mt-3 font-display text-xl font-semibold tracking-[-0.02em]">
         The <code className="font-mono text-base">{table}</code> table is not in
         this database yet
       </h2>

@@ -85,7 +85,7 @@ export function ClaimDesk({
         <div className="flex flex-col gap-5 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
-              <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+              <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                 {reservation.books?.title ?? "Title no longer in the catalog"}
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">

@@ -80,7 +80,7 @@ export function LibraryView({
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
               Catalog
             </p>
-            <h2 className="mt-2 font-display text-2xl font-medium tracking-[-0.03em]">
+            <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em]">
               {count} {count === 1 ? "title" : "titles"}
             </h2>
           </div>

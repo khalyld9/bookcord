@@ -4,7 +4,7 @@ import mascotFace from "@/assets/mascot/face.png";
 import { cn } from "@/lib/utils";
 
 /**
- * The Bookcord mascot as the app mark — used in the sidebar header and on
+ * The Bookcords mascot as the app mark — used in the sidebar header and on
  * the login screen. The favicon/icon files in `app/` come from the same art.
  */
 export function BrandMark({ className }: { className?: string }) {
@@ -17,7 +17,7 @@ export function BrandMark({ className }: { className?: string }) {
     >
       <Image
         src={mascotFace}
-        alt="Booky, the Bookcord book mascot"
+        alt="Booky, the Bookcords book mascot"
         width={30}
         height={25}
       />

@@ -10,8 +10,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Bookcord",
-    template: "%s | Bookcord",
+    default: "Bookcords",
+    template: "%s | Bookcords",
   },
   description:
     "School library system for checking textbook stock and reserving titles.",

@@ -61,7 +61,7 @@ export function BookCard({ book }: { book: BookListItem }) {
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Available
             </p>
-            <p className="mt-1 font-display text-xl font-medium tracking-[-0.02em] tabular-nums">
+            <p className="mt-1 font-display text-xl font-semibold tracking-[-0.02em] tabular-nums">
               {available}
               <span className="ml-1 text-sm font-normal text-muted-foreground">
                 {available === 1 ? "copy" : "copies"}

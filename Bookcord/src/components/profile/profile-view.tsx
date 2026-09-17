@@ -102,7 +102,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
             {profile.avatarUrl ? (
               <AvatarImage src={profile.avatarUrl} alt={profile.fullName} />
             ) : null}
-            <AvatarFallback className="bg-espresso-foreground/15 font-display text-2xl font-medium text-espresso-foreground">
+            <AvatarFallback className="bg-espresso-foreground/15 font-display text-2xl font-semibold text-espresso-foreground">
               {initials(profile.fullName)}
             </AvatarFallback>
           </Avatar>
@@ -111,7 +111,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-espresso-muted">
               Account — Profile
             </p>
-            <h1 className="mt-2 truncate font-display text-3xl font-medium leading-tight tracking-[-0.04em] sm:text-4xl">
+            <h1 className="mt-2 truncate font-display text-3xl font-bold leading-tight tracking-[-0.04em] sm:text-4xl">
               {profile.fullName}
             </h1>
             <p className="mt-1.5 truncate text-sm text-espresso-muted">
@@ -139,7 +139,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
               <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted">
                 {stat.label}
               </dt>
-              <dd className="mt-2 font-display text-3xl font-medium tracking-[-0.03em] tabular-nums">
+              <dd className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] tabular-nums">
                 {stat.value}
               </dd>
             </div>
@@ -228,7 +228,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
                   >
                     {item.label}
                   </Link>
-                  <span className="font-display text-xl font-medium tabular-nums tracking-[-0.02em]">
+                  <span className="font-display text-xl font-semibold tabular-nums tracking-[-0.02em]">
                     {item.value}
                   </span>
                 </li>

@@ -13,6 +13,8 @@ import { formatDate } from "@/lib/utils";
 
 import type { Metadata } from "next";
 
+import { Reveal } from "@/components/motion/reveal";
+
 export const metadata: Metadata = {
   title: "Book History",
 };
@@ -24,7 +26,7 @@ export default async function HistoryPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="font-display text-3xl font-medium tracking-[-0.03em]">
+        <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Book History
         </h1>
         <p className="text-sm text-muted-foreground">
@@ -32,7 +34,7 @@ export default async function HistoryPage() {
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-3xl bg-card shadow-shelf ring-1 ring-border">
+      <Reveal delay={120} className="overflow-hidden rounded-3xl bg-card shadow-shelf ring-1 ring-border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -74,7 +76,7 @@ export default async function HistoryPage() {
             )}
           </TableBody>
         </Table>
-      </div>
+      </Reveal>
     </div>
   );
 }

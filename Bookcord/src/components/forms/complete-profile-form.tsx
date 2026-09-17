@@ -6,10 +6,14 @@ import { LoaderCircle, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { completeProfile } from "@/lib/actions/auth";
-
-const selectClasses =
-  "h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
 export type ProfileOption = { id: string; name: string };
 
@@ -31,7 +35,7 @@ export function CompleteProfileForm({
           name="full_name"
           required
           placeholder="Juan Dela Cruz"
-          className="mt-1.5"
+          className="mt-1.5 h-12 rounded-xl text-base"
         />
       </div>
       <div>
@@ -41,35 +45,39 @@ export function CompleteProfileForm({
           name="student_id"
           required
           placeholder="2026-00000"
-          className="mt-1.5"
+          className="mt-1.5 h-12 rounded-xl text-base"
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="cp-year">Year level</Label>
-          <select id="cp-year" name="year_level_id" required className={selectClasses} defaultValue="">
-            <option value="" disabled>
-              Select
-            </option>
-            {yearLevels.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.name}
-              </option>
-            ))}
-          </select>
+          <Select name="year_level_id" required defaultValue="">
+            <SelectTrigger id="cp-year" className="h-12 rounded-xl text-base">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border p-1">
+              {yearLevels.map((option) => (
+                <SelectItem key={option.id} value={option.id} className="rounded-lg px-3 py-2 text-base">
+                  {option.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor="cp-strand">Strand</Label>
-          <select id="cp-strand" name="strand_id" required className={selectClasses} defaultValue="">
-            <option value="" disabled>
-              Select
-            </option>
-            {strands.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.name}
-              </option>
-            ))}
-          </select>
+          <Select name="strand_id" required defaultValue="">
+            <SelectTrigger id="cp-strand" className="h-12 rounded-xl text-base">
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border p-1">
+              {strands.map((option) => (
+                <SelectItem key={option.id} value={option.id} className="rounded-lg px-3 py-2 text-base">
+                  {option.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -79,7 +87,7 @@ export function CompleteProfileForm({
         </p>
       ) : null}
 
-      <Button type="submit" disabled={pending} className="mt-2 w-full rounded-full py-6">
+      <Button type="submit" disabled={pending} className="mt-2 h-12 w-full text-base">
         {pending ? (
           <>
             <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />

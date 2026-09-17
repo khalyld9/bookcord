@@ -48,7 +48,7 @@ export function SyllabiView({ syllabi }: { syllabi: SyllabiResult }) {
               <UserRound className="size-5" strokeWidth={1.75} aria-hidden="true" />
             </span>
             <div className="flex-1">
-              <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+              <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                 Your course is not set yet
               </h2>
               <p className="mt-1 max-w-xl text-sm text-muted-foreground">
@@ -67,7 +67,7 @@ export function SyllabiView({ syllabi }: { syllabi: SyllabiResult }) {
       ) : groups.length === 0 ? (
         <Reveal delay={100}>
           <div className="rounded-3xl border border-dashed border-border bg-card/60 px-6 py-20 text-center">
-            <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+            <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
               No textbooks filed for this course yet
             </h2>
             <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
@@ -86,7 +86,7 @@ export function SyllabiView({ syllabi }: { syllabi: SyllabiResult }) {
               className="rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border sm:p-8"
             >
               <header className="mb-5 flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-4">
-                <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+                <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                   {group.subject}
                 </h2>
                 <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">

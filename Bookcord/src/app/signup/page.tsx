@@ -11,9 +11,7 @@ export default async function SignupPage() {
   return (
     <AuthShell
       title="Create an account"
-      description="Register with your student details — ICT, Grade 11 or 12."
       actionLink={{ href: "/login", label: "Sign in" }}
-      switchPrompt="Already have an account?"
     >
       <GoogleSignInButton />
 

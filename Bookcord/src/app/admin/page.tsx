@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ReservationStatusChip } from "@/components/hub/reservation-status-chip";
+import { Reveal } from "@/components/motion/reveal";
 import { getAdminReservations, getAdminInventory, getAdminStats } from "@/lib/data/admin";
 
 export const metadata: Metadata = {
@@ -27,10 +28,10 @@ function StatCard({
       <p
         className={
           tone === "alert"
-            ? "font-display text-3xl font-medium tracking-[-0.02em] text-primary"
+            ? "font-display text-3xl font-bold tracking-[-0.02em] text-primary"
             : tone === "warn"
-              ? "font-display text-3xl font-medium tracking-[-0.02em] text-ochre-deep"
-              : "font-display text-3xl font-medium tracking-[-0.02em]"
+              ? "font-display text-3xl font-bold tracking-[-0.02em] text-ochre-deep"
+              : "font-display text-3xl font-bold tracking-[-0.02em]"
         }
       >
         {value}
@@ -56,16 +57,16 @@ export default async function AdminOverviewPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <header>
-        <h1 className="font-display text-3xl font-medium tracking-[-0.03em]">
+      <Reveal as="header">
+        <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Librarian desk
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Stock, reservations and checkouts for the whole library at a glance.
         </p>
-      </header>
+      </Reveal>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Library statistics">
+      <Reveal as="section" delay={80} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Library statistics">
         <StatCard label="Titles" value={stats.totalBooks} hint={`${stats.activeUsers} active students`} />
         <StatCard label="Copies on shelf" value={stats.availableStock} hint={`${stats.totalStock} total in the library`} />
         <StatCard label="Checked out" value={stats.issuedBooks} hint="Copies with students right now" />
@@ -74,12 +75,12 @@ export default async function AdminOverviewPage() {
           value={stats.openReservations}
           hint={`${stats.readyReservations} set aside and ready`}
         />
-      </section>
+      </Reveal>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="flex flex-col gap-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+        <Reveal as="section" delay={160} className="flex flex-col gap-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+            <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
               Stock to watch
             </h2>
             <Link
@@ -113,11 +114,11 @@ export default async function AdminOverviewPage() {
               ))}
             </ul>
           )}
-        </section>
+        </Reveal>
 
-        <section className="flex flex-col gap-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+        <Reveal as="section" delay={240} className="flex flex-col gap-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+            <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
               Latest reservations
             </h2>
             <Link
@@ -152,7 +153,7 @@ export default async function AdminOverviewPage() {
               ))}
             </ul>
           )}
-        </section>
+        </Reveal>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ export default async function AdminLayout({
       <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm">
         <Link href="/admin" className="flex items-center gap-2.5 px-2">
           <BrandMark />
-          <span className="font-display text-2xl tracking-tight">Bookcord</span>
+          <span className="font-display text-2xl tracking-tight">Bookcords</span>
         </Link>
         <p className="mt-1 px-2 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground/80">
           Librarian desk

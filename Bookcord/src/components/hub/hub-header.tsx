@@ -25,7 +25,7 @@ export function HubHeader({
             {eyebrow}
           </p>
 
-          <h1 className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-[-0.04em] text-balance sm:text-5xl">
+          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-[-0.04em] text-balance sm:text-5xl">
             {title}
           </h1>
 
@@ -44,7 +44,7 @@ export function HubHeader({
                 <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted">
                   {stat.label}
                 </dt>
-                <dd className="mt-2 font-display text-3xl font-medium tracking-[-0.03em] tabular-nums">
+                <dd className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] tabular-nums">
                   {stat.value}
                 </dd>
               </div>

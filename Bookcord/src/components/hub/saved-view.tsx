@@ -48,7 +48,7 @@ export function SavedView({
               <SearchX className="size-5" strokeWidth={1.75} aria-hidden="true" />
             </span>
             <div>
-              <h2 className="font-display text-xl font-medium tracking-[-0.02em]">
+              <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                 Nothing saved yet
               </h2>
               <p className="mt-1 max-w-sm text-sm text-muted-foreground">

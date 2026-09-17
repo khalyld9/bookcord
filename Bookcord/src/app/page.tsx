@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { BookOpen, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/motion/reveal";
 import { getSessionProfile } from "@/lib/auth";
 
 export default async function HomePage() {
@@ -15,21 +16,25 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen">
       <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-        <div className="mb-6 flex items-center gap-2">
+        <Reveal className="mb-6 flex items-center gap-2">
           <BookOpen className="h-8 w-8" />
-          <span className="text-2xl font-bold">Bookcord</span>
-        </div>
+          <span className="text-2xl font-bold">Bookcords</span>
+        </Reveal>
 
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Bookcord
-        </h1>
+        <Reveal as="header" delay={80}>
+          <h1 className="text-4xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+            Bookcords
+          </h1>
+        </Reveal>
 
-        <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-          School library system for checking textbook stock and reserving
-          titles.
-        </p>
+        <Reveal delay={160}>
+          <p className="mt-4 max-w-xl text-lg font-normal text-muted-foreground">
+            School library system for checking textbook stock and reserving
+            titles.
+          </p>
+        </Reveal>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Reveal delay={240} className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button asChild>
             <Link href="/login">
               Sign in
@@ -40,7 +45,7 @@ export default async function HomePage() {
           <Button asChild variant="outline">
             <Link href="/signup">Create an account</Link>
           </Button>
-        </div>
+        </Reveal>
       </div>
     </main>
   );

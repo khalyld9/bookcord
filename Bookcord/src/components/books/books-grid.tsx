@@ -24,7 +24,7 @@ export function BooksGrid({
         </span>
 
         <div className="flex flex-col gap-2">
-          <h3 className="font-display text-2xl font-medium tracking-[-0.03em]">
+          <h3 className="font-display text-2xl font-semibold tracking-[-0.03em]">
             Nothing on this shelf
           </h3>
           <p className="max-w-sm text-sm text-muted-foreground">

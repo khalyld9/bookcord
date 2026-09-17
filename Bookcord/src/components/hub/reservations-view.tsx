@@ -21,9 +21,11 @@ const OPEN: ReservationStatus[] = ["PENDING", "READY"];
 export function ReservationsView({
   items,
   needsMigration = false,
+  bookHrefPrefix,
 }: {
   items: ReservationListItem[];
   needsMigration?: boolean;
+  bookHrefPrefix?: string;
 }) {
   const open = items.filter((item) => OPEN.includes(item.status)).length;
   const claimed = items.filter((item) => item.status === "CLAIMED").length;
@@ -87,7 +89,11 @@ export function ReservationsView({
               <Reveal key={item.id} as="li" delay={Math.min(index, 5) * 60}>
                 <div className="flex flex-col gap-4 rounded-2xl bg-card p-4 ring-1 ring-border sm:flex-row sm:items-center">
                   <Link
-                    href={`/books/${item.books?.id ?? ""}`}
+                    href={
+                      bookHrefPrefix
+                        ? `${bookHrefPrefix}${item.books?.id ?? ""}`
+                        : `/books/${item.books?.id ?? ""}`
+                    }
                     className="relative block size-16 shrink-0 overflow-hidden rounded-xl bg-espresso"
                     tabIndex={item.books ? undefined : -1}
                     aria-label={item.books?.title ?? "Book"}

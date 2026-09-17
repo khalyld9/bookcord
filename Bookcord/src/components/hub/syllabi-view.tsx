@@ -18,7 +18,13 @@ const TONE: Record<"available" | "low" | "out", string> = {
   out: "text-destructive",
 };
 
-export function SyllabiView({ syllabi }: { syllabi: SyllabiResult }) {
+export function SyllabiView({
+  syllabi,
+  bookHrefPrefix,
+}: {
+  syllabi: SyllabiResult;
+  bookHrefPrefix?: string;
+}) {
   const { groups, totalBooks, strandName, yearLevelName, profileIncomplete } =
     syllabi;
 
@@ -105,7 +111,11 @@ export function SyllabiView({ syllabi }: { syllabi: SyllabiResult }) {
                   return (
                     <li key={book.id}>
                       <Link
-                        href={`/books/${book.id}`}
+                        href={
+                          bookHrefPrefix
+                            ? `${bookHrefPrefix}${book.id}`
+                            : `/books/${book.id}`
+                        }
                         className="group flex items-center justify-between gap-4 py-3.5 transition-colors hover:text-primary"
                       >
                         <span className="min-w-0">

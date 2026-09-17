@@ -40,10 +40,12 @@ export function LibraryView({
   books,
   options,
   basePath,
+  bookHrefPrefix,
 }: {
   books: BookListItem[];
   options: LibraryOptions;
   basePath?: string;
+  bookHrefPrefix?: string;
 }) {
   const count = books.length;
 
@@ -89,7 +91,7 @@ export function LibraryView({
           </p>
         </Reveal>
 
-        <BooksGrid books={books} />
+        <BooksGrid books={books} bookHrefPrefix={bookHrefPrefix} />
       </section>
     </div>
   );

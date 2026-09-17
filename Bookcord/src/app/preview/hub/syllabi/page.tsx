@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 export default function SyllabiPreviewPage() {
   return (
     <PreviewShell label="Design preview — /syllabi" activeHref="/syllabi">
-      <SyllabiView syllabi={syllabi} />
+      <SyllabiView
+        syllabi={syllabi}
+        bookHrefPrefix="/preview/library/book?id="
+      />
     </PreviewShell>
   );
 }

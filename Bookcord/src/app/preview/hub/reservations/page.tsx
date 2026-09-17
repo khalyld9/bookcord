@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 export default function ReservationsPreviewPage() {
   return (
     <PreviewShell label="Design preview — /my-books" activeHref="/my-books">
-      <ReservationsView items={reservationItems} />
+      <ReservationsView
+        items={reservationItems}
+        bookHrefPrefix="/preview/library/book?id="
+      />
     </PreviewShell>
   );
 }

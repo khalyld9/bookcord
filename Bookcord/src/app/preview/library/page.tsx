@@ -40,10 +40,11 @@ export default async function LibraryPreviewPage({
       </div>
 
       <LibraryView
-          books={books}
-          options={options}
-          basePath="/preview/library"
-        />
+        books={books}
+        options={options}
+        basePath="/preview/library"
+        bookHrefPrefix="/preview/library/book?id="
+      />
     </PreviewShell>
   );
 }

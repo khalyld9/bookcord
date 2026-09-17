@@ -13,9 +13,11 @@ import { formatDate } from "@/lib/utils";
 export function SavedView({
   items,
   needsMigration = false,
+  bookHrefPrefix,
 }: {
   items: SavedBookListItem[];
   needsMigration?: boolean;
+  bookHrefPrefix?: string;
 }) {
   const available = items.filter(
     (item) => (item.books?.inventory?.available_stock ?? 0) > 0,
@@ -70,7 +72,11 @@ export function SavedView({
             <Reveal key={item.id} as="li" delay={(index % 6) * 70}>
               <article className="flex h-full flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-border">
                 <Link
-                  href={`/books/${item.book_id}`}
+                  href={
+                    bookHrefPrefix
+                      ? `${bookHrefPrefix}${item.book_id}`
+                      : `/books/${item.book_id}`
+                  }
                   className="group relative block aspect-[3/4] w-full overflow-hidden bg-espresso"
                 >
                   <BookCover

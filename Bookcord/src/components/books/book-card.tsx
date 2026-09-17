@@ -5,14 +5,23 @@ import { BookCover } from "@/components/books/book-cover";
 import { BookStatusBadge } from "@/components/books/book-status-badge";
 import type { BookListItem } from "@/lib/data/books";
 
-export function BookCard({ book }: { book: BookListItem }) {
+export function BookCard({
+  book,
+  bookHrefPrefix,
+}: {
+  book: BookListItem;
+  /** When set, cards link to `prefix + id` instead of the live /books route. */
+  bookHrefPrefix?: string;
+}) {
   const available = book.inventory?.available_stock ?? 0;
   const tags = [book.strand?.name, book.year_level?.name, book.semester?.name]
     .filter((tag): tag is string => Boolean(tag));
 
   return (
     <Link
-      href={`/books/${book.id}`}
+      href={
+        bookHrefPrefix ? `${bookHrefPrefix}${book.id}` : `/books/${book.id}`
+      }
       className="group flex flex-1 flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-border transition-all duration-300 hover:-translate-y-1 hover:shadow-shelf hover:ring-ochre/50"
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-espresso">

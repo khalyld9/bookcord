@@ -12,9 +12,11 @@ const STAGGER_GROUP = 8;
 export function BooksGrid({
   books,
   emptyMessage,
+  bookHrefPrefix,
 }: {
   books: BookListItem[];
   emptyMessage?: string;
+  bookHrefPrefix?: string;
 }) {
   if (books.length === 0) {
     return (
@@ -51,7 +53,7 @@ export function BooksGrid({
           delay={(index % STAGGER_GROUP) * STAGGER_STEP}
           className="flex"
         >
-          <BookCard book={book} />
+          <BookCard book={book} bookHrefPrefix={bookHrefPrefix} />
         </Reveal>
       ))}
     </div>

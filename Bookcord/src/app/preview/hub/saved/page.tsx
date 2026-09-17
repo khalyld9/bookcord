@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 export default function SavedPreviewPage() {
   return (
     <PreviewShell label="Design preview — /saved" activeHref="/saved">
-      <SavedView items={savedItems} />
+      <SavedView
+        items={savedItems}
+        bookHrefPrefix="/preview/library/book?id="
+      />
     </PreviewShell>
   );
 }

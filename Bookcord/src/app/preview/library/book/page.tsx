@@ -12,8 +12,13 @@ export const metadata: Metadata = {
 };
 
 /** Design preview for the book detail view. Safe to delete. */
-export default function BookDetailPreviewPage() {
-  const book = catalog[0];
+export default async function BookDetailPreviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ id?: string }>;
+}) {
+  const { id } = await searchParams;
+  const book = catalog.find((entry) => entry.id === id) ?? catalog[0];
 
   return (
     <PreviewShell label="Guest student · book detail" activeHref="/books">

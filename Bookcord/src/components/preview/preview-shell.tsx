@@ -21,6 +21,23 @@ const routes = [
  * plus a top bar that labels the route and links the other previews.
  * Everything under /preview is safe to delete before production.
  */
+const STUDENT_REMAP: Record<string, string> = {
+  "/books": "/preview/library",
+  "/my-books": "/preview/hub/reservations",
+  "/saved": "/preview/hub/saved",
+  "/syllabi": "/preview/hub/syllabi",
+  "/profile": "/preview/profile",
+};
+
+const ADMIN_REMAP: Record<string, string> = {
+  "/admin": "/preview/admin",
+  "/admin/reservations": "/preview/admin/reservations",
+  "/admin/inventory": "/preview/admin/inventory",
+  "/admin/checkouts": "/preview/admin/checkouts",
+  "/admin/claim": "/preview/admin",
+  "/admin/chat": "/preview/admin",
+};
+
 export function PreviewShell({
   label,
   children,
@@ -50,9 +67,9 @@ export function PreviewShell({
 
         <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
           {variant === "admin" ? (
-            <AdminNav activeHref={activeHref} />
+            <AdminNav activeHref={activeHref} remap={ADMIN_REMAP} />
           ) : (
-            <StudentNav activeHref={activeHref} />
+            <StudentNav activeHref={activeHref} remap={STUDENT_REMAP} />
           )}
         </div>
 

@@ -27,7 +27,7 @@ export default async function LoginPage({ searchParams }: PageProps) {
       actionLink={
         adminDesk
           ? { href: "/login", label: "Student sign in" }
-          : { href: "/login?desk=admin", label: "Librarian sign in" }
+          : { href: "/signup", label: "Create account" }
       }
     >
       <GoogleSignInButton />
@@ -40,12 +40,17 @@ export default async function LoginPage({ searchParams }: PageProps) {
 
       <LoginForm />
 
-      <p className="mt-4 text-sm text-muted-foreground">
+      <p className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">
         {adminDesk ? (
           <>Librarians land on the admin dashboard automatically.</>
         ) : (
           <>
-            Just looking?{" "}
+            <Link
+              href="/login?desk=admin"
+              className="font-semibold text-ochre-deep transition-colors hover:text-ochre"
+            >
+              Librarian sign in
+            </Link>
             <Link
               href="/preview"
               className="font-semibold text-ochre-deep transition-colors hover:text-ochre"

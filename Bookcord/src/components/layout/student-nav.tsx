@@ -34,12 +34,20 @@ function isActive(href: string, pathname: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function NavRow({ link, active }: { link: NavItem; active: boolean }) {
+function NavRow({
+  link,
+  active,
+  remap,
+}: {
+  link: NavItem;
+  active: boolean;
+  remap?: Record<string, string>;
+}) {
   const Icon = link.icon;
 
   return (
     <Link
-      href={link.href}
+      href={remap?.[link.href] ?? link.href}
       aria-current={active ? "page" : undefined}
       className={cn(
         "relative flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors",
@@ -67,7 +75,13 @@ function NavRow({ link, active }: { link: NavItem; active: boolean }) {
   );
 }
 
-export function StudentNav({ activeHref }: { activeHref?: string }) {
+export function StudentNav({
+  activeHref,
+  remap,
+}: {
+  activeHref?: string;
+  remap?: Record<string, string>;
+}) {
   const routePathname = usePathname();
   // Preview routes pass the route they are standing in for, so the pill can
   // be shown without navigating there.
@@ -81,6 +95,7 @@ export function StudentNav({ activeHref }: { activeHref?: string }) {
             key={link.href}
             link={link}
             active={isActive(link.href, pathname)}
+            remap={remap}
           />
         ))}
       </nav>
@@ -94,6 +109,7 @@ export function StudentNav({ activeHref }: { activeHref?: string }) {
             key={link.href}
             link={link}
             active={isActive(link.href, pathname)}
+            remap={remap}
           />
         ))}
       </nav>

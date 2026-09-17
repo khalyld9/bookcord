@@ -46,7 +46,11 @@ export async function updateSession(request: NextRequest) {
       .eq("auth_user_id", user.id)
       .single();
     const url = request.nextUrl.clone();
-    url.pathname = profile?.role === "ADMIN" ? "/admin" : "/books";
+    url.pathname = !profile
+      ? "/complete-profile"
+      : profile.role === "ADMIN"
+        ? "/admin"
+        : "/books";
     url.search = "";
     return NextResponse.redirect(url);
   }

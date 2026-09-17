@@ -32,7 +32,7 @@ export default function PreviewAdminPage() {
   const attention = mockInventory.filter((b) => b.available <= b.minimum);
 
   return (
-    <PreviewShell label="Guest librarian · overview">
+    <PreviewShell label="Guest librarian · overview" variant="admin" activeHref="/admin">
       <header>
         <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Librarian desk

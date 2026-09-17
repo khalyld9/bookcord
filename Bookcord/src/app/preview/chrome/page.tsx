@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function ChromePreviewPage() {
   return (
-    <PreviewShell label="Design preview — sidebar, themes, loader">
+    <PreviewShell label="Design preview — sidebar, themes, loader" activeHref="/books">
       <ChromePreview />
     </PreviewShell>
   );

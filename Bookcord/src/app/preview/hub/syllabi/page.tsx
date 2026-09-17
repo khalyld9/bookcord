@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 /** Mock-data preview of /syllabi. Safe to delete. */
 export default function SyllabiPreviewPage() {
   return (
-    <PreviewShell label="Design preview — /syllabi">
+    <PreviewShell label="Design preview — /syllabi" activeHref="/syllabi">
       <SyllabiView syllabi={syllabi} />
     </PreviewShell>
   );

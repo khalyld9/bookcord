@@ -13,7 +13,7 @@ import { mockInventory } from "@/app/preview/admin/mock-admin";
 
 export default function PreviewAdminInventoryPage() {
   return (
-    <PreviewShell label="Guest librarian · inventory">
+    <PreviewShell label="Guest librarian · inventory" variant="admin" activeHref="/admin/inventory">
       <header>
         <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Inventory

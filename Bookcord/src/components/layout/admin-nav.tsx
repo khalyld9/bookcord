@@ -67,8 +67,9 @@ function NavRow({ link, active }: { link: NavItem; active: boolean }) {
   );
 }
 
-export function AdminNav() {
-  const pathname = usePathname();
+export function AdminNav({ activeHref }: { activeHref?: string }) {
+  const routePathname = usePathname();
+  const pathname = activeHref ?? routePathname;
 
   return (
     <nav className="flex flex-col gap-1" aria-label="Librarian navigation">

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 /** Mock-data preview of /my-books. Safe to delete. */
 export default function ReservationsPreviewPage() {
   return (
-    <PreviewShell label="Design preview — /my-books">
+    <PreviewShell label="Design preview — /my-books" activeHref="/my-books">
       <ReservationsView items={reservationItems} />
     </PreviewShell>
   );

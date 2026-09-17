@@ -13,7 +13,7 @@ import { mockCheckouts } from "@/app/preview/admin/mock-admin";
 
 export default function PreviewAdminCheckoutsPage() {
   return (
-    <PreviewShell label="Guest librarian · checkouts">
+    <PreviewShell label="Guest librarian · checkouts" variant="admin" activeHref="/admin/checkouts">
       <header>
         <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Checkouts

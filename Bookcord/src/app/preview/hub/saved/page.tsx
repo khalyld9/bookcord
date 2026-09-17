@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 /** Mock-data preview of /saved. Safe to delete. */
 export default function SavedPreviewPage() {
   return (
-    <PreviewShell label="Design preview — /saved">
+    <PreviewShell label="Design preview — /saved" activeHref="/saved">
       <SavedView items={savedItems} />
     </PreviewShell>
   );

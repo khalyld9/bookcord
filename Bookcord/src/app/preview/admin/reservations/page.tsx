@@ -13,7 +13,7 @@ import { mockReservations } from "@/app/preview/admin/mock-admin";
 
 export default function PreviewAdminReservationsPage() {
   return (
-    <PreviewShell label="Guest librarian · reservations">
+    <PreviewShell label="Guest librarian · reservations" variant="admin" activeHref="/admin/reservations">
       <header>
         <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
           Reservations

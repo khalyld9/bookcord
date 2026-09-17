@@ -1,6 +1,4 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { UserPlus } from "lucide-react";
 
 import { AuthShell } from "@/components/layout/auth-shell";
 import { LoginForm } from "@/components/forms/login-form";
@@ -16,24 +14,11 @@ export default async function LoginPage() {
   return (
     <AuthShell
       title="Welcome back"
-      description="Sign in to your Bookcord account"
+      description="Sign in to check textbook stock and reserve titles."
       actionLink={{ href: "/signup", label: "Create account" }}
+      switchPrompt="New to Bookcord?"
     >
       <LoginForm />
-
-      <div className="mt-6 flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="h-px flex-1 bg-border" aria-hidden="true" />
-        New here?
-        <span className="h-px flex-1 bg-border" aria-hidden="true" />
-      </div>
-
-      <Link
-        href="/signup"
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-input bg-background py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-ochre hover:text-ochre-deep"
-      >
-        <UserPlus className="size-4" strokeWidth={2} aria-hidden="true" />
-        Create Account
-      </Link>
     </AuthShell>
   );
 }

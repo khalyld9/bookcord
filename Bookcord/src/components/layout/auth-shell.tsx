@@ -2,86 +2,86 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { BrandMark } from "@/components/layout/brand-mark";
-import heroImage from "@/assets/bookcord-hero.jpg";
+import { ThemeSwitcher } from "@/components/layout/theme-switcher";
+import authPanel from "@/assets/bookcord-auth-panel.png";
 
 export function AuthShell({
   children,
   title,
   description,
   actionLink,
+  switchPrompt,
 }: {
   children: React.ReactNode;
   title: string;
   description: string;
-  /** Small link in the top-right corner (e.g. Sign in / Create account). */
+  /** The toggle link under the form (e.g. Create account / Sign in). */
   actionLink?: { href: string; label: string };
+  /** Lead-in sentence for the toggle link, e.g. "New to Bookcord?" */
+  switchPrompt?: string;
 }) {
   return (
-    <main className="min-h-screen w-full bg-paper px-3 py-4 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
-      <div className="mx-auto grid w-full max-w-6xl overflow-hidden rounded-2xl sm:rounded-3xl bg-card shadow-shelf ring-1 ring-border lg:grid-cols-2">
-        {/* Left: brand panel */}
-        <section className="relative isolate flex min-h-[200px] flex-col justify-end overflow-hidden bg-espresso p-6 text-espresso-foreground sm:min-h-[240px] sm:p-8 lg:min-h-[620px] lg:justify-between lg:p-10">
-          <Image
-            src={heroImage}
-            alt="A librarian reviewing textbook stock levels on a tablet beside a stack of school textbooks"
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="absolute inset-0 -z-10 size-full object-cover opacity-70"
-          />
-          <div className="absolute inset-0 -z-10 bg-espresso/70" />
+    <main className="grid min-h-screen w-full bg-paper dark:bg-background lg:grid-cols-2">
+      {/* Left: full-height brand panel with Booky (desktop only). */}
+      <section className="relative isolate hidden overflow-hidden bg-espresso lg:block">
+        <Image
+          src={authPanel}
+          alt="Booky, the Bookcord mascot, jumping joyfully among colorful textbooks in a library"
+          fill
+          priority
+          sizes="50vw"
+          className="absolute inset-0 size-full object-cover"
+        />
+        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-4 px-12 pb-16 text-center">
+          <p className="font-display text-6xl font-semibold tracking-[-0.04em] text-white">
+            Bookcord
+          </p>
+          <p className="max-w-xs text-sm leading-relaxed text-white/75 text-pretty">
+            Your school library companion for checking stock and reserving
+            textbooks.
+          </p>
+        </div>
+      </section>
 
-          <p className="hidden font-mono text-[11px] uppercase tracking-[0.22em] text-espresso-muted lg:block">
-            School library system
+      {/* Right: the form column. */}
+      <section className="relative flex min-h-screen flex-col px-6 py-6 sm:px-12 lg:px-16 lg:py-8">
+        <header className="flex items-center justify-between gap-3">
+          <p className="flex items-center gap-2.5">
+            <BrandMark />
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              Bookcord for web
+            </span>
+          </p>
+          <ThemeSwitcher />
+        </header>
+
+        <div className="mx-auto my-auto w-full max-w-md py-10">
+          <h1 className="font-display text-4xl font-medium tracking-[-0.03em] sm:text-5xl">
+            {title}
+          </h1>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            {description}
           </p>
 
-          <div className="lg:mt-24">
-            <h2 className="font-display text-3xl font-medium leading-[1.05] tracking-[-0.04em] text-balance sm:text-4xl lg:text-5xl">
-              Every textbook
-              <br />
-              accounted for
-            </h2>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-espresso-muted text-pretty lg:mt-4">
-              Inventory, restock alerts and checkout records.
-            </p>
-          </div>
-        </section>
+          {children}
 
-        {/* Right: form */}
-        <section className="flex min-w-0 flex-col bg-card p-6 sm:p-8 lg:p-12">
-          <header className="flex flex-wrap items-center justify-between gap-2">
-            <Link href="/" className="flex items-center gap-2.5">
-              <BrandMark />
-              <span className="font-display text-xl tracking-tight sm:text-2xl">
-                Bookcord
-              </span>
-            </Link>
-            {actionLink ? (
+          {actionLink ? (
+            <p className="mt-8 text-sm text-muted-foreground">
+              {switchPrompt ? `${switchPrompt} ` : ""}
               <Link
                 href={actionLink.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-ochre-deep"
+                className="font-medium text-ochre-deep transition-colors hover:text-ochre"
               >
                 {actionLink.label}
               </Link>
-            ) : null}
-          </header>
-
-          <div className="mx-auto my-auto w-full max-w-md py-8 lg:py-12">
-            <h1 className="font-display text-3xl font-medium tracking-[-0.03em] sm:text-4xl">
-              {title}
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {description}
             </p>
+          ) : null}
+        </div>
 
-            {children}
-          </div>
-
-          <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground">
-            <p>© 2026 Bookcord</p>
-          </footer>
-        </section>
-      </div>
+        <footer className="text-xs text-muted-foreground">
+          <p>© 2026 Bookcord · School library stock &amp; reservations</p>
+        </footer>
+      </section>
     </main>
   );
 }

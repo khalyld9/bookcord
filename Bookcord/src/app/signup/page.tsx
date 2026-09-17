@@ -10,8 +10,9 @@ export default async function SignupPage() {
   return (
     <AuthShell
       title="Create an account"
-      description="Register your student account"
-      actionLink={{ href: "/login", label: "Sign in instead" }}
+      description="Register with your student details — ICT, Grade 11 or 12."
+      actionLink={{ href: "/login", label: "Sign in" }}
+      switchPrompt="Already have an account?"
     >
       <SignupForm yearLevels={yearLevels} strands={strands} />
     </AuthShell>

@@ -46,6 +46,21 @@ export default async function HomePage() {
             <Link href="/signup">Create an account</Link>
           </Button>
         </Reveal>
+
+        <Reveal delay={320} className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+          <Link
+            href="/login?desk=admin"
+            className="font-semibold text-ochre-deep transition-colors hover:text-ochre"
+          >
+            Librarian sign in
+          </Link>
+          <Link
+            href="/preview"
+            className="font-semibold text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Explore the guest preview
+          </Link>
+        </Reveal>
       </div>
     </main>
   );

@@ -94,8 +94,11 @@ export function LibraryView({
         <BooksGrid books={books} bookHrefPrefix={bookHrefPrefix} />
       </section>
 
-      <footer className="mt-4 border-t border-border pt-6 text-xs text-muted-foreground">
+      <footer className="mt-4 flex items-center justify-between gap-4 border-t border-border pt-6 text-xs text-muted-foreground">
         <p>© 2026 Bookcords · School library stock &amp; reservations</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em]">
+          {count} titles · Paper &amp; Espresso
+        </p>
       </footer>
     </div>
   );

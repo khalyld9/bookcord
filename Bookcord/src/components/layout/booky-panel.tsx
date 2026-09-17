@@ -27,7 +27,7 @@ const GREETING: BotMessage = {
 /* The panel is intentionally light in every theme (light, dark, OLED), so
    all colors below are literal — no tokens that could invert. */
 const inputClasses =
-  "w-full rounded-xl border border-[#e5cfc4] bg-white px-4 py-2.5 pr-11 text-sm text-[#2a1512] outline-none transition-all placeholder:text-[#a08579] focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+  "w-full rounded-xl border border-[#e5cfc4] bg-white px-4 py-2.5 pr-11 text-sm text-[#2a1512] outline-none transition-all placeholder:text-[#a1a1aa] focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 export function BookyPanel({
   open,
@@ -144,7 +144,7 @@ export function BookyPanel({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 24, scale: 0.96 }}
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
-          className="fixed bottom-6 left-6 z-[70] flex max-h-[min(72vh,42rem)] w-[min(24rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-[#fbf6ef] shadow-shelf ring-1 ring-[#e7d8c9]"
+          className="fixed bottom-6 left-6 z-[70] flex max-h-[min(72vh,42rem)] w-[min(24rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-[#ffffff] shadow-shelf ring-1 ring-[#e4e4e7]"
         >
           <header className="flex items-center gap-3 border-b border-[#e7d8c9] px-4 py-3">
             <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white ring-1 ring-[#e7d8c9]">
@@ -190,8 +190,8 @@ export function BookyPanel({
                 className={cn(
                   "relative flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
                   tab === item.id
-                    ? "text-[#fff5ee]"
-                    : "text-[#8d6a5e] hover:text-[#472a21]",
+                    ? "text-[#ffffff]"
+                    : "text-[#71717a] hover:text-[#472a21]",
                 )}
               >
                 {tab === item.id ? (
@@ -217,7 +217,7 @@ export function BookyPanel({
                     className={cn(
                       "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
                       item.role === "bot"
-                        ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#efe2d4]"
+                        ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#f4f4f5]"
                         : "self-end rounded-br-md bg-espresso text-[#fff5ee]",
                     )}
                   >
@@ -226,7 +226,7 @@ export function BookyPanel({
                 ))
               : needsSetup
                 ? (
-                  <p className="rounded-2xl border border-dashed border-[#e0cdbd] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">
+                  <p className="rounded-2xl border border-dashed border-[#d4d4d8] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">
                     The chat tables are not in the database yet. Run{" "}
                     <code className="font-mono">
                       supabase/migrations/0004_booky_chat.sql

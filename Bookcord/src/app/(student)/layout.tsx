@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { BrandMark } from "@/components/layout/brand-mark";
 import { BookyWidget } from "@/components/layout/booky-widget";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { StudentNav } from "@/components/layout/student-nav";
 import { UserMenu } from "@/components/layout/user-menu";
 import { SignOutButton } from "@/components/layout/sign-out-button";
@@ -18,7 +19,7 @@ export default async function StudentLayout({
   return (
     <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
       {/* Sidebar */}
-      <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm md:flex">
         <Link href="/books" className="flex items-center gap-2.5 px-2">
           <BrandMark />
           <span className="font-display text-2xl tracking-tight">Bookcords</span>
@@ -43,7 +44,21 @@ export default async function StudentLayout({
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
+        <MobileNav
+          nav={<StudentNav />}
+          homeHref="/books"
+          footer={
+            <>
+              <BookyWidget />
+              <ThemeSwitcher />
+              <div className="flex items-center justify-between gap-2 px-2">
+                <UserMenu profile={profile} />
+                <SignOutButton />
+              </div>
+            </>
+          }
+        />
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6 md:py-8">
           {children}
         </main>
       </div>

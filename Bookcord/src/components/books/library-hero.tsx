@@ -45,3 +45,4 @@ export function LibraryHero() {
     </section>
   );
 }
+// keep library in sync with login AuthShell

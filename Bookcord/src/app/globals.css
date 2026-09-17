@@ -300,6 +300,12 @@ body {
   0%, 100% { transform: translateY(0) rotate(-2.5deg); }
   50% { transform: translateY(-7px) rotate(2.5deg); }
 }
+@keyframes booky-page-flip {
+  0% { transform: rotateY(-8deg); opacity: 1; }
+  55% { transform: rotateY(-165deg); opacity: 1; }
+  70% { transform: rotateY(-170deg); opacity: 0; }
+  100% { transform: rotateY(-8deg); opacity: 0; }
+}
 
 /* SF Pro typography rhythm: tight leading for display sizes. */
 h1 { line-height: 1.02; }

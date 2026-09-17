@@ -55,7 +55,7 @@ export function AuthShell({
             </p>
           ) : null}
 
-          {children}
+          <div className="mt-8">{children}</div>
 
           {actionLink ? (
             <Link

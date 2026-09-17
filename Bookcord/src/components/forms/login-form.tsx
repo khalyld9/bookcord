@@ -18,7 +18,7 @@ export function LoginForm({
   return (
     <form
       action={formAction}
-      className={cn("mt-8 space-y-3.5", className)}
+      className={cn("space-y-3.5", className)}
       {...props}
     >
       <div>

@@ -32,7 +32,7 @@ export function HubHeader({
             sizes="(max-width: 1024px) 100vw, 1024px"
             className="absolute inset-0 -z-10 size-full object-cover object-right"
           />
-          <div className="absolute inset-0 -z-10 bg-espresso/60 lg:bg-espresso/40" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-espresso via-espresso/70 to-espresso/10" />
         </>
       ) : null}
 

@@ -59,7 +59,7 @@ export function BottomNav({
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-50 grid border-t border-border bg-card/95 backdrop-blur md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 grid border-t border-border bg-card/95 backdrop-blur md:hidden [@media(pointer:fine)]:hidden"
       style={{ gridTemplateColumns: `repeat(${exitHref ? tabs.length + 1 : tabs.length}, minmax(0, 1fr))` }}
     >
       {tabs.map((tab) => {

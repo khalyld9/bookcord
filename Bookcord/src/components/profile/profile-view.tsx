@@ -98,7 +98,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
         sizes="(max-width: 1024px) 100vw, 1024px"
         className="absolute inset-0 -z-10 size-full object-cover object-right"
       />
-      <div className="absolute inset-0 -z-10 bg-espresso/60 lg:bg-espresso/40" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-espresso via-espresso/70 to-espresso/10" />
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-5">
           <Avatar className="size-20 rounded-2xl ring-1 ring-espresso-foreground/25">

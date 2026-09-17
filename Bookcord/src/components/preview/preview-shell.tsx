@@ -67,7 +67,7 @@ export function PreviewShell({
   return (
     <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
       {/* Sidebar — same shell as the live app, guest session. */}
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm md:flex">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-card/70 px-4 py-6 backdrop-blur-sm md:flex [@media(pointer:fine)]:flex">
         <a href={homeHref} className="flex items-center gap-2.5 px-2">
           <BrandMark />
           <span className="font-display text-2xl tracking-tight">Bookcords</span>

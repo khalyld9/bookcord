@@ -93,6 +93,10 @@ export function LibraryView({
 
         <BooksGrid books={books} bookHrefPrefix={bookHrefPrefix} />
       </section>
+
+      <footer className="mt-4 border-t border-border pt-6 text-xs text-muted-foreground">
+        <p>© 2026 Bookcords · School library stock &amp; reservations</p>
+      </footer>
     </div>
   );
 }

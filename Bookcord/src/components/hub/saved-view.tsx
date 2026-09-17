@@ -19,10 +19,6 @@ export function SavedView({
   needsMigration?: boolean;
   bookHrefPrefix?: string;
 }) {
-  const available = items.filter(
-    (item) => (item.books?.inventory?.available_stock ?? 0) > 0,
-  ).length;
-
   return (
     <div className="flex flex-col gap-8">
       <Reveal>
@@ -31,11 +27,7 @@ export function SavedView({
           eyebrow="Student hub — Wishlist"
           title="Saved for later"
           description="Titles you parked while deciding. Check availability here and reserve one when a copy frees up."
-          stats={[
-            { label: "Saved", value: items.length },
-            { label: "Available now", value: available },
-            { label: "Waiting", value: items.length - available },
-          ]}
+          image="/banners/saved.png"
         />
       </Reveal>
 

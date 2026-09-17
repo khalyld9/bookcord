@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   BadgeCheck,
@@ -88,14 +89,16 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
     .filter(Boolean)
     .join(" · ");
 
-  const stats = [
-    { label: "Checked out", value: profile.activity.activeIssues },
-    { label: "Copies checked out", value: profile.activity.copiesBorrowed },
-    { label: "Returned", value: profile.activity.returned },
-  ];
-
   return (
     <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8 lg:p-10">
+      <Image
+        src="/banners/profile.png"
+        alt=""
+        fill
+        sizes="(max-width: 1024px) 100vw, 1024px"
+        className="absolute inset-0 -z-10 size-full object-cover object-right"
+      />
+      <div className="absolute inset-0 -z-10 bg-espresso/60 lg:bg-espresso/40" />
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-5">
           <Avatar className="size-20 rounded-2xl ring-1 ring-espresso-foreground/25">
@@ -130,21 +133,6 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
           </div>
         </div>
 
-        <dl className="grid shrink-0 grid-cols-3 gap-px overflow-hidden rounded-2xl bg-espresso-foreground/20 ring-1 ring-espresso-foreground/20">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-espresso/70 px-4 py-4 backdrop-blur-sm sm:px-5"
-            >
-              <dt className="font-mono text-xs uppercase tracking-[0.18em] text-espresso-muted">
-                {stat.label}
-              </dt>
-              <dd className="mt-2 font-display text-3xl font-bold tracking-[-0.03em] tabular-nums">
-                {stat.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );
@@ -158,12 +146,6 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
     { label: "Strand", value: profile.strandName ?? "—" },
     { label: "Role", value: profile.role === "ADMIN" ? "Administrator" : "Student" },
     { label: "Member since", value: formatDate(profile.memberSince) },
-  ];
-
-  const activityLinks = [
-    { href: "/my-books", label: "Currently checked out", value: profile.activity.activeIssues },
-    { href: "/history", label: "Copies checked out all time", value: profile.activity.copiesBorrowed },
-    { href: "/history", label: "Returned", value: profile.activity.returned },
   ];
 
   return (
@@ -219,22 +201,6 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
           </Panel>
 
           <Panel delay={250} title="Library activity" icon={LibraryBig}>
-            <ul className="flex flex-col divide-y divide-border">
-              {activityLinks.map((item) => (
-                <li key={item.label} className="flex items-center justify-between gap-3 py-3">
-                  <Link
-                    href={item.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-ochre-deep"
-                  >
-                    {item.label}
-                  </Link>
-                  <span className="font-display text-xl font-semibold tabular-nums tracking-[-0.02em]">
-                    {item.value}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
             <Link
               href="/history"
               className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"

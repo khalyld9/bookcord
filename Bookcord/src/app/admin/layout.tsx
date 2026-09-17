@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BrandMark } from "@/components/layout/brand-mark";
 import { AdminNav } from "@/components/layout/admin-nav";
 import { BookyWidget } from "@/components/layout/booky-widget";
-import { MobileNav } from "@/components/layout/mobile-nav";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 import { UserMenu } from "@/components/layout/user-menu";
@@ -46,21 +46,8 @@ export default async function AdminLayout({
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <MobileNav
-          nav={<AdminNav />}
-          homeHref="/admin"
-          footer={
-            <>
-              <BookyWidget />
-              <ThemeSwitcher />
-              <div className="flex items-center justify-between gap-2 px-2">
-                <UserMenu profile={profile} />
-                <SignOutButton />
-              </div>
-            </>
-          }
-        />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6 md:py-8">
+        <BottomNav variant="admin" />
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-24 md:px-6 md:py-8 md:pb-8">
           {children}
         </main>
       </div>

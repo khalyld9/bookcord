@@ -38,6 +38,7 @@ export function ReservationsView({
           eyebrow="Student hub — Checkout"
           title="My reservations"
           description="Reserve a textbook, then show its QR code at the counter. The librarian scans it and hands your copy over."
+          image="/banners/reservations.png"
           stats={[
             { label: "Reservations", value: items.length },
             { label: "Waiting for pickup", value: open },

@@ -25,8 +25,7 @@ export function SyllabiView({
   syllabi: SyllabiResult;
   bookHrefPrefix?: string;
 }) {
-  const { groups, totalBooks, strandName, yearLevelName, profileIncomplete } =
-    syllabi;
+  const { groups, strandName, yearLevelName, profileIncomplete } = syllabi;
 
   return (
     <div className="flex flex-col gap-8">
@@ -40,10 +39,7 @@ export function SyllabiView({
               ? "Add your strand and year level in your profile and the catalog files your required textbooks here automatically."
               : `Every live textbook filed under ${strandName ?? "your strand"}, ${yearLevelName ?? "your year level"}, grouped by subject.`
           }
-          stats={[
-            { label: "Subjects", value: groups.length },
-            { label: "Textbooks", value: totalBooks },
-          ]}
+          image="/banners/syllabi.png"
         />
       </Reveal>
 

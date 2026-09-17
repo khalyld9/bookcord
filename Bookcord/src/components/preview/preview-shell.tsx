@@ -1,7 +1,7 @@
 import { AdminNav } from "@/components/layout/admin-nav";
 import { BookyWidget } from "@/components/layout/booky-widget";
 import { BrandMark } from "@/components/layout/brand-mark";
-import { MobileNav } from "@/components/layout/mobile-nav";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { StudentNav } from "@/components/layout/student-nav";
 import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 
@@ -88,8 +88,13 @@ export function PreviewShell({
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <MobileNav nav={nav} footer={guestFooter} homeHref={homeHref} />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6 md:py-8">
+        <BottomNav
+          variant={variant}
+          remap={variant === "admin" ? ADMIN_REMAP : STUDENT_REMAP}
+          activeHref={activeHref}
+          exitHref="/preview"
+        />
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-24 md:px-6 md:py-8 md:pb-8">
           {children}
         </main>
       </div>

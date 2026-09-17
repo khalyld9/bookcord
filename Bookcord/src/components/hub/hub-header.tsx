@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 /**
  * Masthead shared by the student hub screens. Same brand panel language as
  * the catalog hero — espresso surface, mono eyebrow, display headline — kept
@@ -8,16 +10,32 @@ export function HubHeader({
   eyebrow,
   title,
   description,
+  image,
   stats,
 }: {
   icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
   eyebrow: string;
   title: string;
   description: string;
+  /** Page-specific banner artwork, rendered behind the copy. */
+  image?: string;
   stats?: { label: string; value: string | number }[];
 }) {
   return (
     <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8">
+      {image ? (
+        <>
+          <Image
+            src={image}
+            alt=""
+            fill
+            sizes="(max-width: 1024px) 100vw, 1024px"
+            className="absolute inset-0 -z-10 size-full object-cover object-right"
+          />
+          <div className="absolute inset-0 -z-10 bg-espresso/60 lg:bg-espresso/40" />
+        </>
+      ) : null}
+
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">

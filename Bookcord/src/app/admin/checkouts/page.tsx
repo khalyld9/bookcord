@@ -13,11 +13,11 @@ import {
 import { getAdminCheckouts } from "@/lib/data/admin";
 
 export const metadata: Metadata = {
-  title: "Checkouts — Librarian Desk",
+  title: "Checkouts, Librarian Desk",
 };
 
 function formatDate(value: string | null) {
-  if (!value) return "—";
+  if (!value) return "N/A";
   return new Date(value).toLocaleDateString("en-PH", {
     month: "short",
     day: "numeric",

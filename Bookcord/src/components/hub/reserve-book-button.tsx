@@ -8,7 +8,7 @@ import { reserveBook } from "@/lib/actions/reservations";
 
 /**
  * Primary checkout action: reserve the title, then show the QR that the
- * librarian scans. Success is reflected by the server revalidating — the
+ * librarian scans. Success is reflected by the server revalidating, the
  * book page swaps this button for the live reservation state.
  */
 export function ReserveBookButton({
@@ -46,7 +46,7 @@ export function ReserveBookButton({
 
       <p className="text-xs text-muted-foreground">
         {outOfStock
-          ? "Every copy is out — reserve now and we will set one aside for you."
+          ? "Every copy is out, reserve now and we will set one aside for you."
           : "Reserving generates your QR code. Show it at the counter to check the book out."}
       </p>
 

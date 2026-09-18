@@ -55,7 +55,7 @@ const updatePasswordSchema = z
  *
  * The `profiles update own or admin` RLS policy has no `with check` clause, so
  * the database would happily let a user rewrite their own `role` or `status`.
- * Only the fields below are ever sent — never spread formData into the update.
+ * Only the fields below are ever sent, never spread formData into the update.
  */
 export async function updateProfile(
   _prevState: ProfileState,

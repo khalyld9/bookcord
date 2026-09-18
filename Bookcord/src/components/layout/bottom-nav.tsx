@@ -36,7 +36,7 @@ function isActive(href: string, pathname: string) {
 }
 
 /**
- * Phone navigation: a fixed bottom tab bar. Desktop keeps the sidebar —
+ * Phone navigation: a fixed bottom tab bar. Desktop keeps the sidebar,
  * this bar is hidden from md up.
  */
 export function BottomNav({

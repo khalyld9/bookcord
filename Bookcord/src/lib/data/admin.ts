@@ -1,8 +1,9 @@
 import "server-only";
 
 import { getInventoryOverview } from "@/lib/data/inventory";
+import { isMissingTable } from "@/lib/data/hub";
 import { createClient } from "@/lib/supabase/server";
-import type { ReservationStatus } from "@/types/database";
+import type { ReservationStatus, RestockRequestStatus } from "@/types/database";
 
 export type AdminReservationItem = {
   id: string;
@@ -149,4 +150,36 @@ export async function getAdminStats() {
     openReservations: openReservations.count ?? 0,
     readyReservations: readyReservations.count ?? 0,
   };
+}
+
+export type RestockRequestListItem = {
+  id: string;
+  status: RestockRequestStatus;
+  created_at: string;
+  books: { title: string; isbn: string | null } | null;
+  profile: { full_name: string | null; student_id: string | null } | null;
+};
+
+/** Pending student restock requests, oldest first. Empty until migration 0007 runs. */
+export async function getRestockRequests(): Promise<RestockRequestListItem[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("restock_requests")
+    .select(
+      `
+      id, status, created_at,
+      books:book_id(title, isbn),
+      profile:profiles!restock_requests_profile_id_fkey(full_name, student_id)
+      `,
+    )
+    .eq("status", "PENDING")
+    .order("created_at", { ascending: true })
+    .overrideTypes<RestockRequestListItem[], { merge: false }>();
+
+  if (error) {
+    if (isMissingTable(error)) return [];
+    throw error;
+  }
+  return data ?? [];
 }

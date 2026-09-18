@@ -25,7 +25,7 @@ const STATUS: Record<ReservationStatus, { label: string; className: string }> =
     },
   };
 
-/** Shared status pill for reservations — student list and librarian desk. */
+/** Shared status pill for reservations, student list and librarian desk. */
 export function ReservationStatusChip({
   status,
   className,

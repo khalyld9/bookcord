@@ -5,15 +5,19 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { addBook } from "@/lib/actions/admin";
 
 export type AcademicOptions = {
   id: string;
   name: string;
 };
-
-const selectClasses =
-  "h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
 /** Catalogs a new title with opening stock, straight from the desk. */
 export function AddBookForm({
@@ -45,47 +49,63 @@ export function AddBookForm({
       </div>
       <div>
         <Label htmlFor="new-subject">Subject</Label>
-        <select id="new-subject" name="subjectId" className={selectClasses} defaultValue="">
-          <option value="">Not set</option>
-          {subjects.map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
-        </select>
+        <Select name="subjectId">
+          <SelectTrigger id="new-subject" className="mt-1.5">
+            <SelectValue placeholder="Not set" />
+          </SelectTrigger>
+          <SelectContent>
+            {subjects.map((option) => (
+              <SelectItem key={option.id} value={option.id}>
+                {option.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div>
         <Label htmlFor="new-semester">Semester</Label>
-        <select id="new-semester" name="semesterId" className={selectClasses} defaultValue="">
-          <option value="">Not set</option>
-          {semesters.map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
-        </select>
+        <Select name="semesterId">
+          <SelectTrigger id="new-semester" className="mt-1.5">
+            <SelectValue placeholder="Not set" />
+          </SelectTrigger>
+          <SelectContent>
+            {semesters.map((option) => (
+              <SelectItem key={option.id} value={option.id}>
+                {option.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div>
         <Label htmlFor="new-strand">Strand</Label>
-        <select id="new-strand" name="strandId" className={selectClasses} defaultValue="">
-          <option value="">Not set</option>
-          {strands.map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
-        </select>
+        <Select name="strandId">
+          <SelectTrigger id="new-strand" className="mt-1.5">
+            <SelectValue placeholder="Not set" />
+          </SelectTrigger>
+          <SelectContent>
+            {strands.map((option) => (
+              <SelectItem key={option.id} value={option.id}>
+                {option.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div>
         <Label htmlFor="new-year">Year level</Label>
-        <select id="new-year" name="yearLevelId" className={selectClasses} defaultValue="">
-          <option value="">Not set</option>
-          {yearLevels.map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
-        </select>
+        <Select name="yearLevelId">
+          <SelectTrigger id="new-year" className="mt-1.5">
+            <SelectValue placeholder="Not set" />
+          </SelectTrigger>
+          <SelectContent>
+            {yearLevels.map((option) => (
+              <SelectItem key={option.id} value={option.id}>
+                {option.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div>
         <Label htmlFor="new-min">Minimum stock</Label>

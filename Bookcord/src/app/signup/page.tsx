@@ -4,7 +4,7 @@ import { SignupForm } from "@/components/forms/signup-form";
 import { getProfileOptions } from "@/lib/data/profiles";
 
 export default async function SignupPage() {
-  // ICT strand and Grade 11 / Grade 12 only — the same filtered provider the
+  // ICT strand and Grade 11 / Grade 12 only, the same filtered provider the
   // profile form uses.
   const { yearLevels, strands } = await getProfileOptions();
 

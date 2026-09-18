@@ -3,6 +3,7 @@ import { CalendarDays, Hash, Info } from "lucide-react";
 
 import { BookCover } from "@/components/books/book-cover";
 import { BookStatusBadge } from "@/components/books/book-status-badge";
+import { RequestRestockButton } from "@/components/books/request-restock-button";
 import { ReserveBookButton } from "@/components/hub/reserve-book-button";
 import { ReservationStatusChip } from "@/components/hub/reservation-status-chip";
 import { SaveBookButton } from "@/components/hub/save-book-button";
@@ -16,24 +17,30 @@ export function BookDetail({
   book,
   saved = false,
   openReservation = null,
+  restockRequested = false,
   showHubActions = false,
+  previewRestockDemo = false,
 }: {
   book: BookListItem;
   /** Already on the student's wishlist. */
   saved?: boolean;
   /** An open reservation already exists for this title. */
   openReservation?: { id: string; status: ReservationStatus } | null;
+  /** The student already asked for a restock of this title. */
+  restockRequested?: boolean;
   /** Hidden on the unauthenticated preview route. */
   showHubActions?: boolean;
+  /** Guest preview: demo the restock request when the title is out. */
+  previewRestockDemo?: boolean;
 }) {
   const availableStock = book.inventory?.available_stock ?? 0;
   const details = [
-    { label: "ISBN", value: book.isbn ?? "—" },
+    { label: "ISBN", value: book.isbn ?? "N/A" },
     { label: "Author", value: book.author?.name ?? "Unknown author" },
-    { label: "Subject", value: book.subject?.name ?? "—" },
-    { label: "Semester", value: book.semester?.name ?? "—" },
-    { label: "Strand", value: book.strand?.name ?? "—" },
-    { label: "Year Level", value: book.year_level?.name ?? "—" },
+    { label: "Subject", value: book.subject?.name ?? "N/A" },
+    { label: "Semester", value: book.semester?.name ?? "N/A" },
+    { label: "Strand", value: book.strand?.name ?? "N/A" },
+    { label: "Year Level", value: book.year_level?.name ?? "N/A" },
   ];
 
   const stock = [
@@ -167,6 +174,25 @@ export function BookDetail({
                     availableStock={availableStock}
                   />
                 )}
+
+                {availableStock === 0 ? (
+                  <RequestRestockButton
+                    bookId={book.id}
+                    requested={restockRequested}
+                  />
+                ) : null}
+              </section>
+            </>
+          ) : previewRestockDemo && availableStock === 0 ? (
+            <>
+              <Separator />
+
+              <section className="flex flex-col gap-4">
+                <h2 className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
+                  Your actions
+                </h2>
+
+                <RequestRestockButton bookId={book.id} demoMode />
               </section>
             </>
           ) : null}

@@ -55,7 +55,7 @@ export function CompleteProfileForm({
             <SelectTrigger id="cp-year" className="h-12 rounded-xl text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-border p-1">
+            <SelectContent >
               {yearLevels.map((option) => (
                 <SelectItem key={option.id} value={option.id} className="rounded-lg px-3 py-2 text-base">
                   {option.name}
@@ -70,7 +70,7 @@ export function CompleteProfileForm({
             <SelectTrigger id="cp-strand" className="h-12 rounded-xl text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-border p-1">
+            <SelectContent >
               {strands.map((option) => (
                 <SelectItem key={option.id} value={option.id} className="rounded-lg px-3 py-2 text-base">
                   {option.name}

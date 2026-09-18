@@ -3,6 +3,7 @@ import { LibraryBig, UserRound } from "lucide-react";
 
 import { HubHeader } from "@/components/hub/hub-header";
 import { Reveal } from "@/components/motion/reveal";
+import { EmptyState } from "@/components/ui/empty-state";
 import type { SyllabiResult } from "@/lib/data/hub";
 import { cn } from "@/lib/utils";
 
@@ -32,14 +33,14 @@ export function SyllabiView({
       <Reveal>
         <HubHeader
           icon={LibraryBig}
-          eyebrow="Student hub — Course syllabi"
+          eyebrow="Student hub, Course syllabi"
           title="Reading list for your course"
           description={
             profileIncomplete
               ? "Add your strand and year level in your profile and the catalog files your required textbooks here automatically."
               : `Every live textbook filed under ${strandName ?? "your strand"}, ${yearLevelName ?? "your year level"}, grouped by subject.`
           }
-          image="/banners/syllabi.png"
+          image="/banners/syllabi-2.png"
         />
       </Reveal>
 
@@ -68,15 +69,11 @@ export function SyllabiView({
         </Reveal>
       ) : groups.length === 0 ? (
         <Reveal delay={100}>
-          <div className="rounded-3xl border border-dashed border-border bg-card/60 px-6 py-20 text-center">
-            <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
-              No textbooks filed for this course yet
-            </h2>
-            <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-              Once the librarian assigns titles to your strand and year level,
-              they show up here grouped by subject.
-            </p>
-          </div>
+          <EmptyState
+            compact
+            title="No textbooks filed for this course yet"
+            description="Once the librarian assigns titles to your strand and year level, they show up here grouped by subject."
+          />
         </Reveal>
       ) : (
         <div className="flex flex-col gap-6">

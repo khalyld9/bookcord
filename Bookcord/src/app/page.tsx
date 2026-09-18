@@ -54,12 +54,6 @@ export default async function HomePage() {
           >
             Librarian sign in
           </Link>
-          <Link
-            href="/preview"
-            className="font-semibold text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Explore the guest preview
-          </Link>
         </Reveal>
       </div>
     </main>

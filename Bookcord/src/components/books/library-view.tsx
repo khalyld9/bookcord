@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import { BooksFilters } from "@/components/books/books-filters";
-import { BooksGrid } from "@/components/books/books-grid";
+import { CatalogCarousel } from "@/components/books/catalog-carousel";
 import { LibraryHero } from "@/components/books/library-hero";
 import { Reveal } from "@/components/motion/reveal";
 import type { BookListItem } from "@/lib/data/books";
@@ -91,14 +91,11 @@ export function LibraryView({
           </p>
         </Reveal>
 
-        <BooksGrid books={books} bookHrefPrefix={bookHrefPrefix} />
+        <CatalogCarousel books={books} bookHrefPrefix={bookHrefPrefix} />
       </section>
 
       <footer className="mt-4 flex items-center justify-between gap-4 border-t border-border pt-6 text-xs text-muted-foreground">
         <p>© 2026 Bookcords · Book stock &amp; reservations</p>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em]">
-          {count} titles · Paper &amp; Espresso
-        </p>
       </footer>
     </div>
   );

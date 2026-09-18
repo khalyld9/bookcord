@@ -41,7 +41,7 @@ const TIPS: Tip[] = [
     mode: "exact",
     pose: pose2,
     alt: "Booky happily holding a history textbook",
-    text: "Pick a shelf and wander — every textbook lives here.",
+    text: "Pick a shelf and wander, every textbook lives here.",
   },
   {
     match: "/my-books",
@@ -161,7 +161,7 @@ export function MascotTip({
 
   return (
     <div className="flex flex-col items-center gap-2 px-1" aria-label="Booky says">
-      {/* Cartoon balloon — stays white in every theme, like a comic strip. */}
+      {/* Cartoon balloon, stays white in every theme, like a comic strip. */}
       <div className="relative w-full rounded-2xl bg-white px-3.5 py-2.5 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.7)]">
         <p className="min-h-10 text-xs leading-relaxed text-[#472a21]">
           <Typewriter key={pathname} text={tip.text} />

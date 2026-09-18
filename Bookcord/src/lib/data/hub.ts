@@ -44,7 +44,7 @@ export type SyllabiResult = {
 };
 
 /**
- * Postgres SQLSTATE 42P01 — the table does not exist. The hub tables ship in
+ * Postgres SQLSTATE 42P01, the table does not exist. The hub tables ship in
  * migration 0003, so a project that has not run it yet should see a setup
  * notice rather than a 500.
  */
@@ -216,4 +216,25 @@ export async function getHubStateForBook(profileId: string, bookId: string) {
     saved: Boolean(saved.data),
     openReservation: reservation.data?.[0] ?? null,
   };
+}
+
+/**
+ * Does the student already have a pending restock request for this title?
+ * Separate from getHubStateForBook so migration 0007 is optional on its own.
+ */
+export async function getRestockRequestState(
+  profileId: string,
+  bookId: string,
+) {
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("restock_requests")
+    .select("id")
+    .eq("profile_id", profileId)
+    .eq("book_id", bookId)
+    .eq("status", "PENDING")
+    .limit(1);
+
+  return Boolean(data?.length);
 }

@@ -60,7 +60,7 @@ export function AuthShell({
           {actionLink ? (
             <Link
               href={actionLink.href}
-              className="mt-4 flex w-full items-center justify-center rounded-xl border border-input bg-background py-3.5 text-base font-semibold text-foreground transition-colors hover:bg-accent"
+              className="mt-4 flex w-full items-center justify-center rounded-xl border border-input bg-card py-3.5 text-base font-semibold text-foreground transition-colors hover:bg-accent"
             >
               {actionLink.label}
             </Link>

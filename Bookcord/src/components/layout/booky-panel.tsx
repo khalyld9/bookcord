@@ -21,11 +21,11 @@ type BotMessage = { id: number; role: "user" | "bot"; text: string };
 const GREETING: BotMessage = {
   id: 0,
   role: "bot",
-  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works — or flip to the Librarian tab to message a real human.",
+  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works, or flip to the Librarian tab to message a real human.",
 };
 
 /* The panel is intentionally light in every theme (light, dark, OLED), so
-   all colors below are literal — no tokens that could invert. */
+   all colors below are literal, no tokens that could invert. */
 const inputClasses =
   "w-full rounded-xl border border-[#e5cfc4] bg-white px-4 py-2.5 pr-11 text-sm text-[#2a1512] outline-none transition-all placeholder:text-[#a1a1aa] focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
@@ -68,7 +68,10 @@ export function BookyPanel({
     }
 
     void load();
-    const id = setInterval(() => void load(), 8000);
+    const id = setInterval(() => {
+      if (document.hidden) return;
+      void load();
+    }, 5000);
     return () => {
       stopped = true;
       clearInterval(id);
@@ -237,7 +240,7 @@ export function BookyPanel({
                 : thread.length === 0
                   ? (
                     <p className="rounded-2xl border border-dashed border-[#e0cdbd] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">
-                      No messages yet. Write to the librarian below — replies
+                      No messages yet. Write to the librarian below, replies
                       show up here.
                     </p>
                   )
@@ -265,7 +268,7 @@ export function BookyPanel({
 
           {demo ? (
             <p className="border-t border-[#e7d8c9] px-4 py-3 text-center text-xs text-[#a08579]">
-              Preview mode — sign in to chat for real.
+              Preview mode, sign in to chat for real.
             </p>
           ) : tab === "bot" ? (
             <form onSubmit={submitQuestion} className="relative border-t border-[#e7d8c9] p-3">

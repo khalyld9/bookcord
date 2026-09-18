@@ -66,7 +66,7 @@ export default async function HistoryPage() {
                   <TableCell>
                     {issue.expected_return_date
                       ? formatDate(issue.expected_return_date)
-                      : "—"}
+                      : "N/A"}
                   </TableCell>
                   <TableCell>
                     <IssueStatusBadge status={issue.status} />

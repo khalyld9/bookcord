@@ -23,12 +23,41 @@ export type HoldStatus =
   | "FULFILLED"
   | "CANCELLED"
   | "EXPIRED";
+export type RestockRequestStatus = "PENDING" | "RESTOCKED" | "DISMISSED";
+export type NotificationType =
+  | "RESTOCK_REQUEST"
+  | "RESTOCK_RESOLVED"
+  | "RESERVATION_READY";
 
 type Timestamp = string;
 
 export type Database = {
   public: {
     Tables: {
+      notifications: {
+        Row: {
+          id: string;
+          profile_id: string;
+          type: NotificationType;
+          title: string;
+          body: string;
+          href: string | null;
+          read_at: Timestamp | null;
+          created_at: Timestamp;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          type: NotificationType;
+          title: string;
+          body: string;
+          href?: string | null;
+          read_at?: Timestamp | null;
+          created_at?: Timestamp;
+        };
+        Update: Partial<Database["public"]["Tables"]["notifications"]["Row"]>;
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;
@@ -313,6 +342,28 @@ export type Database = {
           claimed_at?: Timestamp | null;
         };
         Update: Partial<Database["public"]["Tables"]["reservations"]["Row"]>;
+        Relationships: [];
+      };
+      restock_requests: {
+        Row: {
+          id: string;
+          profile_id: string;
+          book_id: string;
+          status: RestockRequestStatus;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+          resolved_at: Timestamp | null;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          book_id: string;
+          status?: RestockRequestStatus;
+          created_at?: Timestamp;
+          updated_at?: Timestamp;
+          resolved_at?: Timestamp | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["restock_requests"]["Row"]>;
         Relationships: [];
       };
       saved_books: {

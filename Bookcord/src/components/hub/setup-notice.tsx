@@ -2,7 +2,7 @@ import { DatabaseBackup } from "lucide-react";
 
 /**
  * Shown when a hub table is missing because its migration has not been run
- * against the Supabase project yet — a setup instruction beats a 500.
+ * against the Supabase project yet, a setup instruction beats a 500.
  */
 export function HubSetupNotice({
   table,

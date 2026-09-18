@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { CheckCircle2, ScanLine, Search } from "lucide-react";
 
+import { QrScanner } from "@/components/admin/qr-scanner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ReservationStatusChip } from "@/components/hub/reservation-status-chip";
@@ -12,17 +13,23 @@ import { formatDate } from "@/lib/utils";
 
 /**
  * Librarian claim desk. The QR on the student's phone links here with
- * ?code=…; scanning it (or typing the code) resolves the reservation, and
- * one button marks it claimed and writes the checkout.
+ * ?code=…; scanning it with the camera (or typing the code) resolves the
+ * reservation, and one button marks it claimed and writes the checkout.
  */
 export function ClaimDesk({
   reservation,
   queriedCode,
   needsMigration = false,
+  claimHref = "/admin/claim",
+  previewMode = false,
 }: {
   reservation: ReservationClaimDetail | null;
   queriedCode: string | null;
   needsMigration?: boolean;
+  /** Where a scanned code should land, remapped in the guest preview. */
+  claimHref?: string;
+  /** Guest preview: render the full desk but disable the write actions. */
+  previewMode?: boolean;
 }) {
   const [state, formAction, pending] = useActionState<ReservationResult, FormData>(
     async (_previous, formData) =>
@@ -36,31 +43,42 @@ export function ClaimDesk({
 
   return (
     <div className="flex flex-col gap-6">
-      <form
-        method="get"
-        className="flex flex-col gap-3 rounded-2xl bg-card p-5 ring-1 ring-border sm:flex-row sm:items-end"
-      >
-        <div className="flex flex-1 flex-col gap-1.5">
-          <label
-            htmlFor="claim-code"
-            className="font-mono text-[13px] uppercase tracking-[0.2em] text-muted-foreground"
-          >
-            Claim code
-          </label>
-          <Input
-            id="claim-code"
-            name="code"
-            placeholder="Scan the student's QR or type the code"
-            defaultValue={queriedCode ?? ""}
-            autoComplete="off"
-            className="font-mono uppercase"
-          />
+      <div className="flex flex-col gap-5 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+        <QrScanner claimHref={claimHref} />
+
+        <div className="relative" aria-hidden="true">
+          <div className="border-t border-dashed border-border" />
+          <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-card px-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            or type the code
+          </span>
         </div>
-        <Button type="submit" className="gap-2">
-          <Search className="size-4" aria-hidden="true" />
-          Find reservation
-        </Button>
-      </form>
+
+        <form
+          method="get"
+          className="flex flex-col gap-3 sm:flex-row sm:items-end"
+        >
+          <div className="flex flex-1 flex-col gap-1.5">
+            <label
+              htmlFor="claim-code"
+              className="font-mono text-[13px] uppercase tracking-[0.2em] text-muted-foreground"
+            >
+              Claim code
+            </label>
+            <Input
+              id="claim-code"
+              name="code"
+              placeholder="Type the code from the student's reservation"
+              defaultValue={queriedCode ?? ""}
+              autoComplete="off"
+              className="font-mono uppercase"
+            />
+          </div>
+          <Button type="submit" className="gap-2">
+            <Search className="size-4" aria-hidden="true" />
+            Find reservation
+          </Button>
+        </form>
+      </div>
 
       {needsMigration ? (
         <div className="rounded-2xl border border-dashed border-border bg-card/60 p-6 text-sm text-muted-foreground">
@@ -134,7 +152,12 @@ export function ClaimDesk({
           {claimable ? (
             <form action={formAction} className="flex flex-col gap-3">
               <input type="hidden" name="code" value={reservation.code} />
-              <Button type="submit" disabled={pending} className="w-fit gap-2">
+              <Button
+                type="submit"
+                disabled={pending || previewMode}
+                title={previewMode ? "Preview only" : undefined}
+                className="w-fit gap-2"
+              >
                 {pending ? (
                   <ScanLine
                     className="size-4 animate-pulse"
@@ -146,8 +169,9 @@ export function ClaimDesk({
                 Mark as claimed and check out
               </Button>
               <p className="text-xs text-muted-foreground">
-                This decrements the shelf stock and records the checkout in the
-                issue ledger.
+                {previewMode
+                  ? "Sample data, actions are disabled in the guest preview."
+                  : "This decrements the shelf stock and records the checkout in the issue ledger."}
               </p>
             </form>
           ) : null}
@@ -159,7 +183,7 @@ export function ClaimDesk({
           {state.success ? (
             <p className="flex items-center gap-2 text-sm text-[oklch(0.45_0.07_145)]">
               <CheckCircle2 className="size-4" aria-hidden="true" />
-              Reservation claimed — hand the copy over and you are done.
+              Reservation claimed, hand the copy over and you are done.
             </p>
           ) : null}
         </div>

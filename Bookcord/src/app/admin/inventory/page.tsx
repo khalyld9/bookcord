@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { AddBookForm } from "@/components/admin/add-book-form";
+import { RestockRequestsPanel } from "@/components/admin/restock-requests-panel";
 import { StockActions } from "@/components/admin/stock-actions";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,16 +13,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getAcademicOptions } from "@/lib/data/books";
-import { getAdminInventory } from "@/lib/data/admin";
+import { getAdminInventory, getRestockRequests } from "@/lib/data/admin";
 
 export const metadata: Metadata = {
-  title: "Inventory — Librarian Desk",
+  title: "Inventory, Librarian Desk",
 };
 
 export default async function AdminInventoryPage() {
-  const [inventory, options] = await Promise.all([
+  const [inventory, options, requests] = await Promise.all([
     getAdminInventory(),
     getAcademicOptions(),
+    getRestockRequests(),
   ]);
 
   return (
@@ -35,6 +37,10 @@ export default async function AdminInventoryPage() {
           correction.
         </p>
       </header>
+
+      {requests.length > 0 ? (
+        <RestockRequestsPanel requests={requests} />
+      ) : null}
 
       <div className="overflow-hidden rounded-2xl bg-card ring-1 ring-border">
         <div className="overflow-x-auto">
@@ -75,7 +81,7 @@ export default async function AdminInventoryPage() {
                         </p>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {book.subject?.name ?? "—"}
+                        {book.subject?.name ?? "N/A"}
                       </TableCell>
                       <TableCell className="text-center text-sm font-medium">{available}</TableCell>
                       <TableCell className="text-center text-sm text-muted-foreground">{out}</TableCell>

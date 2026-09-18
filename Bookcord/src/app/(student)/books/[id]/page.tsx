@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { BookDetail } from "@/components/books/book-detail";
 import { requireUser } from "@/lib/auth";
 import { getBook } from "@/lib/data/books";
-import { getHubStateForBook, isMissingTable } from "@/lib/data/hub";
+import { getHubStateForBook, getRestockRequestState, isMissingTable } from "@/lib/data/hub";
 import type { ReservationStatus } from "@/types/database";
 
 type PageProps = {
@@ -36,6 +36,15 @@ export default async function BookDetailPage({ params }: PageProps) {
     if (!isMissingTable(error)) throw error;
   }
 
+  // Restock requests live in migration 0007; without it the page still
+  // renders, just without that action.
+  let restockRequested = false;
+  try {
+    restockRequested = await getRestockRequestState(profile.id, id);
+  } catch (error) {
+    if (!isMissingTable(error)) throw error;
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <Link
@@ -54,6 +63,7 @@ export default async function BookDetailPage({ params }: PageProps) {
         book={book}
         saved={hub.saved}
         openReservation={hub.openReservation}
+        restockRequested={restockRequested}
         showHubActions
       />
     </div>

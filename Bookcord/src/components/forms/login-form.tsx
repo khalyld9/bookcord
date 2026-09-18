@@ -32,7 +32,7 @@ export function LoginForm({
           autoComplete="email"
           required
           placeholder="Email"
-          className="h-12 w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15"
+          className="h-12 w-full rounded-xl border border-input bg-card px-4 text-base text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15"
         />
       </div>
 
@@ -47,7 +47,7 @@ export function LoginForm({
           autoComplete="current-password"
           required
           placeholder="Password"
-          className="h-12 w-full rounded-xl border border-input bg-background px-4 pr-12 text-base text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15"
+          className="h-12 w-full rounded-xl border border-input bg-card px-4 pr-12 text-base text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15"
         />
         <button
           type="button"

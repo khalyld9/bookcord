@@ -2,7 +2,7 @@ import Image from "next/image";
 
 /**
  * Masthead shared by the student hub screens. Same brand panel language as
- * the catalog hero — espresso surface, mono eyebrow, display headline — kept
+ * the catalog hero, espresso surface, mono eyebrow, display headline, kept
  * a little shorter since these pages are narrower in scope.
  */
 export function HubHeader({
@@ -32,7 +32,9 @@ export function HubHeader({
             sizes="(max-width: 1024px) 100vw, 1024px"
             className="absolute inset-0 -z-10 size-full object-cover object-right"
           />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-espresso via-espresso/70 to-espresso/10" />
+          {/* Flat legibility layer for narrow screens, where the crop puts the
+              illustration behind the headline. Hidden on large screens. */}
+          <div className="absolute inset-0 -z-10 bg-espresso/60 lg:hidden" />
         </>
       ) : null}
 

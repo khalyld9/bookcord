@@ -139,7 +139,7 @@ export function SignupForm({
             <SelectTrigger id="year_level_id" className="h-12 rounded-xl text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-border p-1">
+            <SelectContent >
               {yearLevels.map((item) => (
                 <SelectItem key={item.id} value={item.id} className="rounded-lg px-3 py-2 text-base">
                   {item.name}
@@ -150,7 +150,7 @@ export function SignupForm({
 
           {yearLevels.length === 0 && (
             <p className="text-xs text-destructive">
-              No year levels available yet — the librarian needs to run
+              No year levels available yet, the librarian needs to run
               migration 0005.
             </p>
           )}
@@ -166,7 +166,7 @@ export function SignupForm({
             <SelectTrigger id="strand_id" className="h-12 rounded-xl text-base">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-border p-1">
+            <SelectContent >
               {strands.map((item) => (
                 <SelectItem key={item.id} value={item.id} className="rounded-lg px-3 py-2 text-base">
                   {item.name}
@@ -177,7 +177,7 @@ export function SignupForm({
 
           {strands.length === 0 && (
             <p className="text-xs text-destructive">
-              No strands available yet — the librarian needs to run migration
+              No strands available yet, the librarian needs to run migration
               0005 (it adds the ICT strand).
             </p>
           )}

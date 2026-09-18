@@ -1,11 +1,8 @@
 "use client";
 
-import { useRef } from "react";
 import {
   motion,
   useReducedMotion,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 
 type RevealProps = {
@@ -14,11 +11,11 @@ type RevealProps = {
   style?: React.CSSProperties;
   id?: string;
   "aria-label"?: string;
-  /** Stagger in milliseconds; shifts the scroll point where the reveal completes. */
+  /** Stagger in milliseconds; delays this element's entrance. */
   delay?: number;
   /** Render as a different element. */
   as?: "div" | "section" | "article" | "li" | "header" | "aside";
-  /** Kept for API compatibility; reveals are scroll-driven both ways. */
+  /** Kept for API compatibility; entrances always play once. */
   repeat?: boolean;
 };
 
@@ -36,12 +33,10 @@ const MOTION_TAGS = {
 } as const;
 
 /**
- * Scroll-driven reveal: while the element enters the viewport its opacity
- * eases to 1, a 12px blur eases to 0, it rises 40px and scales 0.98 → 1 —
- * all mapped to scroll progress, so the motion stays glued to the scroll
- * position instead of firing once. `delay` staggers siblings by moving the
- * completion point later along the scroll. Reduced-motion users get the
- * content statically.
+ * Entrance reveal: the first time an element scrolls into view it fades in,
+ * rises 28px and blurs in from 8px, then stays put. One-shot, never tied to
+ * the scroll position afterwards, so nothing re-blurs while scrolling.
+ * `delay` staggers siblings. Reduced-motion users get the content statically.
  */
 export function Reveal({
   children,
@@ -54,27 +49,14 @@ export function Reveal({
   "aria-label": ariaLabel,
 }: RevealProps) {
   const tag: Tag = TAGS.includes(as as Tag) ? (as as Tag) : "div";
-  const ref = useRef<HTMLElement | null>(null);
   const reduced = useReducedMotion();
-
-  const end = Math.min(0.85, Math.max(0.4, 0.8 - delay * 0.0008));
-  const { scrollYProgress } = useScroll({
-    target: ref as React.RefObject<HTMLElement>,
-    offset: ["start end", `start ${end}`],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.98, 1]);
-  const blur = useTransform(scrollYProgress, [0, 1], [12, 0]);
-  const filter = useTransform(blur, (v) => `blur(${v.toFixed(2)}px)`);
 
   const MotionTag = MOTION_TAGS[tag];
 
   if (reduced) {
     return (
       <MotionTag
-        ref={ref as React.Ref<never>}
+        ref={undefined}
         style={style}
         className={className}
         id={id}
@@ -87,18 +69,18 @@ export function Reveal({
 
   return (
     <MotionTag
-      ref={ref as React.Ref<never>}
-      style={{
-        ...style,
-        opacity,
-        y,
-        scale,
-        filter,
-        willChange: "transform, opacity, filter",
-      }}
+      style={style}
       className={className}
       id={id}
       aria-label={ariaLabel}
+      initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+      transition={{
+        duration: 0.55,
+        delay: delay / 1000,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       {children}
     </MotionTag>
@@ -106,9 +88,8 @@ export function Reveal({
 }
 
 /**
- * Very subtle parallax for imagery: drifts slightly slower than the page,
- * a touch of scale and blur while off-center, completely sharp in the
- * middle of the viewport.
+ * Very subtle parallax for imagery: drifts slightly slower than the page.
+ * No blur, the image stays sharp at every scroll position.
  */
 export function Parallax({
   children,
@@ -117,26 +98,17 @@ export function Parallax({
   children: React.ReactNode;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [18, -18]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.985, 1, 0.995]);
-  const blur = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [5, 0, 0, 5]);
-  const filter = useTransform(blur, (v) => `blur(${v.toFixed(2)}px)`);
 
   if (reduced) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
-      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={className}
-      style={{ y, scale, filter, willChange: "transform, filter" }}
     >
       {children}
     </motion.div>

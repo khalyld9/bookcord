@@ -2,7 +2,15 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type FilterOption = { id: string; name: string };
 
@@ -15,9 +23,10 @@ type BooksFiltersProps = {
   basePath?: string;
 };
 
-const controlClasses =
-  "h-10 appearance-none rounded-xl border border-input bg-background pl-4 pr-9 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15";
-
+/**
+ * Same select control as the signup and profile forms, so the open panel,
+ * hover states and check marks match everywhere on the site.
+ */
 function FilterSelect({
   label,
   value,
@@ -26,25 +35,19 @@ function FilterSelect({
 }: {
   label: string;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (value: string) => void;
   children: React.ReactNode;
 }) {
   return (
-    <span className="relative inline-flex items-center">
-      <select
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger
         aria-label={label}
-        value={value}
-        onChange={onChange}
-        className={controlClasses}
+        className="h-12 w-auto shrink-0 rounded-xl text-base"
       >
-        {children}
-      </select>
-      <ChevronDown
-        className="pointer-events-none absolute right-3.5 size-4 text-muted-foreground"
-        strokeWidth={1.75}
-        aria-hidden="true"
-      />
-    </span>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>{children}</SelectContent>
+    </Select>
   );
 }
 
@@ -121,7 +124,7 @@ export function BooksFilters({
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search by title, author, ISBN or subject…"
-          className="h-12 w-full rounded-xl border border-input bg-background pl-11 pr-24 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15 [&::-webkit-search-cancel-button]:appearance-none"
+          className="h-12 w-full rounded-xl border border-input bg-card pl-11 pr-24 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15 [&::-webkit-search-cancel-button]:appearance-none"
         />
         {search ? (
           <button
@@ -135,8 +138,8 @@ export function BooksFilters({
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="flex items-center gap-2 pr-1 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
+      <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <span className="flex shrink-0 items-center gap-2 pr-1 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
           <SlidersHorizontal className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
           Refine
         </span>
@@ -144,64 +147,64 @@ export function BooksFilters({
         <FilterSelect
           label="Semester"
           value={current("semester")}
-          onChange={(event) => updateParam("semester", event.target.value)}
+          onChange={(value) => updateParam("semester", value)}
         >
-          <option value="ALL">All semesters</option>
+          <SelectItem value="ALL">All semesters</SelectItem>
           {semesters.map((item) => (
-            <option key={item.id} value={item.id}>
+            <SelectItem key={item.id} value={item.id}>
               {item.name}
-            </option>
+            </SelectItem>
           ))}
         </FilterSelect>
 
         <FilterSelect
           label="Strand"
           value={current("strand")}
-          onChange={(event) => updateParam("strand", event.target.value)}
+          onChange={(value) => updateParam("strand", value)}
         >
-          <option value="ALL">All strands</option>
+          <SelectItem value="ALL">All strands</SelectItem>
           {strands.map((item) => (
-            <option key={item.id} value={item.id}>
+            <SelectItem key={item.id} value={item.id}>
               {item.name}
-            </option>
+            </SelectItem>
           ))}
         </FilterSelect>
 
         <FilterSelect
           label="Year level"
           value={current("yearLevel")}
-          onChange={(event) => updateParam("yearLevel", event.target.value)}
+          onChange={(value) => updateParam("yearLevel", value)}
         >
-          <option value="ALL">All year levels</option>
+          <SelectItem value="ALL">All year levels</SelectItem>
           {yearLevels.map((item) => (
-            <option key={item.id} value={item.id}>
+            <SelectItem key={item.id} value={item.id}>
               {item.name}
-            </option>
+            </SelectItem>
           ))}
         </FilterSelect>
 
         <FilterSelect
           label="Subject"
           value={current("subject")}
-          onChange={(event) => updateParam("subject", event.target.value)}
+          onChange={(value) => updateParam("subject", value)}
         >
-          <option value="ALL">All subjects</option>
+          <SelectItem value="ALL">All subjects</SelectItem>
           {subjects.map((item) => (
-            <option key={item.id} value={item.id}>
+            <SelectItem key={item.id} value={item.id}>
               {item.name}
-            </option>
+            </SelectItem>
           ))}
         </FilterSelect>
 
         <FilterSelect
           label="Availability"
           value={current("availability")}
-          onChange={(event) => updateParam("availability", event.target.value)}
+          onChange={(value) => updateParam("availability", value)}
         >
-          <option value="ALL">Any availability</option>
-          <option value="AVAILABLE">Available</option>
-          <option value="LOW">Low stock</option>
-          <option value="OUT">Out of stock</option>
+          <SelectItem value="ALL">Any availability</SelectItem>
+          <SelectItem value="AVAILABLE">Available</SelectItem>
+          <SelectItem value="LOW">Low stock</SelectItem>
+          <SelectItem value="OUT">Out of stock</SelectItem>
         </FilterSelect>
 
         {activeFilterCount > 0 ? (

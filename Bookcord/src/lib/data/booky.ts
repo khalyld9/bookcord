@@ -78,3 +78,51 @@ export async function getAdminThreads() {
   if (error) throw error;
   return data ?? [];
 }
+
+export type ChatThreadSummary = {
+  profileId: string;
+  name: string;
+  studentId: string | null;
+  lastBody: string;
+  count: number;
+};
+
+/**
+ * Grouped inbox state for the live librarian chat: the thread list plus
+ * the active thread's lines. No active id means the first thread.
+ */
+export async function getAdminChatState(activeProfileId?: string): Promise<{
+  threads: ChatThreadSummary[];
+  lines: AdminThreadLine[];
+}> {
+  const lines = await getAdminThreads();
+
+  const grouped = new Map<
+    string,
+    { name: string; studentId: string | null; lines: AdminThreadLine[] }
+  >();
+  for (const line of lines) {
+    const entry = grouped.get(line.profile_id) ?? {
+      name: line.profiles?.full_name ?? "Unknown student",
+      studentId: line.profiles?.student_id ?? null,
+      lines: [],
+    };
+    entry.lines.push(line);
+    grouped.set(line.profile_id, entry);
+  }
+
+  const threads = [...grouped.entries()].map(([profileId, thread]) => ({
+    profileId,
+    name: thread.name,
+    studentId: thread.studentId,
+    lastBody: thread.lines[thread.lines.length - 1]?.body ?? "",
+    count: thread.lines.length,
+  }));
+
+  const active = activeProfileId ?? threads[0]?.profileId ?? null;
+
+  return {
+    threads,
+    lines: active ? (grouped.get(active)?.lines ?? []) : [],
+  };
+}

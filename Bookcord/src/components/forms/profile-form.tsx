@@ -3,6 +3,13 @@
 import { useActionState, useState } from "react";
 import { LoaderCircle, Save, Upload } from "lucide-react";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { updateProfile, type ProfileState } from "@/lib/actions/profile";
 import { initials } from "@/lib/utils";
 
@@ -25,7 +32,7 @@ type ProfileFormProps = {
 const initialState: ProfileState = {};
 
 const fieldClasses =
-  "w-full rounded-xl border border-input bg-background px-5 py-3.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
+  "w-full rounded-xl border border-input bg-card px-5 py-3.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-ochre focus:ring-4 focus:ring-ochre/15";
 
 const labelClasses =
   "mb-2 block font-mono text-[13px] uppercase tracking-[0.18em] text-muted-foreground";
@@ -76,7 +83,7 @@ export function ProfileForm({
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <label
             htmlFor="profile-avatar"
-            className="flex w-fit cursor-pointer items-center gap-2 rounded-xl border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-ochre"
+            className="flex w-fit cursor-pointer items-center gap-2 rounded-xl border border-input bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-ochre"
           >
             <Upload className="size-4" aria-hidden="true" />
             Choose a photo
@@ -153,38 +160,48 @@ export function ProfileForm({
           <label htmlFor="profile-year-level" className={labelClasses}>
             Year level
           </label>
-          <select
-            id="profile-year-level"
+          <Select
             name="year_level_id"
-            defaultValue={defaultValues.yearLevelId}
-            className={fieldClasses}
+            defaultValue={defaultValues.yearLevelId || undefined}
           >
-            <option value="">Not set</option>
-            {yearLevels.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger
+              id="profile-year-level"
+              className="h-12 rounded-xl px-5 text-sm"
+            >
+              <SelectValue placeholder="Not set" />
+            </SelectTrigger>
+            <SelectContent>
+              {yearLevels.map((item) => (
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
           <label htmlFor="profile-strand" className={labelClasses}>
             Strand
           </label>
-          <select
-            id="profile-strand"
+          <Select
             name="strand_id"
-            defaultValue={defaultValues.strandId}
-            className={fieldClasses}
+            defaultValue={defaultValues.strandId || undefined}
           >
-            <option value="">Not set</option>
-            {strands.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger
+              id="profile-strand"
+              className="h-12 rounded-xl px-5 text-sm"
+            >
+              <SelectValue placeholder="Not set" />
+            </SelectTrigger>
+            <SelectContent>
+              {strands.map((item) => (
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

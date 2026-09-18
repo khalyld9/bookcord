@@ -5,10 +5,13 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin, requireUser } from "@/lib/auth";
 import { getBooks } from "@/lib/data/books";
 import {
+  getAdminChatState,
   getChatThread,
   getUpcomingRestocks,
   isMissingSchemaObject,
+  type AdminThreadLine,
   type ChatThreadLine,
+  type ChatThreadSummary,
 } from "@/lib/data/booky";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
@@ -35,12 +38,12 @@ async function answerRestocks(): Promise<BookyReply> {
     if (rows.length === 0) {
       return {
         answer:
-          "No restocks on the calendar right now. The moment a copy lands I'll flip it to available — or tap the Librarian tab and ask!",
+          "No restocks on the calendar right now. The moment a copy lands I'll flip it to available, or tap the Librarian tab and ask!",
       };
     }
     const lines = rows.map(
       (row) =>
-        `• ${row.title}${row.subject ? ` (${row.subject})` : ""} — ${row.quantity} ${row.quantity === 1 ? "copy" : "copies"}, arriving ${formatDate(row.restock_date, "MMM d")}`,
+        `• ${row.title}${row.subject ? ` (${row.subject})` : ""}, ${row.quantity} ${row.quantity === 1 ? "copy" : "copies"}, arriving ${formatDate(row.restock_date, "MMM d")}`,
     );
     return { answer: `On the way to the shelves:\n${lines.join("\n")}` };
   } catch (error) {
@@ -48,7 +51,7 @@ async function answerRestocks(): Promise<BookyReply> {
       return {
         needsSetup: true,
         answer:
-          "I can't peek at the restock schedule yet — the librarian hasn't run migration 0004 in the database.",
+          "I can't peek at the restock schedule yet, the librarian hasn't run migration 0004 in the database.",
       };
     }
     throw error;
@@ -67,7 +70,7 @@ async function answerAvailability(question: string): Promise<BookyReply> {
     }
     const lines = books.slice(0, 3).map((book) => {
       const available = book.inventory?.available_stock ?? 0;
-      return `• ${book.title} — ${
+      return `• ${book.title}, ${
         available > 0 ? `${available} on the shelf` : "out of stock"
       }`;
     });
@@ -76,7 +79,7 @@ async function answerAvailability(question: string): Promise<BookyReply> {
 
   const out = await getBooks({ availability: "OUT" });
   if (out.length === 0) {
-    return { answer: "Nothing is fully out right now — the shelves are stocked!" };
+    return { answer: "Nothing is fully out right now, the shelves are stocked!" };
   }
   const lines = out
     .slice(0, 4)
@@ -100,7 +103,7 @@ export async function askBooky(question: string): Promise<BookyReply> {
   if (/(reserv|claim|qr|check ?out|pick ?up|hold)/.test(q)) {
     return {
       answer:
-        "Open the book's page and press “Reserve this book” — that creates your claim QR. Find it under My Reservations, show it at the counter, and the librarian scans it and hands your copy over. It goes from Pending to Claimed right there!",
+        "Open the book's page and press “Reserve this book”, that creates your claim QR. Find it under My Reservations, show it at the counter, and the librarian scans it and hands your copy over. It goes from Pending to Claimed right there!",
     };
   }
 
@@ -132,14 +135,14 @@ export async function askBooky(question: string): Promise<BookyReply> {
   if (/(hour|open|close|when.*library|time)/.test(q)) {
     return {
       answer:
-        "The library desk follows school hours — drop by any weekday and the librarian will sort you out.",
+        "The library desk follows school hours, drop by any weekday and the librarian will sort you out.",
     };
   }
 
   if (/(librarian|admin|human|real person|teacher)/.test(q)) {
     return {
       answer:
-        "Flip to the Librarian tab up top and say hi — your message lands straight in the librarian's inbox.",
+        "Flip to the Librarian tab up top and say hi, your message lands straight in the librarian's inbox.",
     };
   }
 
@@ -150,13 +153,13 @@ export async function askBooky(question: string): Promise<BookyReply> {
   if (/(^(hi|hello|hey|yo)\b|good (morning|afternoon|evening)|kumusta)/.test(q)) {
     return {
       answer:
-        "Hello hello! Ask me what's restocking, what's available, or how reserving works — or message the librarian in the other tab.",
+        "Hello hello! Ask me what's restocking, what's available, or how reserving works, or message the librarian in the other tab.",
     };
   }
 
   return {
     answer:
-      "Hmm, that one's above my pay grade. I'm best at restocks, availability and reserving — or send it to the librarian in the Librarian tab!",
+      "Hmm, that one's above my pay grade. I'm best at restocks, availability and reserving, or send it to the librarian in the Librarian tab!",
   };
 }
 
@@ -178,7 +181,7 @@ export async function sendChatMessage(
 
   if (error) {
     if (isMissingSchemaObject(error)) return { needsSetup: true };
-    return { error: "Could not send that — try again in a moment." };
+    return { error: "Could not send that, try again in a moment." };
   }
 
   revalidatePath("/admin/chat");
@@ -225,4 +228,23 @@ export async function adminSendChat(formData: FormData): Promise<{
 
   revalidatePath("/admin/chat");
   return {};
+}
+
+/** Poll target for the live librarian inbox. */
+export async function fetchAdminChatState(activeProfileId?: string): Promise<{
+  threads: ChatThreadSummary[];
+  lines: AdminThreadLine[];
+  needsSetup: boolean;
+}> {
+  await requireAdmin();
+
+  try {
+    const state = await getAdminChatState(activeProfileId);
+    return { ...state, needsSetup: false };
+  } catch (error) {
+    if (isMissingSchemaObject(error)) {
+      return { threads: [], lines: [], needsSetup: true };
+    }
+    throw error;
+  }
 }

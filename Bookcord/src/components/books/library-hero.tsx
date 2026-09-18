@@ -4,7 +4,7 @@ import { LibraryBig } from "lucide-react";
 import heroBanner from "@/assets/bookcord-hero-banner.png";
 
 /**
- * Catalog masthead: Bookcords's branded hero banner — illustrated game-style
+ * Catalog masthead: Bookcords's branded hero banner, illustrated game-style
  * artwork with Booky on the right and a clean espresso field on the left so
  * the headline stays readable. Same rounded shape and copy as before.
  */
@@ -27,7 +27,7 @@ export function LibraryHero() {
         <div>
           <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
             <LibraryBig className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-            Library — Book catalog
+            Library, Book catalog
           </p>
 
           <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-[-0.04em] text-balance sm:text-5xl">

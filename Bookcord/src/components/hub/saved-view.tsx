@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bookmark, SearchX } from "lucide-react";
+import { Bookmark } from "lucide-react";
 
 import { BookCover } from "@/components/books/book-cover";
 import { BookStatusBadge } from "@/components/books/book-status-badge";
@@ -7,6 +7,7 @@ import { HubHeader } from "@/components/hub/hub-header";
 import { HubSetupNotice } from "@/components/hub/setup-notice";
 import { SaveBookButton } from "@/components/hub/save-book-button";
 import { Reveal } from "@/components/motion/reveal";
+import { EmptyState } from "@/components/ui/empty-state";
 import type { SavedBookListItem } from "@/lib/data/hub";
 import { formatDate } from "@/lib/utils";
 
@@ -24,10 +25,10 @@ export function SavedView({
       <Reveal>
         <HubHeader
           icon={Bookmark}
-          eyebrow="Student hub — Wishlist"
+          eyebrow="Student hub, Wishlist"
           title="Saved for later"
           description="Titles you parked while deciding. Check availability here and reserve one when a copy frees up."
-          image="/banners/saved.png"
+          image="/banners/saved-2.png"
         />
       </Reveal>
 
@@ -37,26 +38,18 @@ export function SavedView({
         </Reveal>
       ) : items.length === 0 ? (
         <Reveal delay={100}>
-          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-border bg-card/60 px-6 py-20 text-center">
-            <span className="grid size-12 place-items-center rounded-2xl bg-espresso text-espresso-foreground">
-              <SearchX className="size-5" strokeWidth={1.75} aria-hidden="true" />
-            </span>
-            <div>
-              <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
-                Nothing saved yet
-              </h2>
-              <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-                Browse the catalog and hit <strong>Save for later</strong> on any
-                textbook to keep it here.
-              </p>
-            </div>
-            <Link
-              href="/books"
-              className="rounded-xl bg-espresso px-5 py-2.5 text-sm font-semibold text-espresso-foreground"
-            >
-              Browse the catalog
-            </Link>
-          </div>
+          <EmptyState
+            title="Nothing saved yet"
+            description="Browse the catalog and hit Save for later on any textbook to keep it here."
+            action={
+              <Link
+                href="/books"
+                className="rounded-full bg-espresso px-5 py-2.5 text-sm font-semibold text-espresso-foreground transition-transform hover:-translate-y-0.5"
+              >
+                Browse the catalog
+              </Link>
+            }
+          />
         </Reveal>
       ) : (
         <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

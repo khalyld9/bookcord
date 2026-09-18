@@ -92,13 +92,15 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
   return (
     <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8 lg:p-10">
       <Image
-        src="/banners/profile.png"
+        src="/banners/profile-2.png"
         alt=""
         fill
         sizes="(max-width: 1024px) 100vw, 1024px"
         className="absolute inset-0 -z-10 size-full object-cover object-right"
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-espresso via-espresso/70 to-espresso/10" />
+      {/* Flat legibility layer for narrow screens, where the crop puts the
+          illustration behind the avatar. Hidden on large screens. */}
+      <div className="absolute inset-0 -z-10 bg-espresso/60 lg:hidden" />
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-5">
           <Avatar className="size-20 rounded-2xl ring-1 ring-espresso-foreground/25">
@@ -112,7 +114,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
 
           <div className="min-w-0">
             <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
-              Account — Profile
+              Account, Profile
             </p>
             <h1 className="mt-2 truncate font-display text-3xl font-bold leading-tight tracking-[-0.04em] sm:text-4xl">
               {profile.fullName}
@@ -141,9 +143,9 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
 export function ProfileView({ profile }: { profile: ProfileViewData }) {
   const account = [
     { label: "Email", value: profile.email },
-    { label: "Student ID", value: profile.studentId ?? "—" },
-    { label: "Year level", value: profile.yearLevelName ?? "—" },
-    { label: "Strand", value: profile.strandName ?? "—" },
+    { label: "Student ID", value: profile.studentId ?? "N/A" },
+    { label: "Year level", value: profile.yearLevelName ?? "N/A" },
+    { label: "Strand", value: profile.strandName ?? "N/A" },
     { label: "Role", value: profile.role === "ADMIN" ? "Administrator" : "Student" },
     { label: "Member since", value: formatDate(profile.memberSince) },
   ];

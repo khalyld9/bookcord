@@ -20,7 +20,7 @@ type StorageAdmin = {
  * Makes sure the public `avatars` bucket exists. Migration 0005 creates it,
  * but a project that has not run the migration (or ran it before the storage
  * section was added) would otherwise fail every upload with "Bucket not
- * found". Safe to call before each upload — it is a no-op once the bucket
+ * found". Safe to call before each upload, it is a no-op once the bucket
  * is there, and a concurrent creator loses the race harmlessly.
  */
 export async function ensureAvatarsBucket(admin: StorageAdmin) {

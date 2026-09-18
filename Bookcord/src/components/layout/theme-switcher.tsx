@@ -24,7 +24,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
       role="group"
       aria-label="Appearance"
       className={cn(
-        "flex items-center gap-0.5 rounded-lg border border-border bg-muted/60 p-0.5",
+        "flex w-fit items-center gap-0.5 rounded-lg border border-border bg-muted/60 p-0.5",
         className,
       )}
     >

@@ -9,9 +9,9 @@ export function formatDate(
   value: string | Date | null | undefined,
   pattern = "MMM d, yyyy",
 ) {
-  if (!value) return "—";
+  if (!value) return "N/A";
   const date = typeof value === "string" ? new Date(value) : value;
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return "N/A";
   const months = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",

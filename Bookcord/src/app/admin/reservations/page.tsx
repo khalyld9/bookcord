@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import type { ReservationStatus } from "@/types/database";
 
 export const metadata: Metadata = {
-  title: "Reservations — Librarian Desk",
+  title: "Reservations, Librarian Desk",
 };
 
 const FILTERS: { value: ReservationStatus | null; label: string }[] = [
@@ -61,7 +61,7 @@ export default async function AdminReservationsPage({ searchParams }: PageProps)
                 "rounded-xl px-4 py-1.5 text-sm font-semibold transition-colors",
                 active === filter.value
                   ? "bg-espresso text-primary-foreground shadow-cta"
-                  : "bg-card text-muted-foreground ring-1 ring-border hover:text-accent-foreground",
+                  : "bg-muted/70 text-muted-foreground hover:text-accent-foreground",
               )}
             >
               {filter.label}

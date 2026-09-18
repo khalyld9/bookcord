@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { KeyRound, UserRound } from "lucide-react";
 
 import { AuthShell } from "@/components/layout/auth-shell";
 import { GoogleSignInButton } from "@/components/forms/oauth-buttons";
@@ -40,26 +41,35 @@ export default async function LoginPage({ searchParams }: PageProps) {
 
       <LoginForm />
 
-      <p className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">
-        {adminDesk ? (
-          <>Librarians land on the admin dashboard automatically.</>
-        ) : (
-          <>
-            <Link
-              href="/login?desk=admin"
-              className="font-semibold text-ochre-deep transition-colors hover:text-ochre"
-            >
-              Librarian sign in
-            </Link>
-            <Link
-              href="/preview"
-              className="font-semibold text-ochre-deep transition-colors hover:text-ochre"
-            >
-              Explore the guest preview
-            </Link>
-          </>
-        )}
-      </p>
+      {adminDesk ? (
+        <p className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">
+          Librarians land on the admin dashboard automatically.
+        </p>
+      ) : null}
+
+      {/* The librarian entrance is a quiet icon at the bottom right: a
+          person with a key badge. */}
+      {!adminDesk ? (
+        <Link
+          href="/login?desk=admin"
+          aria-label="Librarian sign in"
+          title="Librarian sign in"
+          className="fixed bottom-5 right-5 z-40 grid size-12 place-items-center rounded-full bg-card text-foreground shadow-[0_18px_44px_-20px_rgba(23,12,16,0.35)] ring-1 ring-black/10 transition-transform duration-300 ease-out hover:-translate-y-0.5 dark:ring-white/15"
+        >
+          <UserRound
+            className="size-5"
+            strokeWidth={1.75}
+            aria-hidden="true"
+          />
+          <span className="absolute -bottom-0.5 -right-0.5 grid size-5 place-items-center rounded-full bg-espresso text-espresso-foreground ring-2 ring-card">
+            <KeyRound
+              className="size-2.5"
+              strokeWidth={2.25}
+              aria-hidden="true"
+            />
+          </span>
+        </Link>
+      ) : null}
     </AuthShell>
   );
 }

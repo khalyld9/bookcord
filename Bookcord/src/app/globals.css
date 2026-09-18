@@ -334,6 +334,10 @@ body {
   from { transform: translateX(-130%); }
   to { transform: translateX(130%); }
 }
+@keyframes booky-frames {
+  from { background-position: 0 0; }
+  to { background-position: -396px 0; }
+}
 @keyframes booky-step {
   0%, 100% { transform: translateY(0) rotate(-2.5deg); }
   50% { transform: translateY(-7px) rotate(2.5deg); }

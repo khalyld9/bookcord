@@ -68,7 +68,7 @@ export function AuthShell({
         </div>
 
         <footer className="text-xs text-muted-foreground">
-          <p>© 2026 Bookcords · School library stock &amp; reservations</p>
+          <p>© 2026 Bookcords · Book stock &amp; reservations</p>
         </footer>
       </section>
     </main>

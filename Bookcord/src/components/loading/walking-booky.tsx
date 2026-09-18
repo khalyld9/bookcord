@@ -1,10 +1,7 @@
-import Image from "next/image";
-
-import walker from "@/assets/mascot/pose-2.png";
-
 /**
- * Loading state: Booky walks across the screen holding his history book
- * while a page flips over it. Pure CSS animation — no JS needed.
+ * Loading state: Booky walks the shelf with a real frame-by-frame cycle —
+ * six walk poses on a sprite sheet advanced with CSS steps(), so the legs
+ * genuinely move. Pure CSS animation — no JS needed.
  */
 export function WalkingBooky({ label = "Loading" }: { label?: string }) {
   return (
@@ -13,33 +10,17 @@ export function WalkingBooky({ label = "Loading" }: { label?: string }) {
       role="status"
       aria-live="polite"
     >
-      <div className="relative h-32 w-64 overflow-hidden">
-        <div className="absolute inset-y-0 left-1/2 -ml-16 w-32 [animation:booky-walk-across_3.2s_linear_infinite]">
-          <div className="relative size-full [animation:booky-step_0.45s_ease-in-out_infinite]">
-            <Image
-              src={walker}
-              alt="Booky walking while holding a book"
-              width={128}
-              height={128}
-              className="size-full object-contain"
-              priority
-            />
-            {/* A page flipping over the book Booky carries. */}
-            <span
-              aria-hidden="true"
-              className="absolute right-[7%] top-[40%] h-[24%] w-[13%] [perspective:240px]"
-            >
-              <span
-                className="block size-full origin-left rounded-r-[3px] border-l border-[#6d1712]/40 bg-[#f6ecd9] [animation:booky-page-flip_1.15s_ease-in-out_infinite]"
-              />
-            </span>
-          </div>
-        </div>
-        {/* Flat ground line for Booky to walk on. */}
+      <div className="relative h-40 w-64 overflow-hidden rounded-3xl bg-[#f7f1e8] ring-1 ring-border">
         <div
-          className="absolute inset-x-6 bottom-2 h-0.5 rounded-full bg-border"
+          className="absolute inset-x-6 bottom-4 h-0.5 rounded-full bg-[#e2d7c2]"
           aria-hidden="true"
         />
+        <div className="absolute bottom-4 left-1/2 h-[132px] w-[66px] -ml-[33px] [animation:booky-walk-across_3.2s_linear_infinite]">
+          <div
+            aria-hidden="true"
+            className="size-full bg-[url(/mascot/walk-sheet.png)] [background-size:396px_132px] [background-repeat:no-repeat] [animation:booky-frames_0.7s_steps(6)_infinite]"
+          />
+        </div>
       </div>
       <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
         {label}

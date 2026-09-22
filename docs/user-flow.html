@@ -126,6 +126,30 @@ flowchart TD
     PROFILE --> LOGOUT
     MYBOOKS --> LOGOUT
     SAVED --> LOGOUT
+
+    %% ── Added: ensure all remaining flows reach Sign Out (no node/layout change) ──
+    BLOCKED -.-> LOGOUT
+    TO_ADMIN -.-> LOGOUT
+    ERR_DUP -.-> LOGOUT
+    ERR_RESTOCK_DUP -.-> LOGOUT
+    CANCELLED_NOTE -.-> LOGOUT
+    CLAIMED_NOTE -.-> LOGOUT
+    RETURNED_NOTE -.-> LOGOUT
+    ISSUE_ROW -.-> LOGOUT
+    NOTIF -.-> LOGOUT
+    BOOKY_FAQ -.-> LOGOUT
+    ADMIN_INBOX -.-> LOGOUT
+    BOOKY_SEND -.-> LOGOUT
+    BOOKY -.-> LOGOUT
+    BOOKY_CHOOSE -.-> LOGOUT
+    READY_NOTE -.-> LOGOUT
+    SHOW_QR -.-> LOGOUT
+    PENDING_NOTE -.-> LOGOUT
+    CANCEL_OPT -.-> LOGOUT
+    SYL_VIEW -.-> LOGOUT
+    SAVE_PROFILE -.-> LOGOUT
+    WAIT_RESTOCK -.-> LOGOUT
+
     LOGOUT --> END([● End]):::endDef
       </pre>
     </div>

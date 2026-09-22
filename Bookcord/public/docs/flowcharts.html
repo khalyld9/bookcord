@@ -359,6 +359,30 @@ flowchart TD
     PROFILE --> LOGOUT
     MYBOOKS --> LOGOUT
     SAVED --> LOGOUT
+
+    %% ── Added: ensure all remaining flows reach Sign Out (no node/layout change) ──
+    BLOCKED -.-> LOGOUT
+    TO_ADMIN -.-> LOGOUT
+    ERR_DUP -.-> LOGOUT
+    ERR_RESTOCK_DUP -.-> LOGOUT
+    CANCELLED_NOTE -.-> LOGOUT
+    CLAIMED_NOTE -.-> LOGOUT
+    RETURNED_NOTE -.-> LOGOUT
+    ISSUE_ROW -.-> LOGOUT
+    NOTIF -.-> LOGOUT
+    BOOKY_FAQ -.-> LOGOUT
+    ADMIN_INBOX -.-> LOGOUT
+    BOOKY_SEND -.-> LOGOUT
+    BOOKY -.-> LOGOUT
+    BOOKY_CHOOSE -.-> LOGOUT
+    READY_NOTE -.-> LOGOUT
+    SHOW_QR -.-> LOGOUT
+    PENDING_NOTE -.-> LOGOUT
+    CANCEL_OPT -.-> LOGOUT
+    SYL_VIEW -.-> LOGOUT
+    SAVE_PROFILE -.-> LOGOUT
+    WAIT_RESTOCK -.-> LOGOUT
+
     LOGOUT --> END([● End]):::endDef
         </pre>
       </div>
@@ -559,6 +583,60 @@ flowchart TD
     CLAIM --> LOGOUT
     CHECK --> LOGOUT
     CHAT --> LOGOUT
+
+    %% ── Added: ensure all Admin branches reach Sign Out (Sign Out is final) ──
+    DASH_DATA -.-> LOGOUT
+    NOTIF_BELL -.-> LOGOUT
+    S_OUT -.-> LOGOUT
+    S_LOW -.-> LOGOUT
+    S_OK -.-> LOGOUT
+    ERR_NEG -.-> LOGOUT
+    ERR_NOT_PENDING -.-> LOGOUT
+    ERR_CLOSED -.-> LOGOUT
+    ERR_NO_MATCH -.-> LOGOUT
+    ERR_CLAIMED -.-> LOGOUT
+    ERR_STATE -.-> LOGOUT
+    ERR_STOCK -.-> LOGOUT
+    REDIR -.-> LOGOUT
+    INSERT_BOOK -.-> LOGOUT
+    USE_AUTHOR -.-> LOGOUT
+    CREATE_AUTHOR -.-> LOGOUT
+    HAS_INIT -.-> LOGOUT
+    INV_STATUS -.-> LOGOUT
+    REQ_ROW -.-> LOGOUT
+    REQ_ACT -.-> LOGOUT
+    NOTIF_RESOLVED -.-> LOGOUT
+    NOTIF_READY -.-> LOGOUT
+    READY_OK -.-> LOGOUT
+    CANCEL_OK -.-> LOGOUT
+    FOUND -.-> LOGOUT
+    STATUS_CHK2 -.-> LOGOUT
+    STOCK_CHK -.-> LOGOUT
+    CLAIM_FLOW -.-> LOGOUT
+    CLAIM_UPDATE -.-> LOGOUT
+    CLAIM_OK -.-> LOGOUT
+    LOOKUP -.-> LOGOUT
+    SCAN -.-> LOGOUT
+    TYPED -.-> LOGOUT
+    CLAIM_INPUT -.-> LOGOUT
+    INV_ACT -.-> LOGOUT
+    CHAT_DATA -.-> LOGOUT
+    THREAD_PICK -.-> LOGOUT
+    LINES -.-> LOGOUT
+    REPLY -.-> LOGOUT
+    CHECK_TABLE -.-> LOGOUT
+    RETURN_OK -.-> LOGOUT
+    RET_FULL -.-> LOGOUT
+    RET_PART -.-> LOGOUT
+    DO_RETURN -.-> LOGOUT
+    RETURN_CHOOSE -.-> LOGOUT
+    INV_TABLE -.-> LOGOUT
+    RES_TABLE -.-> LOGOUT
+    RES_OP -.-> LOGOUT
+    OP_READY -.-> LOGOUT
+    OP_CANCEL -.-> LOGOUT
+    OP_CLAIM -.-> LOGOUT
+
     LOGOUT --> END([● End]):::endDef
 
     %% Cross links

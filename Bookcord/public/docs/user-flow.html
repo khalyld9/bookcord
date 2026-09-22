@@ -55,10 +55,8 @@ flowchart TD
     LANDING --> HAS_SESSION{Logged in<br>& session?}:::decision
     HAS_SESSION -->|No| CHOICE{Create or Sign in?}:::decision
     HAS_SESSION -->|Yes| ROLE_CHK{Role Check}:::decision
-    ROLE_CHK -->|Admin| CONN_B((B)):::connector
-    CONN_B --> TO_ADMIN[/→ /admin<br>Admin Dashboard<br>Admin Flow/]:::page
-    ROLE_CHK -->|User| CONN_A((A)):::connector
-    CONN_A --> CATALOG
+    ROLE_CHK -->|Admin| TO_ADMIN[/→ /admin<br>Admin Dashboard<br>Admin Flow<br>Ⓐ/]:::page
+    ROLE_CHK -->|User| CATALOG
     CHOICE -->|New student| SIGNUP[/Sign Up /signup<br>full_name • student_id • email • password<br>ICT • Grade 11/12/]:::page
     CHOICE -->|Existing| LOGIN[/Sign In /login<br>email+password / Google OAuth/]:::page
     SIGNUP --> AUTH_CB[/Auth Callback /auth/callback<br>Supabase session/]:::page

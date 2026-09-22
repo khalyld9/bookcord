@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bookcord — User & Admin Flowcharts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --paper:#ffffff;
+    --card:#ffffff;
+    --ink:#000000;
+    --muted:#6e6e6e;
+    --espresso: #000000;
+    --espresso-2:#000000;
+    --ochre:#000000;
+    --ochre-deep:#000000;
+    --primary:#000000;
+    --ring:#0000002a;
+    --border: #e5e5e5;
+    --shadow: 0 22px 44px -30px rgba(0,0,0,0.08), 0 6px 16px -10px rgba(0,0,0,0.1);
+    --radius:28px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    background: #ffffff;
+    color: var(--ink);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  a{color:#000000;text-decoration:none}
+  a:hover{color:#000000}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+  /* header */
+  .brand-bar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    background:var(--card);border:1px solid var(--border);
+    border-radius:18px;padding:14px 18px;box-shadow:var(--shadow);
+    position:sticky;top:16px;z-index:20;backdrop-filter:blur(12px);
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .mark{width:40px;height:40px;border-radius:12px;background:#000000;display:grid;place-items:center;color:white;box-shadow:0 6px 16px -10px rgba(0,0,0,0.35)}
+  .brand h1{margin:0;font-family:Fraunces, serif;font-weight:900;letter-spacing:-0.04em;font-size:22px;line-height:1}
+  .brand p{margin:2px 0 0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .brand-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .pill{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;background:#000000;color:white;padding:6px 12px;border-radius:999px}
+  .pill-soft{background:#ffffff;color:var(--muted);border:1px solid var(--border)}
+  .hero{
+    margin:28px 0 18px;
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:28px;
+    display:grid;grid-template-columns:1.2fr 0.9fr;gap:28px;overflow:hidden;position:relative;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:auto -60px -60px auto;width:260px;height:260px;
+    background: radial-gradient(closest-side, rgba(0,0,0,0.04), transparent 70%);
+    pointer-events:none;
+  }
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#000000;font-weight:700;margin:0 0 10px}
+  .hero h2{font-family:Fraunces, serif;font-size:38px;line-height:0.95;letter-spacing:-0.04em;margin:0 0 12px;font-weight:900}
+  .hero h2 em{font-style:normal;color:#000000}
+  .hero p{color:var(--muted);margin:0;font-size:14.5px;line-height:1.6}
+  .hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+  .stat{background:#ffffff;border:1px solid var(--border);border-radius:20px;padding:16px}
+  .stat strong{font-family:Fraunces, serif;font-size:22px;letter-spacing:-0.03em;display:block;line-height:1}
+  .stat span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
+  .stat p{font-size:12.5px;margin:6px 0 0;color:var(--muted)}
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+  .toc a{
+    background:var(--card);border:1px solid var(--border);padding:8px 14px;border-radius:999px;
+    font-size:13px;font-weight:600;color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,0.04);
+    transition:all .15s;
+  }
+  .toc a:hover{background:#000000;color:white;transform:translateY(-1px)}
+  /* cards */
+  .section{margin:36px 0 0}
+  .section-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin:0 0 16px}
+  .section-head h3{margin:0;font-family:Fraunces, serif;font-size:26px;letter-spacing:-0.03em;font-weight:800;display:flex;align-items:center;gap:10px}
+  .section-head h3 i{width:36px;height:36px;border-radius:12px;background:#000000;color:white;display:grid;place-items:center;font-size:18px}
+  .section-head p{margin:6px 0 0;color:var(--muted);font-size:13.5px;max-width:620px}
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px;overflow:hidden;
+  }
+  .card-pad{padding:22px 22px 18px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+  .legend span{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+    background:#ffffff;border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:var(--muted)
+  }
+  .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .dot.start{background:#000000}
+  .dot.process{background:#ffffff;border:2px solid #000000}
+  .dot.decision{background:#ffffff}
+  .dot.action{background:var(--primary)}
+  .dot.data{background:#ffffff;border:2px solid #000000}
+  .dot.wait{background:#ffffff;border:1px solid #000000}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin:0 0 14px}
+  .toolbar-left{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{
+    appearance:none;border:1px solid var(--border);background:var(--card);
+    padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:0.04em;
+    cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s;
+  }
+  .btn:hover{background:#000000;color:white;border-color:var(--espresso);transform:translateY(-1px)}
+  .btn.primary{background:#000000;color:white;border-color:var(--espresso)}
+  .btn.primary:hover{background:var(--espresso-2)}
+  .mermaid-wrap{
+    background: none,
+                
+                #ffffff;
+    border:1px solid var(--border);border-radius:22px;
+    padding:10px;overflow:auto;
+  }
+  .mermaid{width:100%;display:flex;justify-content:center}
+  .mermaid svg{max-width:100%;height:auto}
+  /* tables */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+  th{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px;background:#ffffff;border-bottom:1px solid var(--border)}
+  td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .badge{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:0.06em;padding:3px 8px;border-radius:999px;display:inline-block}
+  .badge.pending{background:#ffffff;color:#000000;border:1px solid #000000}
+  .badge.ready{background:#ffffff;color:#000000;border:1px solid #000000}
+  .badge.claimed{background:#ffffff;color:#000000;border:1px solid #000000}
+  .badge.cancelled{background:#ffffff;color:#000000;border:1px solid #000000}
+  .badge.issued{background:#ffffff;color:#000000;border:1px solid #000000}
+  .badge.ok{background:#ffffff;color:#000000;border:1px solid #000000}
+  .badge.low{background:#ffffff;color:#000000;border:1px solid #000000}
+  .badge.out{background:#ffffff;color:#000000;border:1px solid #000000}
+  .callout{
+    display:flex;gap:12px;background:#ffffff;border:1px solid #e5e5e5;border-radius:16px;padding:14px 16px;margin:14px 0 0;
+  }
+  .callout strong{font-size:13px}
+  .callout p{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+  .flow-notes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0 0}
+  .note{background:#ffffff;border:1px solid var(--border);border-radius:18px;padding:14px}
+  .note h4{margin:0 0 6px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);font-family:"JetBrains Mono",monospace}
+  .note p, .note li{font-size:12.5px;color:var(--ink)}
+  .note ul{margin:6px 0 0;padding-left:16px}
+  .kvs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+  .kv{font-family:"JetBrains Mono",monospace;font-size:11px;background:#ffffff;border:1px solid var(--border);padding:5px 8px;border-radius:999px;color:var(--muted)}
+  .kv b{color:var(--ink)}
+  /* responsive */
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr}
+    .grid2, .flow-notes{grid-template-columns:1fr}
+    .brand-bar{position:static}
+    .wrap{padding-top:18px}
+  }
+  @media print{
+    .brand-bar{position:static;box-shadow:none}
+    .btn{display:none}
+    .mermaid-wrap{break-inside:avoid;box-shadow:none}
+    .card{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- Header -->
+  <div class="brand-bar">
+    <div class="brand">
+      <div class="mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8"/><path d="M8 11h8"/></svg>
+      </div>
+      <div>
+        <h1>Bookcord</h1>
+        <p>School library • ICT • Grade 11–12</p>
+      </div>
+    </div>
+    <div class="brand-meta">
+      <span class="pill">User & Admin Flowcharts</span>
+      <span class="pill-soft">v0.1.0 • 2026-09-22</span>
+      <span class="pill-soft">Next.js 16 + Supabase</span>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <p class="eyebrow">System overview • Bookcord Library Hub</p>
+      <h2>Every tap, <em>mapped</em>.<br>Student & Admin journeys.</h2>
+      <p>
+        Bookcord is a school library system for checking textbook stock and reserving titles. Students browse an ICT-filtered catalog, save titles, reserve with a QR claim code, and track syllabi. Admins run the desk: inventory, reservations, claim scanning, checkouts, and the Booky chat inbox. Both roles share the same Next.js + Supabase core with role-based guards.
+      </p>
+      <div class="toc">
+        <a href="#user-flow">① Student flow</a>
+        <a href="#admin-flow">② Admin flow</a>
+        <a href="#status">③ Statuses & RPCs</a>
+        <a href="#schema">④ Data model</a>
+      </div>
+      <div class="kvs">
+        <span class="kv"><b>Auth:</b> Supabase Auth + Google OAuth</span>
+        <span class="kv"><b>Guard:</b> requireUser / requireAdmin</span>
+        <span class="kv"><b>Stock RPCs:</b> restock_book • issue_book • return_book • adjust_inventory</span>
+        <span class="kv"><b>Realtime:</b> Supabase Realtime for Booky</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span>Student side</span>
+        <strong>/books hub</strong>
+        <p>Catalog → Detail → Reserve / Save → My Books (QR) → Syllabi → History → Profile</p>
+      </div>
+      <div class="stat">
+        <span>Admin side</span>
+        <strong>/admin desk</strong>
+        <p>Overview → Inventory (+1 / −1 / Add Book) → Reservations → Claim Desk (QR scan) → Checkouts → Inbox</p>
+      </div>
+      <div class="stat">
+        <span>QR claim code</span>
+        <strong>8 hex</strong>
+        <p>CODE_PATTERN 6–12 chars uppercase; scanned with jsqr at the desk, then issue_book RPC.</p>
+      </div>
+      <div class="stat">
+        <span>Single source</span>
+        <strong>inventory</strong>
+        <p>available_stock / issued_stock / total_stock kept in sync via stock_movements audit table.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER FLOW -->
+  <section id="user-flow" class="section">
+    <div class="section-head">
+      <div>
+        <h3><i>🎓</i> Student (User) Flowchart</h3>
+        <p>From landing to checkout: auth, browse, save, reserve, claim, and return. Blue = navigation, amber diamond = decision, crimson = action that writes DB.</p>
+      </div>
+      <div class="legend">
+        <span><i class="dot start"></i> Start / End</span>
+        <span><i class="dot process"></i> Page / View</span>
+        <span><i class="dot decision"></i> Decision</span>
+        <span><i class="dot action"></i> Write (DB / RPC)</span>
+        <span><i class="dot wait"></i> Wait / Notify</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn primary" onclick="downloadSVG('user-mermaid','bookcord-user-flow.svg')">⬇ Download SVG</button>
+          <button class="btn" onclick="window.print()">🖨 Print / Save PDF</button>
+        </div>
+        <span class="kv">Tip: pinch-zoom on mobile • drag to scroll the diagram</span>
+      </div>
+
+      <div class="mermaid-wrap">
+        <pre id="user-mermaid" class="mermaid">
+flowchart TD
+    %% ── Styling ──
+    classDef start fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
+    classDef endDef fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
+    classDef page fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
+    classDef decision fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:8,ry:8
+    classDef action fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.4px,rx:14,ry:14
+    classDef wait fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
+    classDef data fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000,rx:10,ry:10
+
+    START([● Start]):::start --> LANDING[/Landing / <br> Hero + Sign in / Sign up/]:::page
+    LANDING --> HAS_SESSION{Logged in<br>& session?}:::decision
+    HAS_SESSION -->|No| CHOICE{Create or Sign in?}:::decision
+    HAS_SESSION -->|Yes| ROLE_CHK{Role Check}:::decision
+    ROLE_CHK -->|Admin| TO_ADMIN[/→ /admin<br>Admin Dashboard<br>Admin Flow/]:::page
+    ROLE_CHK -->|User| CATALOG
+
+    CHOICE -->|New student| SIGNUP[/Sign Up /signup<br>full_name • student_id • email • password<br>ICT • Grade 11/12/]:::page
+    CHOICE -->|Existing| LOGIN[/Sign In /login<br>email+password / Google OAuth/]:::page
+    SIGNUP --> AUTH_CB[/Auth Callback /auth/callback<br>Supabase session/]:::page
+    LOGIN --> AUTH_CB
+    AUTH_CB --> PROFILE_EXISTS{Profile row<br>exists?}:::decision
+    PROFILE_EXISTS -->|No| COMPLETE[/Complete Profile /complete-profile<br>Pick strand + year level/]:::page
+    COMPLETE --> ROLE_CHK
+    PROFILE_EXISTS -->|Yes • check status| STATUS_CHK{status ACTIVE?}:::decision
+    STATUS_CHK -->|DISABLED| BLOCKED([✕ Account disabled<br>Contact admin]):::endDef
+    STATUS_CHK -->|ACTIVE| ROLE_CHK
+
+    subgraph StudentHub["───  STUDENT HUB  /books shell  ───"]
+      direction TB
+      CATALOG[/📚 Catalog /books<br>Search • Filters<br>semester • strand • yearLevel • subject • availability/]:::page
+      CATALOG --> FILTER{Filter?}:::decision
+      FILTER -->|Search / availability| CATALOG
+      FILTER -->|View title| DETAIL[/Book Detail /books/:id<br>Author • Subject • Stock • Shelf count/]:::page
+    end
+
+    DETAIL --> STOCK_Q{available_stock<br>> 0 ?}:::decision
+
+    STOCK_Q -->|YES • in stock| ACTION_CHOICE{Student action}:::decision
+    ACTION_CHOICE -->|Save / Unsave| SAVE_TOGGLE[/Toggle Saved ❤<br>saved_books INSERT / DELETE<br>↔ /saved/]:::action
+    SAVE_TOGGLE --> CATALOG
+
+    ACTION_CHOICE -->|Reserve| RESERVE[/Reserve Book<br>reservations PENDING<br>code = 8-hex • QR generated/]:::action
+    RESERVE --> DUP_CHK{Already open<br>reservation?}:::decision
+    DUP_CHK -->|Yes 23505| ERR_DUP([⊘ Error: already have open reservation]):::endDef
+    DUP_CHK -->|No| MYBOOKS
+
+    STOCK_Q -->|NO • out 0| RESTOCK_ASK{Request<br>restock?}:::decision
+    RESTOCK_ASK -->|Yes| RESTOCK_REQ[/Request Restock<br>restock_requests PENDING<br>Guard: only if 0 on shelf/]:::action
+    RESTOCK_REQ --> RESTOCK_DUP{Duplicate<br>request?}:::decision
+    RESTOCK_DUP -->|Yes 23505| ERR_RESTOCK_DUP([⊘ Already requested]):::endDef
+    RESTOCK_DUP -->|No| WAIT_RESTOCK[/⏳ Wait • Bell<br>RESTOCK_RESOLVED<br>when admin +1/]:::wait
+
+    WAIT_RESTOCK -.->|Notification| CATALOG
+
+    MYBOOKS[/🎫 My Books /my-books<br>All reservations • QR • Code • Status/]:::page --> RES_STATUS{Status = ?}:::decision
+    RES_STATUS -->|PENDING| PENDING_NOTE[PENDING<br>waiting for admin<br>to mark READY]:::data
+    RES_STATUS -->|READY| READY_NOTE[READY<br>RESERVATION_READY bell<br>Go to library desk]:::wait
+    RES_STATUS -->|CLAIMED| CLAIMED_NOTE[CLAIMED<br>checked out → ISSUED<br>see History]:::data
+    RES_STATUS -->|CANCELLED| CANCELLED_NOTE[CANCELLED]:::data
+    RES_STATUS -->|RETURNED| RETURNED_NOTE[RETURNED]:::data
+
+    PENDING_NOTE --> CANCEL_OPT{Cancel<br>before claim?}:::decision
+    CANCEL_OPT -->|Yes| CANCEL_ACT[/Cancel Reservation<br>PENDING/READY → CANCELLED/]:::action
+    READY_NOTE --> SHOW_QR[/Show QR at desk<br>Admin scans @ /admin/claim/]:::page
+    SHOW_QR -.->|Scanned| CLAIMED_NOTE
+    CANCEL_ACT --> MYBOOKS
+
+    %% Hub extra pages
+    CATALOG --> SAVED[/🔖 Saved /saved<br>Wishlist filtered by you/]:::page
+    SAVED --> SAVED_ACT{From saved card?}:::decision
+    SAVED_ACT -->|Reserve| RESERVE
+    SAVED_ACT -->|Unsave| SAVE_TOGGLE
+    SAVED_ACT -->|Back| CATALOG
+
+    CATALOG --> SYLLABI[/📖 Syllabi /syllabi<br>Grouped by subject<br>for your strand+yearLevel/]:::page
+    SYLLABI --> SYL_CHK{strand & yearLevel<br>complete?}:::decision
+    SYL_CHK -->|No| PROFILE
+    SYL_CHK -->|Yes| SYL_VIEW[Subject groups<br>browse titles]:::data
+    SYL_VIEW --> DETAIL
+
+    CATALOG --> HISTORY[/📜 History /history<br>book_issues table<br>ISSUED • PARTIALLY_RETURNED • RETURNED/]:::page
+    HISTORY --> ISSUE_ROW[Rows: Book • Qty • Checked out • Due • Status]:::data
+
+    CATALOG --> PROFILE[/👤 Profile /profile<br>full_name • student_id • avatar (Supabase storage)<br>yearLevel • strand • password<br>Stats: activeIssues • copiesBorrowed • returned/]:::page
+    PROFILE --> EDIT{Edit?}:::decision
+    EDIT -->|Update| SAVE_PROFILE[/Update profiles<br>avatar upload • yearLevel/strand/]:::action
+    SAVE_PROFILE --> CATALOG
+    EDIT -->|No| CATALOG
+
+    %% Global widgets
+    CATALOG -.->|Booky tap| BOOKY[/💬 Booky<br>FAQ • upcoming_restocks RPC<br>Message Admin/]:::page
+    BOOKY --> BOOKY_CHOOSE{Tab}:::decision
+    BOOKY_CHOOSE -->|FAQ| BOOKY_FAQ[Answers via restocks view]:::data
+    BOOKY_CHOOSE -->|Admin| BOOKY_SEND[/Send chat_messages<br>sender STUDENT/]:::action
+    BOOKY_SEND -.->|Realtime| ADMIN_INBOX[(→ Admin Inbox /admin/chat)]
+
+    CATALOG -.->|Bell| NOTIF[/🔔 Notifications<br>RESERVATION_READY • RESTOCK_RESOLVED • RESTOCK_REQUEST/]:::page
+
+    CATALOG --> LOGOUT[/Sign Out<br>supabase.auth.signOut()/]:::page
+    HISTORY --> LOGOUT
+    PROFILE --> LOGOUT
+    MYBOOKS --> LOGOUT
+    SAVED --> LOGOUT
+    LOGOUT --> END([● End]):::endDef
+        </pre>
+      </div>
+
+      <div class="flow-notes">
+        <div class="note">
+          <h4>📍 Key routes</h4>
+          <ul>
+            <li><code>/</code> landing → auto-redirect if session</li>
+            <li><code>/login?desk=admin</code> subtle admin door</li>
+            <li><code>/books</code> + <code>/books/:id</code> catalog & detail</li>
+            <li><code>/my-books</code> QR + status chip</li>
+            <li><code>/saved</code> wishlist • <code>/syllabi</code> subject groups</li>
+            <li><code>/history</code> issue ledger • <code>/profile</code> edit</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h4>⚙️ Writes from student</h4>
+          <ul>
+            <li><code>toggleSavedBook</code> — saved_books</li>
+            <li><code>reserveBook</code> — reservations PENDING (+code)</li>
+            <li><code>cancelReservation</code> — → CANCELLED</li>
+            <li><code>requestRestock</code> — restock_requests PENDING (only if 0)</li>
+            <li><code>chat_messages</code> — sender STUDENT → admin inbox</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h4>🔔 Student notifications</h4>
+          <ul>
+            <li><span class="badge ready">RESERVATION_READY</span> when admin marks READY</li>
+            <li><span class="badge ok">RESTOCK_RESOLVED</span> after +1 restock fulfills request</li>
+            <li>Bell: <code>getNotifications / getUnreadNotificationCount</code></li>
+            <li>Booky: <code>upcoming_restocks(p_limit)</code> RPC</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card-pad" style="padding-left:0;padding-right:0;padding-bottom:0">
+        <h4 style="margin:0 0 10px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)">Reservation lifecycle • student view</h4>
+        <table>
+          <thead><tr><th>Status</th><th>Meaning</th><th>Student can</th><th>Next</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge pending">PENDING</span></td><td>Just placed, admin hasn't set aside</td><td>Cancel • View QR & code</td><td>→ READY or CANCELLED</td></tr>
+            <tr><td><span class="badge ready">READY</span></td><td>Admin marked ready for pickup, bell rings</td><td>Show QR at desk • Cancel</td><td>→ CLAIMED</td></tr>
+            <tr><td><span class="badge claimed">CLAIMED</span></td><td>Scanned at desk, checked out via issue_book RPC</td><td>See in History as <span class="badge issued">ISSUED</span></td><td>→ RETURNED via admin</td></tr>
+            <tr><td><span class="badge cancelled">CANCELLED</span></td><td>You or admin cancelled</td><td>Reserve again later</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN FLOW -->
+  <section id="admin-flow" class="section">
+    <div class="section-head">
+      <div>
+        <h3><i>📚</i> Admin Flowchart</h3>
+        <p>Every desk operation goes through audited RPCs so inventory never drifts. Scan QR → issue, return → restock, adjust → audit trail. Chat inbox is realtime.</p>
+      </div>
+      <div class="legend">
+        <span><i class="dot start"></i> Start / End</span>
+        <span><i class="dot process"></i> Desk / Table</span>
+        <span><i class="dot decision"></i> Guard / Decision</span>
+        <span><i class="dot action"></i> RPC Write</span>
+        <span><i class="dot data"></i> Derived View</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn primary" onclick="downloadSVG('admin-mermaid','bookcord-admin-flow.svg')">⬇ Download SVG</button>
+          <button class="btn" onclick="window.print()">🖨 Print / Save PDF</button>
+        </div>
+        <span class="kv">Mirrored nav: Manage = Overview • Reservations • Inventory • Checkouts &nbsp;|&nbsp; Desk = Claim • Chat</span>
+      </div>
+
+      <div class="mermaid-wrap">
+        <pre id="admin-mermaid" class="mermaid">
+flowchart TD
+    classDef start fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
+    classDef endDef fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
+    classDef page fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
+    classDef decision fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:8,ry:8
+    classDef action fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.4px,rx:14,ry:14
+    classDef data fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000,rx:10,ry:10
+    classDef warn fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
+
+    START([● Start Admin]):::start --> LOGIN[/Admin Sign In<br>/login?desk=admin<br>email • password • Google/]:::page
+    LOGIN --> AUTH[/Auth Callback /auth/callback<br>updateSession middleware/]:::page
+    AUTH --> GUARD{Role Check<br>requireAdmin?}:::decision
+    GUARD -->|User| REDIR[/→ /books<br>Catalog<br>User Flow/]:::page
+    GUARD -->|Admin| DASH
+
+    DASH[/📊 Overview /admin<br>Stat cards • Stock to watch • Latest reservations/]:::page
+    DASH --> DASH_DATA[Headlines via getAdminStats & inventory<br>Titles • On shelf • Checked out • Open/Ready<br>Attention = available ≤ minimum_stock]:::data
+    DASH --> NAV{Choose desk}:::decision
+
+    %% ── Inventory ──
+    NAV -->|Manage → Inventory| INV
+    INV[/📦 Inventory /admin/inventory<br>Live shelf per title/]:::page --> INV_TABLE[Table: Title • Subject • On shelf • Issued • Total • Status]:::data
+    INV_TABLE --> INV_STATUS{Status badge}:::decision
+    INV_STATUS -->|OUT 0| S_OUT[<span class='badge out'>OUT</span>]:::data
+    INV_STATUS -->|LOW ≤ min| S_LOW[<span class='badge low'>LOW</span>]:::data
+    INV_STATUS -->|OK > min| S_OK[<span class='badge ok'>OK</span>]:::data
+
+    INV_TABLE --> INV_ACT{Action}:::decision
+    INV_ACT -->|Add new title| ADD[/Add Book Form<br>title • author • ISBN • subject • semester • strand • yearLevel<br>minimum_stock • initial_stock/]:::page
+    ADD --> AUTHOR_CHK{Author exists<br>ilike?}:::decision
+    AUTHOR_CHK -->|Yes| USE_AUTHOR[Reuse author id]:::data
+    AUTHOR_CHK -->|No| CREATE_AUTHOR[/Insert authors/]:::action
+    USE_AUTHOR --> INSERT_BOOK
+    CREATE_AUTHOR --> INSERT_BOOK
+    INSERT_BOOK[/Insert books/]:::action --> HAS_INIT{initial_stock<br>> 0?}:::decision
+    HAS_INIT -->|Yes| RESTOCK_OPEN[/restock_book RPC p_quantity=initialStock<br>p_notes Opening stock/]:::action
+    HAS_INIT -->|No| INV_TABLE
+    RESTOCK_OPEN --> INV_TABLE
+
+    INV_ACT -->|Restock +N| RESTOCK[/Restock +Qty<br>restock_book RPC<br>→ inventory + + stock_movements RESTOCK/]:::action
+    RESTOCK --> INV_TABLE
+    INV_ACT -->|Adjust ±| ADJUST[/Adjust Stock ±Change<br>adjust_inventory RPC<br>DAMAGED / CORRECTION + reason<br>→ stock_movements ADJUSTMENT/]:::action
+    ADJUST --> NEG_CHK{Would make<br>inventory negative?}:::decision
+    NEG_CHK -->|Yes| ERR_NEG([⊘ Collect returns before removing]):::endDef
+    NEG_CHK -->|No| INV_TABLE
+
+    INV -.-> REQ_PANEL[/Restock Requests Panel<br>PENDING oldest first<br>getRestockRequests/]:::page
+    REQ_PANEL --> REQ_EMPTY{Any pending?}:::decision
+    REQ_EMPTY -->|No| INV_TABLE
+    REQ_EMPTY -->|Yes| REQ_ROW[Row: Book • Student • Requested at]:::data
+    REQ_ROW --> REQ_ACT{Resolve}:::decision
+    REQ_ACT -->|Restock 1| DO_RESTOCK[/restockFromRequest<br>restock_book 1 copy<br>Resolves ALL pending for this title/]:::action
+    DO_RESTOCK --> NOTIF_RESOLVED[(Notify students<br>RESTOCK_RESOLVED<br>bell + revalidate)]:::data
+    NOTIF_RESOLVED --> INV_TABLE
+    REQ_ACT -->|Dismiss| DISMISS[/dismissRestockRequest<br>→ DISMISSED / resolved_at/]:::action
+    DISMISS --> INV_TABLE
+
+    %% ── Reservations ──
+    NAV -->|Manage → Reservations| RES
+    RES[/🎫 Reservations /admin/reservations<br>All / Pending / Ready / Claimed / Cancelled filters/]:::page --> RES_TABLE[Rows: Student • Title • Code • Placed • Status chip]:::data
+    RES_TABLE --> RES_OP{Row action}:::decision
+    RES_OP -->|Mark Ready| OP_READY[/adminReservationAction op=ready<br>PENDING → READY/]:::action
+    OP_READY --> READY_OK{Was PENDING?}:::decision
+    READY_OK -->|No| ERR_NOT_PENDING([⊘ Not pending]):::endDef
+    READY_OK -->|Yes| NOTIF_READY[(RESERVATION_READY<br>notify student)]:::data
+    NOTIF_READY --> RES_TABLE
+    RES_OP -->|Cancel| OP_CANCEL[/adminReservationAction op=cancel<br>PENDING/READY → CANCELLED/]:::action
+    OP_CANCEL --> CANCEL_OK{Was open?}:::decision
+    CANCEL_OK -->|No| ERR_CLOSED([⊘ Already closed]):::endDef
+    CANCEL_OK -->|Yes| RES_TABLE
+    RES_OP -->|Claim via code| OP_CLAIM[/adminReservationAction op=claim<br>→ claimReservation(code)/]:::action
+    OP_CLAIM --> CLAIM_FLOW
+
+    %% ── Claim Desk ──
+    NAV -->|Desk → Claim| CLAIM
+    CLAIM[/🔍 Claim Desk /admin/claim<br>Scan QR camera jsqr • or type code/]:::page --> CLAIM_INPUT{Input}:::decision
+    CLAIM_INPUT -->|Camera scan| SCAN[/QR Scanner component<br>jsqr decode/]:::page
+    CLAIM_INPUT -->|Type 6-12| TYPED[/Input CODE_PATTERN<br>trim + uppercase/]:::page
+    SCAN --> LOOKUP
+    TYPED --> LOOKUP
+    LOOKUP[/Lookup getReservationByCode<br>reservations + books + profile/]:::page --> FOUND{Found?}:::decision
+    FOUND -->|No| ERR_NO_MATCH([⊘ No match for code]):::endDef
+    FOUND -->|Yes| STATUS_CHK2{Status<br>PENDING / READY?}:::decision
+    STATUS_CHK2 -->|CLAIMED| ERR_CLAIMED([⊘ Already CLAIMED]):::endDef
+    STATUS_CHK2 -->|CANCELLED / other| ERR_STATE([⊘ Is cancelled/expired]):::endDef
+    STATUS_CHK2 -->|PENDING/READY| STOCK_CHK{available_stock<br>≥ quantity?}:::decision
+    STOCK_CHK -->|No| ERR_STOCK([⊘ Not enough on shelf<br>Restock first → rescan]):::warn
+    ERR_STOCK -.->|Fix| INV
+    STOCK_CHK -->|Yes| CLAIM_FLOW
+    CLAIM_FLOW[/claimReservation • issue_book RPC<br>p_book_id + p_profile_id + quantity<br>p_notes Reserved CODE/]:::action --> CLAIM_UPDATE[/Update reservations<br>CLAIMED + claimed_at now()/]:::action
+    CLAIM_UPDATE --> CLAIM_OK[(✅ Checked out<br>book_issues ISSUED • inventory updated<br>stock_movements ISSUE)]:::data
+    CLAIM_OK --> RES_TABLE
+
+    %% ── Checkouts ──
+    NAV -->|Manage → Checkouts| CHECK
+    CHECK[/📤 Checkouts /admin/checkouts<br>ISSUED + PARTIALLY_RETURNED<br>getAdminCheckouts/]:::page --> CHECK_TABLE[Rows: Student • Book • Qty • Due • Status]:::data
+    CHECK_TABLE --> RETURN_CHOOSE{Return?}:::decision
+    RETURN_CHOOSE -->|Return all remaining| DO_RETURN[/returnCheckout<br>return_book RPC<br>p_issue_id • remaining qty/]:::action
+    DO_RETURN --> RETURN_OK{All copies?}:::decision
+    RETURN_OK -->|Yes| RET_FULL[→ RETURNED]:::data
+    RETURN_OK -->|Partial| RET_PART[→ PARTIALLY_RETURNED]:::data
+    RET_FULL --> CHECK_TABLE
+    RET_PART --> CHECK_TABLE
+    RETURN_CHOOSE -->|No| CHECK_TABLE
+
+    %% ── Chat ──
+    NAV -->|Desk → Chat| CHAT
+    CHAT[/💬 Admin Inbox /admin/chat<br>ChatLive • threads per student/]:::page --> CHAT_DATA[Grouped threads<br>getAdminChatState<br>profiles + lastBody + count]:::data
+    CHAT_DATA --> THREAD_PICK{Pick thread}:::decision
+    THREAD_PICK --> LINES[Lines: STUDENT • ADMIN<br>ordered created_at]:::data
+    LINES --> REPLY[/Reply as ADMIN<br>chat_messages sender ADMIN<br>Realtime to student Booky/]:::action
+    REPLY --> LINES
+
+    %% ── Common ──
+    DASH -.-> NOTIF_BELL[/🔔 Bell • Notifications<br>getNotifications • unreadCount/]:::page
+    DASH --> LOGOUT[/Sign Out/]:::page
+    INV --> LOGOUT
+    RES --> LOGOUT
+    CLAIM --> LOGOUT
+    CHECK --> LOGOUT
+    CHAT --> LOGOUT
+    LOGOUT --> END([● End]):::endDef
+
+    %% Cross links
+    INV_TABLE -.->|Low/Out| RES_TABLE
+    RES_TABLE -.->|Ready → wait| CLAIM
+        </pre>
+      </div>
+
+      <div class="flow-notes">
+        <div class="note">
+          <h4>🔐 Guard everywhere</h4>
+          <p><code>middleware.ts → updateSession</code> refreshes Supabase session on every request. Then:</p>
+          <ul>
+            <li><code>requireUser()</code> → redirect /login</li>
+            <li><code>requireAdmin()</code> → role ADMIN && status ACTIVE else → /books</li>
+            <li>Every server action re-checks admin (restock, adjust, addBook, claim…)</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h4>📦 Stock is single-source</h4>
+          <ul>
+            <li><code>restock_book</code> +N → <code>inventory</code> ↑ + <code>restocks</code> + <code>stock_movements RESTOCK</code></li>
+            <li><code>issue_book</code> −N on claim → <code>book_issues ISSUED</code> + issued_stock ↑</li>
+            <li><code>return_book</code> +N → <code>book_returns</code> + stock back</li>
+            <li><code>adjust_inventory</code> ±N → audit reason DAMAGED/CORRECTION</li>
+          </ul>
+        </div>
+        <div class="note">
+          <h4>💬 Realtime chat</h4>
+          <ul>
+            <li>Student Booky → <code>chat_messages STUDENT</code></li>
+            <li>Admin reply → <code>sender ADMIN</code></li>
+            <li>Admin inbox groups by <code>profile_id</code>, live via Supabase Realtime</li>
+            <li>FAQ shortcut: <code>upcoming_restocks</code> shows next titles</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div style="font-size:22px">💡</div>
+        <div>
+          <strong>How a QR claim actually works — 6 steps</strong>
+          <p>Student reserves in catalog → gets QR + 8-hex code (PENDING) → admin marks READY (bell) → student shows QR at desk → admin scans at <code>/admin/claim</code> (jsqr or typed) → <code>claimReservation</code> validates PENDING/READY + stock, then <code>issue_book</code> RPC creates the checkout and flips reservation to <code>CLAIMED</code>. If shelf is 0, error instructs to restock first.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATUSES -->
+  <section id="status" class="section">
+    <div class="section-head">
+      <div>
+        <h3><i>🏷️</i> Statuses, Badges & RPC Reference</h3>
+        <p>Every color you see in the app maps to an enum in <code>types/database.ts</code>. These tables are the source of truth for chips, filters, and guards.</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card card-pad">
+        <h4 style="margin:0 0 10px;font-family:Fraunces,serif;font-size:16px;letter-spacing:-0.02em">ReservationStatus</h4>
+        <table>
+          <thead><tr><th>Status</th><th>Badge</th><th>Who writes</th></tr></thead>
+          <tbody>
+            <tr><td><code>PENDING</code></td><td><span class="badge pending">PENDING</span></td><td>reserveBook (student)</td></tr>
+            <tr><td><code>READY</code></td><td><span class="badge ready">READY</span></td><td>adminReservationAction ready</td></tr>
+            <tr><td><code>CLAIMED</code></td><td><span class="badge claimed">CLAIMED</span></td><td>claimReservation + issue_book</td></tr>
+            <tr><td><code>CANCELLED</code></td><td><span class="badge cancelled">CANCELLED</span></td><td>cancelReservation / admin cancel</td></tr>
+            <tr><td colspan="3" style="color:var(--muted);font-size:12px">Also: RETURNED appears in My Books once the linked checkout is fully returned (via book_issues).</td></tr>
+          </tbody>
+        </table>
+        <h4 style="margin:18px 0 10px;font-family:Fraunces,serif;font-size:16px;letter-spacing:-0.02em">IssueStatus</h4>
+        <table>
+          <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>ISSUED</code></td><td><span class="badge issued">ISSUED</span> — with student, none returned</td></tr>
+            <tr><td><code>PARTIALLY_RETURNED</code></td><td>Some copies back, some still out</td></tr>
+            <tr><td><code>RETURNED</code></td><td>All copies processed via return_book</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card card-pad">
+        <h4 style="margin:0 0 10px;font-family:Fraunces,serif;font-size:16px;letter-spacing:-0.02em">Inventory & RPCs</h4>
+        <table>
+          <thead><tr><th>RPC</th><th>Called from</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr><td><code>restock_book</code></td><td>Add Book • Restock • RestockFromRequest</td><td>↑ total/available • restocks row • movement RESTOCK</td></tr>
+            <tr><td><code>issue_book</code></td><td>claimReservation</td><td>Creates book_issues • ↓ available ↑ issued • movement ISSUE</td></tr>
+            <tr><td><code>return_book</code></td><td>returnCheckout</td><td>book_returns • ↑ available ↓ issued • movement RETURN</td></tr>
+            <tr><td><code>adjust_inventory</code></td><td>Stock −1 / +N</td><td>Correction • DAMAGED reason • movement ADJUSTMENT</td></tr>
+            <tr><td><code>upcoming_restocks</code></td><td>Booky FAQ</td><td>Read-only view for next restocks</td></tr>
+          </tbody>
+        </table>
+        <h4 style="margin:18px 0 10px;font-family:Fraunces,serif;font-size:16px;letter-spacing:-0.02em">Other enums</h4>
+        <table>
+          <thead><tr><th>Enum</th><th>Values</th></tr></thead>
+          <tbody>
+            <tr><td><code>RestockRequestStatus</code></td><td>PENDING → RESTOCKED / DISMISSED</td></tr>
+            <tr><td><code>HoldStatus</code></td><td>PENDING READY FULFILLED CANCELLED EXPIRED</td></tr>
+            <tr><td><code>ChatSender</code></td><td>STUDENT / ADMIN</td></tr>
+            <tr><td><code>NotificationType</code></td><td>RESTOCK_REQUEST • RESTOCK_RESOLVED • RESERVATION_READY</td></tr>
+            <tr><td><code>RoleName</code></td><td>USER • ADMIN</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEMA -->
+  <section id="schema" class="section">
+    <div class="section-head">
+      <div>
+        <h3><i>🗄️</i> Data model (condensed)</h3>
+        <p>The flowcharts above ride on ~18 tables. This ER slice shows the hot path: catalog → inventory → reservations → issues → returns, with the wishlist and restock request spokes.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="mermaid-wrap">
+        <pre class="mermaid">
+erDiagram
+    profiles ||--o{ saved_books : "saves"
+    profiles ||--o{ reservations : "reserves"
+    profiles ||--o{ restock_requests : "requests"
+    profiles ||--o{ book_issues : "borrows"
+    profiles ||--o{ chat_messages : "writes"
+    profiles ||--o{ notifications : "receives"
+
+    books ||--o{ inventory : "has 1"
+    books ||--o{ saved_books : "wishlisted"
+    books ||--o{ reservations : "reserved"
+    books ||--o{ restock_requests : "requested"
+    books ||--o{ book_issues : "issued"
+    books ||--o{ restocks : "restocked"
+    books ||--o{ stock_movements : "tracked"
+
+    authors ||--o{ books : "writes"
+    subjects ||--o{ books : "classifies"
+    strands ||--o{ books : "ICT scope"
+    year_levels ||--o{ books : "G11/G12"
+
+    book_issues ||--o{ book_returns : "returned via"
+
+    profiles {
+      uuid id PK
+      string role USER_ADMIN
+      string status ACTIVE_DISABLED
+      uuid strand_id FK
+      uuid year_level_id FK
+    }
+    books {
+      uuid id PK
+      string title
+      uuid author_id FK
+      uuid subject_id FK
+      uuid strand_id FK
+      uuid year_level_id FK
+      int minimum_stock
+    }
+    inventory {
+      uuid book_id FK
+      int total_stock
+      int available_stock
+      int issued_stock
+    }
+    reservations {
+      uuid id PK
+      uuid profile_id FK
+      uuid book_id FK
+      enum status PENDING_READY_CLAIMED_CANCELLED
+      string code 8hex
+      timestamp claimed_at
+    }
+    restock_requests {
+      uuid id PK
+      enum status PENDING_RESTOCKED_DISMISSED
+    }
+    book_issues {
+      uuid id PK
+      enum status ISSUED_RETURNED_PARTIALLY
+      int quantity
+      int returned_quantity
+    }
+        </pre>
+      </div>
+      <div class="callout" style="background:#ffffff;border-color:var(--border)">
+        <div style="font-size:18px">📋</div>
+        <div>
+          <strong>Full schema lives in <code>src/types/database.ts</code> + <code>supabase/migrations/</code></strong>
+          <p>0003 saved_books • 0004 booky_chat • 0005 reservations + code • 0007 restock_requests • 0008 notifications — tables are optional-guarded so pages render a setup notice (<code>isMissingTable 42P01</code>) instead of 500 when migrations haven't run.</p>
+        </div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="card card-pad">
+        <h4 style="margin:0;font-family:Fraunces,serif">End-to-end example</h4>
+        <p style="margin:8px 0 0;color:var(--muted);font-size:13px"><b>Student Maya (G11 ICT)</b> searches “Filipino” → opens <i>21st Century Literature</i> → sees 0 on shelf → taps <b>Request Restock</b> → row in <code>restock_requests PENDING</code>. <b>Admin</b> sees it in Inventory panel → taps <b>Restock 1</b> → <code>restock_book 1</code> fires, shelf becomes 1, every pending request for that title → RESTOCKED, Maya bell → <b>RESERVATION_READY</b> → Maya reserves → gets QR → shows at desk → scan → <code>issue_book</code> → PENDING → CLAIMED → appears in <b>History ISSUED</b> → later admin <b>Return</b> at Checkouts → RETURNED.</p>
+      </div>
+      <div class="card card-pad">
+        <h4 style="margin:0;font-family:Fraunces,serif">Syllabi derivation</h4>
+        <p style="margin:8px 0 0;color:var(--muted);font-size:13px"><code>getSyllabi(profile)</code> takes the student’s own <code>strand_id + year_level_id</code> and loads every live <code>books</code> where both match, grouped by <code>subjects.name</code>. If either id is missing (new account), the page shows “complete your profile” instead of an empty list. No extra syllabus table — it’s a filtered view of the catalog itself.</p>
+        <div class="kvs" style="margin-top:10px">
+          <span class="kv">G11 ICT →  • 21st Century Lit • Filipino sa Piling Larang</span>
+          <span class="kv">Filtered by subject → per-subject sections</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="margin:40px 0 0;padding:20px;text-align:center;color:var(--muted);font-size:12.5px">
+    <p style="margin:0;font-weight:600">Bookcord • School library system • Built with Next.js 16, Supabase, and a lot of paper.</p>
+    <p style="margin:6px 0 0">Flowcharts generated 2026-09-22 • Next step: export as PDF (⌘P / Ctrl+P) or download SVGs above for your docs.</p>
+  </footer>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad:true,
+    theme:'base',
+    securityLevel:'loose',
+    flowchart:{ curve:'linear', padding:10, nodeSpacing:18, rankSpacing:22, htmlLabels:true },
+    themeVariables:{
+      primaryColor:'#ffffff',
+      primaryTextColor:'#000000',
+      primaryBorderColor:'#000000',
+      secondaryColor:'#ffffff',
+      tertiaryColor:'#ffffff',
+      lineColor:'#000000',
+      textColor:'#000000',
+      fontFamily:'Inter, SF Pro Display, sans-serif',
+      fontSize:'13px'
+    }
+  });
+
+  function downloadSVG(id, filename){
+    const wrap = document.getElementById(id);
+    // mermaid renders SVG as sibling of pre; find svg
+    const svg = wrap ? wrap.querySelector('svg') : null
+      || document.querySelector('#'+id+' + svg')
+      || document.getElementById(id).parentElement.querySelector('svg');
+    // fallback: find any svg inside the card that contains this pre's id adjacency
+    const candidate = svg || document.querySelector('#'+id) && document.querySelector('#'+id).closest('.mermaid-wrap').querySelector('svg');
+    const target = candidate || document.querySelector('#'+id+' svg') || wrap.querySelector('svg');
+    // Actually mermaid replaces <pre class=mermaid> with <svg> inside it (via inner transform) - but with v10 it keeps pre
+    const findSvg = () => {
+      const el = document.getElementById(id);
+      if(el && el.querySelector('svg')) return el.querySelector('svg');
+      // mermaid may have replaced pre content
+      const mWrap = el && el.closest('.mermaid-wrap');
+      if(mWrap) return mWrap.querySelector('svg');
+      return null;
+    };
+    const svgEl = findSvg();
+    if(!svgEl){ alert('Diagram still rendering — wait a second and try again.'); return; }
+    const clone = svgEl.cloneNode(true);
+    clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+    // add white bg
+    const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bg.setAttribute('width','100%'); bg.setAttribute('height','100%'); bg.setAttribute('fill','#ffffff');
+    clone.insertBefore(bg, clone.firstChild);
+    const src = new XMLSerializer().serializeToString(clone);
+    const blob = new Blob([src], {type:'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url; a.download=filename; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 800);
+  }
+</script>
+</body>
+</html>

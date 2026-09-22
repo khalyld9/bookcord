@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bookcord — User Flowchart</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<style>
+  :root{--paper:#ffffff;--card:#ffffff;--ink:#000000;--muted:#6e6e6e;--espresso:#000000;--ochre:#000000;--ochre-deep:#000000;--primary:#000000;--border:#e5e5e5;--shadow:0 2px 12px rgba(0,0,0,0.06);--radius:28px}
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#ffffff;color:var(--ink);line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 60px}
+  .brand-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 18px;box-shadow:var(--shadow)}
+  .brand{display:flex;align-items:center;gap:12px} .mark{width:40px;height:40px;border-radius:12px;background:#000000;display:grid;place-items:center;color:white}
+  .brand h1{margin:0;font-family:Fraunces,serif;font-weight:900;letter-spacing:-0.04em;font-size:22px;line-height:1} .brand p{margin:2px 0 0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .pill{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;background:#000000;color:white;padding:6px 12px;border-radius:999px} .pill-soft{background:#ffffff;color:var(--muted);border:1px solid var(--border);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700} .pill-row{display:flex;gap:8px;flex-wrap:wrap}
+  .hero{margin:24px 0 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px} .eyebrow{font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#000000;font-weight:700;margin:0 0 8px} .hero h2{font-family:Fraunces,serif;font-size:34px;letter-spacing:-0.04em;margin:0 0 10px;font-weight:900} .hero h2 em{font-style:normal;color:#000000} .hero p{color:var(--muted);margin:0;font-size:14px}
+  .navlinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px} .navlinks a{background:#ffffff;border:1px solid var(--border);padding:7px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none} .navlinks a:hover{background:#000000;color:white} .navlinks a.on{background:#000000;color:white}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:18px} .mermaid-wrap{background:radial-gradient(1200px 600px at 10% -10%,rgba(0,0,0,0.03),transparent 50%),radial-gradient(900px 500px at 90% 0%,rgba(0,0,0,0.02),transparent 50%),#ffffff;border:1px solid var(--border);border-radius:22px;padding:12px;overflow:auto} .mermaid{display:flex;justify-content:center} .toolbar{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px} .btn{appearance:none;border:1px solid var(--border);background:var(--card);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer} .btn.primary{background:#000000;color:white;border-color:var(--espresso)} .badge{font-family:JetBrains Mono,monospace;font-size:11px;padding:3px 8px;border-radius:999px;font-weight:700;display:inline-block;border:1px solid} .badge.pending{background:#fef3c7;color:#92400e;border-color:#fcd34d} .badge.ready{background:#d1fae5;color:#065f46;border-color:#6ee7b7} .badge.claimed{background:#dbeafe;color:#1e40af;border-color:#93c5fd} .badge.cancelled{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
+  .kv{font-family:JetBrains Mono,monospace;font-size:11px;background:#ffffff;border:1px solid var(--border);padding:5px 8px;border-radius:999px;color:var(--muted)} .note{background:#ffffff;border:1px solid var(--border);border-radius:18px;padding:14px;margin-top:12px} table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px} th{font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;background:#ffffff;border-bottom:1px solid var(--border)} td{padding:8px 10px;border-bottom:1px solid var(--border)}
+  img.flow-img{max-width:100%;height:auto;border-radius:18px;border:1px solid var(--border);box-shadow:var(--shadow);display:block;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand-bar">
+    <div class="brand"><div class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div><h1>Bookcord</h1><p>School library • ICT • Grade 11–12</p></div></div>
+    <div class="pill-row"><span class="pill">User Flow</span><span class="pill-soft">Separate</span><a href="flowcharts.html" style="text-decoration:none"><span class="pill-soft">← Combined view</span></a><a href="admin-flow.html" style="text-decoration:none"><span class="pill-soft">Admin Flow →</span></a></div>
+  </div>
+  <div class="hero">
+    <p class="eyebrow">Bookcord • Student journey</p>
+    <h2>User <em>flow</em> — from landing to claim</h2>
+    <p>Student-only view. Covers auth, catalog browsing, saving, reserving with QR, restock requests, My Books status, and hub pages (Saved, Syllabi, History, Profile, Booky chat). Admin actions appear only as endpoints (e.g. Admin scans QR).</p>
+    <div class="navlinks"><a class="on" href="user-flow.html">User Flow</a><a href="admin-flow.html">Admin Flow</a><a href="flowcharts.html">Combined + ER + RPCs</a><a href="bookcord-user-flow.png" target="_blank">Open PNG</a></div>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <div style="display:flex;gap:8px"><button class="btn primary" onclick="downloadSVG('user-mermaid','bookcord-user-flow.svg')">⬇ Download SVG</button><button class="btn" onclick="window.print()">🖨 Print / PDF</button></div>
+      <span class="kv">High-res image below is also downloadable — diagram is fully vector via Mermaid</span>
+    </div>
+    <div style="margin-bottom:14px"><img class="flow-img" src="bookcord-user-flow.png" alt="Bookcord User Flow diagram"/></div>
+    <div class="mermaid-wrap">
+      <pre id="user-mermaid" class="mermaid">
+flowchart TD
+    classDef start fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
+    classDef endDef fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
+    classDef page fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
+    classDef decision fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:8,ry:8
+    classDef action fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.4px,rx:14,ry:14
+    classDef wait fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
+    classDef data fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000,rx:10,ry:10
+    START([● Start]):::start --> LANDING[/Landing / <br> Hero + Sign in / Sign up/]:::page
+    LANDING --> HAS_SESSION{Logged in<br>& session?}:::decision
+    HAS_SESSION -->|No| CHOICE{Create or Sign in?}:::decision
+    HAS_SESSION -->|Yes| ROLE_CHK{Role Check}:::decision
+    ROLE_CHK -->|Admin| TO_ADMIN[/→ /admin<br>Admin Dashboard<br>Admin Flow/]:::page
+    ROLE_CHK -->|User| CATALOG
+    CHOICE -->|New student| SIGNUP[/Sign Up /signup<br>full_name • student_id • email • password<br>ICT • Grade 11/12/]:::page
+    CHOICE -->|Existing| LOGIN[/Sign In /login<br>email+password / Google OAuth/]:::page
+    SIGNUP --> AUTH_CB[/Auth Callback /auth/callback<br>Supabase session/]:::page
+    LOGIN --> AUTH_CB
+    AUTH_CB --> PROFILE_EXISTS{Profile row<br>exists?}:::decision
+    PROFILE_EXISTS -->|No| COMPLETE[/Complete Profile /complete-profile<br>Pick strand + year level/]:::page
+    COMPLETE --> ROLE_CHK
+    PROFILE_EXISTS -->|Yes • check status| STATUS_CHK{status ACTIVE?}:::decision
+    STATUS_CHK -->|DISABLED| BLOCKED([✕ Account disabled<br>Contact admin]):::endDef
+    STATUS_CHK -->|ACTIVE| ROLE_CHK
+    subgraph StudentHub["───  STUDENT HUB  /books shell  ───"]
+      direction TB
+      CATALOG[/📚 Catalog /books<br>Search • Filters<br>semester • strand • yearLevel • subject • availability/]:::page
+      CATALOG --> FILTER{Filter?}:::decision
+      FILTER -->|Search / availability| CATALOG
+      FILTER -->|View title| DETAIL[/Book Detail /books/:id<br>Author • Subject • Stock • Shelf count/]:::page
+    end
+    DETAIL --> STOCK_Q{available_stock<br>> 0 ?}:::decision
+    STOCK_Q -->|YES • in stock| ACTION_CHOICE{Student action}:::decision
+    ACTION_CHOICE -->|Save / Unsave| SAVE_TOGGLE[/Toggle Saved ❤<br>saved_books INSERT / DELETE<br>↔ /saved/]:::action
+    SAVE_TOGGLE --> CATALOG
+    ACTION_CHOICE -->|Reserve| RESERVE[/Reserve Book<br>reservations PENDING<br>code = 8-hex • QR generated/]:::action
+    RESERVE --> DUP_CHK{Already open<br>reservation?}:::decision
+    DUP_CHK -->|Yes 23505| ERR_DUP([⊘ Error: already have open reservation]):::endDef
+    DUP_CHK -->|No| MYBOOKS
+    STOCK_Q -->|NO • out 0| RESTOCK_ASK{Request<br>restock?}:::decision
+    RESTOCK_ASK -->|Yes| RESTOCK_REQ[/Request Restock<br>restock_requests PENDING<br>Guard: only if 0 on shelf/]:::action
+    RESTOCK_REQ --> RESTOCK_DUP{Duplicate<br>request?}:::decision
+    RESTOCK_DUP -->|Yes 23505| ERR_RESTOCK_DUP([⊘ Already requested]):::endDef
+    RESTOCK_DUP -->|No| WAIT_RESTOCK[/⏳ Wait • Bell<br>RESTOCK_RESOLVED<br>when admin +1/]:::wait
+    WAIT_RESTOCK -.->|Notification| CATALOG
+    MYBOOKS[/🎫 My Books /my-books<br>All reservations • QR • Code • Status/]:::page --> RES_STATUS{Status = ?}:::decision
+    RES_STATUS -->|PENDING| PENDING_NOTE[PENDING<br>waiting for admin<br>to mark READY]:::data
+    RES_STATUS -->|READY| READY_NOTE[READY<br>RESERVATION_READY bell<br>Go to desk]:::wait
+    RES_STATUS -->|CLAIMED| CLAIMED_NOTE[CLAIMED<br>checked out → ISSUED<br>see History]:::data
+    RES_STATUS -->|CANCELLED| CANCELLED_NOTE[CANCELLED]:::data
+    RES_STATUS -->|RETURNED| RETURNED_NOTE[RETURNED]:::data
+    PENDING_NOTE --> CANCEL_OPT{Cancel<br>before claim?}:::decision
+    CANCEL_OPT -->|Yes| CANCEL_ACT[/Cancel Reservation<br>PENDING/READY → CANCELLED/]:::action
+    READY_NOTE --> SHOW_QR[/Show QR at desk<br>Admin scans @ /admin/claim/]:::page
+    SHOW_QR -.->|Scanned| CLAIMED_NOTE
+    CANCEL_ACT --> MYBOOKS
+    CATALOG --> SAVED[/🔖 Saved /saved<br>Wishlist filtered by you/]:::page
+    SAVED --> SAVED_ACT{From saved card?}:::decision
+    SAVED_ACT -->|Reserve| RESERVE
+    SAVED_ACT -->|Unsave| SAVE_TOGGLE
+    SAVED_ACT -->|Back| CATALOG
+    CATALOG --> SYLLABI[/📖 Syllabi /syllabi<br>Grouped by subject<br>for your strand+yearLevel/]:::page
+    SYLLABI --> SYL_CHK{strand & yearLevel<br>complete?}:::decision
+    SYL_CHK -->|No| PROFILE
+    SYL_CHK -->|Yes| SYL_VIEW[Subject groups<br>browse titles]:::data
+    SYL_VIEW --> DETAIL
+    CATALOG --> HISTORY[/📜 History /history<br>book_issues table<br>ISSUED • PARTIALLY_RETURNED • RETURNED/]:::page
+    HISTORY --> ISSUE_ROW[Rows: Book • Qty • Checked out • Due • Status]:::data
+    CATALOG --> PROFILE[/👤 Profile /profile<br>full_name • student_id • avatar<br>yearLevel • strand • password<br>Stats: activeIssues • copiesBorrowed • returned/]:::page
+    PROFILE --> EDIT{Edit?}:::decision
+    EDIT -->|Update| SAVE_PROFILE[/Update profiles<br>avatar upload • yearLevel/strand/]:::action
+    SAVE_PROFILE --> CATALOG
+    EDIT -->|No| CATALOG
+    CATALOG -.->|Booky tap| BOOKY[/💬 Booky<br>FAQ • upcoming_restocks RPC<br>Message Admin/]:::page
+    BOOKY --> BOOKY_CHOOSE{Tab}:::decision
+    BOOKY_CHOOSE -->|FAQ| BOOKY_FAQ[Answers via restocks view]:::data
+    BOOKY_CHOOSE -->|Admin| BOOKY_SEND[/Send chat_messages<br>sender STUDENT/]:::action
+    BOOKY_SEND -.->|Realtime| ADMIN_INBOX[(→ Admin Inbox /admin/chat)]
+    CATALOG -.->|Bell| NOTIF[/🔔 Notifications<br>RESERVATION_READY • RESTOCK_RESOLVED/]:::page
+    CATALOG --> LOGOUT[/Sign Out<br>supabase.auth.signOut()/]:::page
+    HISTORY --> LOGOUT
+    PROFILE --> LOGOUT
+    MYBOOKS --> LOGOUT
+    SAVED --> LOGOUT
+    LOGOUT --> END([● End]):::endDef
+      </pre>
+    </div>
+    <div class="note">
+      <h4 style="margin:0 0 6px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6e6e6e;font-family:JetBrains Mono,monospace">📍 Key routes • User only</h4>
+      <p style="margin:0;font-size:12.5px;color:#000000"><code>/</code> landing → <code>/signup</code> <code>/login</code> → <code>/auth/callback</code> → <code>/complete-profile</code> → <code>/books</code> → <code>/books/:id</code> → <code>/my-books</code> (QR PENDING/READY/CLAIMED) → <code>/saved</code> → <code>/syllabi</code> (strand+yearLevel grouped) → <code>/history</code> → <code>/profile</code>. Writes: <code>toggleSavedBook</code>, <code>reserveBook</code>, <code>cancelReservation</code>, <code>requestRestock</code>, <code>chat_messages STUDENT</code>.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+      <div class="note"><h4 style="margin:0 0 6px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6e6e6e;font-family:JetBrains Mono,monospace">Reservation lifecycle</h4><table><thead><tr><th>Status</th><th>Student can</th></tr></thead><tbody><tr><td><span class="badge pending">PENDING</span></td><td>Cancel • View QR</td></tr><tr><td><span class="badge ready">READY</span></td><td>Show QR at desk</td></tr><tr><td><span class="badge claimed">CLAIMED</span></td><td>See History ISSUED</td></tr><tr><td><span class="badge cancelled">CANCELLED</span></td><td>Reserve again</td></tr></tbody></table></div>
+      <div class="note"><h4 style="margin:0 0 6px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6e6e6e;font-family:JetBrains Mono,monospace">Decrypt the diagram</h4><p style="margin:0;font-size:12.5px;color:#000000">White card = page/view • Amber diamond = decision/guard • Crimson = write (DB/RPC) • Cream = wait/notification • Dark pill = start/end. All student writes re-check <code>requireUser</code> on the server.</p></div>
+    </div>
+  </div>
+  <footer style="text-align:center;color:#6e6e6e;font-size:12px;margin-top:24px">Bookcord • User Flow — separate from Admin Flow • <a href="admin-flow.html">View Admin Flow →</a> • <a href="flowcharts.html">Combined + schemas</a></footer>
+</div>
+<script>mermaid.initialize({startOnLoad:true,theme:'base',flowchart:{curve:'linear',padding:10,nodeSpacing:16,rankSpacing:18,htmlLabels:true},themeVariables:{primaryColor:'#ffffff',primaryTextColor:'#000000',primaryBorderColor:'#000000',lineColor:'#000000',fontFamily:'Inter, sans-serif',fontSize:'13px'}});function downloadSVG(id,fn){const el=document.getElementById(id);const svg=el&&el.querySelector('svg')||el.closest('.mermaid-wrap').querySelector('svg');if(!svg){alert('Rendering — try again');return;}const clone=svg.cloneNode(true);clone.setAttribute('xmlns','http://www.w3.org/2000/svg');const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');bg.setAttribute('width','100%');bg.setAttribute('height','100%');bg.setAttribute('fill','#ffffff');clone.insertBefore(bg,clone.firstChild);const src=new XMLSerializer().serializeToString(clone);const blob=new Blob([src],{type:'image/svg+xml'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},800);}</script>
+</body>
+</html>

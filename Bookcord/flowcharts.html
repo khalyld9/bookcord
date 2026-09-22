@@ -309,7 +309,7 @@ flowchart TD
     RESTOCK_DUP -->|Yes 23505| ERR_RESTOCK_DUP([⊘ Already requested]):::endDef
     RESTOCK_DUP -->|No| WAIT_RESTOCK[⏳ Wait • Bell<br>RESTOCK_RESOLVED<br>when admin +1]:::wait
 
-    WAIT_RESTOCK -.->|Notification| CATALOG
+    WAIT_RESTOCK -->|Notification| CATALOG
 
     MYBOOKS[🎫 My Books /my-books<br>All reservations • QR • Code • Status]:::page --> RES_STATUS{Status = ?}:::decision
     RES_STATUS -->|PENDING| PENDING_NOTE[PENDING<br>waiting for admin<br>to mark READY]:::data
@@ -321,7 +321,7 @@ flowchart TD
     PENDING_NOTE --> CANCEL_OPT{Cancel<br>before claim?}:::decision
     CANCEL_OPT -->|Yes| CANCEL_ACT[Cancel Reservation<br>PENDING/READY → CANCELLED]:::action
     READY_NOTE --> SHOW_QR[/Show QR at desk<br>Admin scans @ /admin/claim/]:::page
-    SHOW_QR -.->|Scanned| CLAIMED_NOTE
+    SHOW_QR -->|Scanned| CLAIMED_NOTE
     CANCEL_ACT --> MYBOOKS
 
     %% Hub extra pages
@@ -347,13 +347,13 @@ flowchart TD
     EDIT -->|No| CATALOG
 
     %% Global widgets
-    CATALOG -.->|Booky tap| BOOKY[/💬 Booky<br>FAQ • upcoming_restocks RPC<br>Message Admin/]:::page
+    CATALOG -->|Booky tap| BOOKY[/💬 Booky<br>FAQ • upcoming_restocks RPC<br>Message Admin/]:::page
     BOOKY --> BOOKY_CHOOSE{Tab}:::decision
     BOOKY_CHOOSE -->|FAQ| BOOKY_FAQ[Answers via restocks view]:::data
     BOOKY_CHOOSE -->|Admin| BOOKY_SEND[/Send chat_messages<br>sender STUDENT/]:::action
-    BOOKY_SEND -.->|Realtime| ADMIN_INBOX[(→ Admin Inbox /admin/chat)]
+    BOOKY_SEND -->|Realtime| ADMIN_INBOX[(→ Admin Inbox /admin/chat)]
 
-    CATALOG -.->|Bell| NOTIF[/🔔 Notifications<br>RESERVATION_READY • RESTOCK_RESOLVED • RESTOCK_REQUEST/]:::page
+    CATALOG -->|Bell| NOTIF[/🔔 Notifications<br>RESERVATION_READY • RESTOCK_RESOLVED • RESTOCK_REQUEST/]:::page
 
     CATALOG --> LOGOUT[Sign Out<br>supabase.auth.signOut()]:::page
     HISTORY --> LOGOUT
@@ -362,27 +362,27 @@ flowchart TD
     SAVED --> LOGOUT
 
     %% ── Added: ensure all remaining flows reach Sign Out (no node/layout change) ──
-    BLOCKED -.-> LOGOUT
-    TO_ADMIN -.-> LOGOUT
-    ERR_DUP -.-> LOGOUT
-    ERR_RESTOCK_DUP -.-> LOGOUT
-    CANCELLED_NOTE -.-> LOGOUT
-    CLAIMED_NOTE -.-> LOGOUT
-    RETURNED_NOTE -.-> LOGOUT
-    ISSUE_ROW -.-> LOGOUT
-    NOTIF -.-> LOGOUT
-    BOOKY_FAQ -.-> LOGOUT
-    ADMIN_INBOX -.-> LOGOUT
-    BOOKY_SEND -.-> LOGOUT
-    BOOKY -.-> LOGOUT
-    BOOKY_CHOOSE -.-> LOGOUT
-    READY_NOTE -.-> LOGOUT
-    SHOW_QR -.-> LOGOUT
-    PENDING_NOTE -.-> LOGOUT
-    CANCEL_OPT -.-> LOGOUT
-    SYL_VIEW -.-> LOGOUT
-    SAVE_PROFILE -.-> LOGOUT
-    WAIT_RESTOCK -.-> LOGOUT
+    BLOCKED --> LOGOUT
+    TO_ADMIN --> LOGOUT
+    ERR_DUP --> LOGOUT
+    ERR_RESTOCK_DUP --> LOGOUT
+    CANCELLED_NOTE --> LOGOUT
+    CLAIMED_NOTE --> LOGOUT
+    RETURNED_NOTE --> LOGOUT
+    ISSUE_ROW --> LOGOUT
+    NOTIF --> LOGOUT
+    BOOKY_FAQ --> LOGOUT
+    ADMIN_INBOX --> LOGOUT
+    BOOKY_SEND --> LOGOUT
+    BOOKY --> LOGOUT
+    BOOKY_CHOOSE --> LOGOUT
+    READY_NOTE --> LOGOUT
+    SHOW_QR --> LOGOUT
+    PENDING_NOTE --> LOGOUT
+    CANCEL_OPT --> LOGOUT
+    SYL_VIEW --> LOGOUT
+    SAVE_PROFILE --> LOGOUT
+    WAIT_RESTOCK --> LOGOUT
 
     LOGOUT --> END([● End]):::endDef
         </pre>
@@ -510,7 +510,7 @@ flowchart TD
     NEG_CHK -->|Yes| ERR_NEG([⊘ Collect returns before removing]):::endDef
     NEG_CHK -->|No| INV_TABLE
 
-    INV -.-> REQ_PANEL[/Restock Requests Panel<br>PENDING oldest first<br>getRestockRequests/]:::page
+    INV --> REQ_PANEL[/Restock Requests Panel<br>PENDING oldest first<br>getRestockRequests/]:::page
     REQ_PANEL --> REQ_EMPTY{Any pending?}:::decision
     REQ_EMPTY -->|No| INV_TABLE
     REQ_EMPTY -->|Yes| REQ_ROW[Row: Book • Student • Requested at]:::data
@@ -551,7 +551,7 @@ flowchart TD
     STATUS_CHK2 -->|CANCELLED / other| ERR_STATE([⊘ Is cancelled/expired]):::endDef
     STATUS_CHK2 -->|PENDING/READY| STOCK_CHK{available_stock<br>≥ quantity?}:::decision
     STOCK_CHK -->|No| ERR_STOCK([⊘ Not enough on shelf<br>Restock first → rescan]):::warn
-    ERR_STOCK -.->|Fix| INV
+    ERR_STOCK -->|Fix| INV
     STOCK_CHK -->|Yes| CLAIM_FLOW
     CLAIM_FLOW[claimReservation • issue_book RPC<br>p_book_id + p_profile_id + quantity<br>p_notes Reserved CODE]:::action --> CLAIM_UPDATE[Update reservations<br>CLAIMED + claimed_at now()]:::action
     CLAIM_UPDATE --> CLAIM_OK[(✅ Checked out<br>book_issues ISSUED • inventory updated<br>stock_movements ISSUE)]:::data
@@ -578,7 +578,7 @@ flowchart TD
     REPLY --> LINES
 
     %% ── Common ──
-    DASH -.-> NOTIF_BELL[/🔔 Bell • Notifications<br>getNotifications • unreadCount/]:::page
+    DASH --> NOTIF_BELL[/🔔 Bell • Notifications<br>getNotifications • unreadCount/]:::page
     DASH --> LOGOUT[/Sign Out/]:::page
     INV --> LOGOUT
     RES --> LOGOUT
@@ -587,63 +587,63 @@ flowchart TD
     CHAT --> LOGOUT
 
     %% ── Added: ensure all Admin branches reach Sign Out (Sign Out is final) ──
-    DASH_DATA -.-> LOGOUT
-    NOTIF_BELL -.-> LOGOUT
-    S_OUT -.-> LOGOUT
-    S_LOW -.-> LOGOUT
-    S_OK -.-> LOGOUT
-    ERR_NEG -.-> LOGOUT
-    ERR_NOT_PENDING -.-> LOGOUT
-    ERR_CLOSED -.-> LOGOUT
-    ERR_NO_MATCH -.-> LOGOUT
-    ERR_CLAIMED -.-> LOGOUT
-    ERR_STATE -.-> LOGOUT
-    ERR_STOCK -.-> LOGOUT
-    REDIR -.-> LOGOUT
-    INSERT_BOOK -.-> LOGOUT
-    USE_AUTHOR -.-> LOGOUT
-    CREATE_AUTHOR -.-> LOGOUT
-    HAS_INIT -.-> LOGOUT
-    INV_STATUS -.-> LOGOUT
-    REQ_ROW -.-> LOGOUT
-    REQ_ACT -.-> LOGOUT
-    NOTIF_RESOLVED -.-> LOGOUT
-    NOTIF_READY -.-> LOGOUT
-    READY_OK -.-> LOGOUT
-    CANCEL_OK -.-> LOGOUT
-    FOUND -.-> LOGOUT
-    STATUS_CHK2 -.-> LOGOUT
-    STOCK_CHK -.-> LOGOUT
-    CLAIM_FLOW -.-> LOGOUT
-    CLAIM_UPDATE -.-> LOGOUT
-    CLAIM_OK -.-> LOGOUT
-    LOOKUP -.-> LOGOUT
-    SCAN -.-> LOGOUT
-    TYPED -.-> LOGOUT
-    CLAIM_INPUT -.-> LOGOUT
-    INV_ACT -.-> LOGOUT
-    CHAT_DATA -.-> LOGOUT
-    THREAD_PICK -.-> LOGOUT
-    LINES -.-> LOGOUT
-    REPLY -.-> LOGOUT
-    CHECK_TABLE -.-> LOGOUT
-    RETURN_OK -.-> LOGOUT
-    RET_FULL -.-> LOGOUT
-    RET_PART -.-> LOGOUT
-    DO_RETURN -.-> LOGOUT
-    RETURN_CHOOSE -.-> LOGOUT
-    INV_TABLE -.-> LOGOUT
-    RES_TABLE -.-> LOGOUT
-    RES_OP -.-> LOGOUT
-    OP_READY -.-> LOGOUT
-    OP_CANCEL -.-> LOGOUT
-    OP_CLAIM -.-> LOGOUT
+    DASH_DATA --> LOGOUT
+    NOTIF_BELL --> LOGOUT
+    S_OUT --> LOGOUT
+    S_LOW --> LOGOUT
+    S_OK --> LOGOUT
+    ERR_NEG --> LOGOUT
+    ERR_NOT_PENDING --> LOGOUT
+    ERR_CLOSED --> LOGOUT
+    ERR_NO_MATCH --> LOGOUT
+    ERR_CLAIMED --> LOGOUT
+    ERR_STATE --> LOGOUT
+    ERR_STOCK --> LOGOUT
+    REDIR --> LOGOUT
+    INSERT_BOOK --> LOGOUT
+    USE_AUTHOR --> LOGOUT
+    CREATE_AUTHOR --> LOGOUT
+    HAS_INIT --> LOGOUT
+    INV_STATUS --> LOGOUT
+    REQ_ROW --> LOGOUT
+    REQ_ACT --> LOGOUT
+    NOTIF_RESOLVED --> LOGOUT
+    NOTIF_READY --> LOGOUT
+    READY_OK --> LOGOUT
+    CANCEL_OK --> LOGOUT
+    FOUND --> LOGOUT
+    STATUS_CHK2 --> LOGOUT
+    STOCK_CHK --> LOGOUT
+    CLAIM_FLOW --> LOGOUT
+    CLAIM_UPDATE --> LOGOUT
+    CLAIM_OK --> LOGOUT
+    LOOKUP --> LOGOUT
+    SCAN --> LOGOUT
+    TYPED --> LOGOUT
+    CLAIM_INPUT --> LOGOUT
+    INV_ACT --> LOGOUT
+    CHAT_DATA --> LOGOUT
+    THREAD_PICK --> LOGOUT
+    LINES --> LOGOUT
+    REPLY --> LOGOUT
+    CHECK_TABLE --> LOGOUT
+    RETURN_OK --> LOGOUT
+    RET_FULL --> LOGOUT
+    RET_PART --> LOGOUT
+    DO_RETURN --> LOGOUT
+    RETURN_CHOOSE --> LOGOUT
+    INV_TABLE --> LOGOUT
+    RES_TABLE --> LOGOUT
+    RES_OP --> LOGOUT
+    OP_READY --> LOGOUT
+    OP_CANCEL --> LOGOUT
+    OP_CLAIM --> LOGOUT
 
     LOGOUT --> END([● End]):::endDef
 
     %% Cross links
-    INV_TABLE -.->|Low/Out| RES_TABLE
-    RES_TABLE -.->|Ready → wait| CLAIM
+    INV_TABLE -->|Low/Out| RES_TABLE
+    RES_TABLE -->|Ready → wait| CLAIM
         </pre>
       </div>
 

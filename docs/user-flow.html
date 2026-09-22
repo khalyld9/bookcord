@@ -87,7 +87,7 @@ flowchart TD
     RESTOCK_REQ --> RESTOCK_DUP{Duplicate<br>request?}:::decision
     RESTOCK_DUP -->|Yes 23505| ERR_RESTOCK_DUP([⊘ Already requested]):::endDef
     RESTOCK_DUP -->|No| WAIT_RESTOCK[⏳ Wait • Bell<br>RESTOCK_RESOLVED<br>when admin +1]:::wait
-    WAIT_RESTOCK -.->|Notification| CATALOG
+    WAIT_RESTOCK -->|Notification| CATALOG
     MYBOOKS[🎫 My Books /my-books<br>All reservations • QR • Code • Status]:::page --> RES_STATUS{Status = ?}:::decision
     RES_STATUS -->|PENDING| PENDING_NOTE[PENDING<br>waiting for admin<br>to mark READY]:::data
     RES_STATUS -->|READY| READY_NOTE[READY<br>RESERVATION_READY bell<br>Go to desk]:::wait
@@ -97,7 +97,7 @@ flowchart TD
     PENDING_NOTE --> CANCEL_OPT{Cancel<br>before claim?}:::decision
     CANCEL_OPT -->|Yes| CANCEL_ACT[Cancel Reservation<br>PENDING/READY → CANCELLED]:::action
     READY_NOTE --> SHOW_QR[/Show QR at desk<br>Admin scans @ /admin/claim/]:::page
-    SHOW_QR -.->|Scanned| CLAIMED_NOTE
+    SHOW_QR -->|Scanned| CLAIMED_NOTE
     CANCEL_ACT --> MYBOOKS
     CATALOG --> SAVED[🔖 Saved /saved<br>Wishlist filtered by you]:::page
     SAVED --> SAVED_ACT{From saved card?}:::decision
@@ -116,12 +116,12 @@ flowchart TD
     EDIT -->|Update| SAVE_PROFILE[Update profiles<br>avatar upload • yearLevel/strand]:::action
     SAVE_PROFILE --> CATALOG
     EDIT -->|No| CATALOG
-    CATALOG -.->|Booky tap| BOOKY[/💬 Booky<br>FAQ • upcoming_restocks RPC<br>Message Admin/]:::page
+    CATALOG -->|Booky tap| BOOKY[/💬 Booky<br>FAQ • upcoming_restocks RPC<br>Message Admin/]:::page
     BOOKY --> BOOKY_CHOOSE{Tab}:::decision
     BOOKY_CHOOSE -->|FAQ| BOOKY_FAQ[Answers via restocks view]:::data
     BOOKY_CHOOSE -->|Admin| BOOKY_SEND[/Send chat_messages<br>sender STUDENT/]:::action
-    BOOKY_SEND -.->|Realtime| ADMIN_INBOX[(→ Admin Inbox /admin/chat)]
-    CATALOG -.->|Bell| NOTIF[/🔔 Notifications<br>RESERVATION_READY • RESTOCK_RESOLVED/]:::page
+    BOOKY_SEND -->|Realtime| ADMIN_INBOX[(→ Admin Inbox /admin/chat)]
+    CATALOG -->|Bell| NOTIF[/🔔 Notifications<br>RESERVATION_READY • RESTOCK_RESOLVED/]:::page
     CATALOG --> LOGOUT[Sign Out<br>supabase.auth.signOut()]:::page
     HISTORY --> LOGOUT
     PROFILE --> LOGOUT
@@ -129,27 +129,27 @@ flowchart TD
     SAVED --> LOGOUT
 
     %% ── Added: ensure all remaining flows reach Sign Out (no node/layout change) ──
-    BLOCKED -.-> LOGOUT
-    TO_ADMIN -.-> LOGOUT
-    ERR_DUP -.-> LOGOUT
-    ERR_RESTOCK_DUP -.-> LOGOUT
-    CANCELLED_NOTE -.-> LOGOUT
-    CLAIMED_NOTE -.-> LOGOUT
-    RETURNED_NOTE -.-> LOGOUT
-    ISSUE_ROW -.-> LOGOUT
-    NOTIF -.-> LOGOUT
-    BOOKY_FAQ -.-> LOGOUT
-    ADMIN_INBOX -.-> LOGOUT
-    BOOKY_SEND -.-> LOGOUT
-    BOOKY -.-> LOGOUT
-    BOOKY_CHOOSE -.-> LOGOUT
-    READY_NOTE -.-> LOGOUT
-    SHOW_QR -.-> LOGOUT
-    PENDING_NOTE -.-> LOGOUT
-    CANCEL_OPT -.-> LOGOUT
-    SYL_VIEW -.-> LOGOUT
-    SAVE_PROFILE -.-> LOGOUT
-    WAIT_RESTOCK -.-> LOGOUT
+    BLOCKED --> LOGOUT
+    TO_ADMIN --> LOGOUT
+    ERR_DUP --> LOGOUT
+    ERR_RESTOCK_DUP --> LOGOUT
+    CANCELLED_NOTE --> LOGOUT
+    CLAIMED_NOTE --> LOGOUT
+    RETURNED_NOTE --> LOGOUT
+    ISSUE_ROW --> LOGOUT
+    NOTIF --> LOGOUT
+    BOOKY_FAQ --> LOGOUT
+    ADMIN_INBOX --> LOGOUT
+    BOOKY_SEND --> LOGOUT
+    BOOKY --> LOGOUT
+    BOOKY_CHOOSE --> LOGOUT
+    READY_NOTE --> LOGOUT
+    SHOW_QR --> LOGOUT
+    PENDING_NOTE --> LOGOUT
+    CANCEL_OPT --> LOGOUT
+    SYL_VIEW --> LOGOUT
+    SAVE_PROFILE --> LOGOUT
+    WAIT_RESTOCK --> LOGOUT
 
     LOGOUT --> END([● End]):::endDef
       </pre>

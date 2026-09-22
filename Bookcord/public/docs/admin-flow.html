@@ -53,31 +53,31 @@ flowchart TD
     START([● Start Admin]):::start --> LOGIN[/Admin Sign In<br>/login?desk=admin<br>email • password • Google/]:::page
     LOGIN --> AUTH[/Auth Callback /auth/callback<br>updateSession middleware/]:::page
     AUTH --> GUARD{Role Check<br>requireAdmin?}:::decision
-    GUARD -->|User| REDIR[/→ /books<br>Catalog<br>User Flow/]:::page
+    GUARD -->|User| REDIR@{ shape: pentagon, label: "→ /books<br>Catalog<br>User Flow" }
     GUARD -->|Admin| DASH
-    DASH[/📊 Overview /admin<br>Stat cards • Stock to watch • Latest reservations<br>Ⓑ/]:::page
+    DASH@{ shape: pentagon, label: "📊 Overview /admin<br>Stat cards • Stock to watch • Latest reservations<br>Ⓑ" }
     DASH --> DASH_DATA[Headlines via getAdminStats & inventory<br>Titles • On shelf • Checked out • Open/Ready<br>Attention = available ≤ minimum_stock]:::data
     DASH --> NAV{Choose desk}:::decision
     NAV -->|Manage → Inventory| INV
-    INV[/📦 Inventory /admin/inventory<br>Live shelf per title/]:::page --> INV_TABLE[Table: Title • Subject • On shelf • Issued • Total • Status]:::data
+    INV[📦 Inventory /admin/inventory<br>Live shelf per title]:::page --> INV_TABLE[Table: Title • Subject • On shelf • Issued • Total • Status]:::data
     INV_TABLE --> INV_STATUS{Status badge}:::decision
-    INV_STATUS -->|OUT 0| S_OUT[OUT]:::data
+    INV_STATUS -->|OUT 0| S_OUT((OUT)):::data
     INV_STATUS -->|LOW ≤ min| S_LOW[LOW]:::data
     INV_STATUS -->|OK > min| S_OK[OK]:::data
     INV_TABLE --> INV_ACT{Action}:::decision
-    INV_ACT -->|Add new title| ADD[/Add Book Form<br>title • author • ISBN • subject • semester • strand • yearLevel<br>minimum_stock • initial_stock/]:::page
+    INV_ACT -->|Add new title| ADD{{Add Book Form<br>title • author • ISBN • subject • semester • strand • yearLevel<br>minimum_stock • initial_stock}}
     ADD --> AUTHOR_CHK{Author exists<br>ilike?}:::decision
     AUTHOR_CHK -->|Yes| USE_AUTHOR[Reuse author id]:::data
     AUTHOR_CHK -->|No| CREATE_AUTHOR[/Insert authors/]:::action
     USE_AUTHOR --> INSERT_BOOK
     CREATE_AUTHOR --> INSERT_BOOK
     INSERT_BOOK[/Insert books/]:::action --> HAS_INIT{initial_stock<br>> 0?}:::decision
-    HAS_INIT -->|Yes| RESTOCK_OPEN[/restock_book RPC p_quantity=initialStock<br>p_notes Opening stock/]:::action
+    HAS_INIT -->|Yes| RESTOCK_OPEN[restock_book RPC p_quantity=initialStock<br>p_notes Opening stock]:::action
     HAS_INIT -->|No| INV_TABLE
     RESTOCK_OPEN --> INV_TABLE
-    INV_ACT -->|Restock +N| RESTOCK[/Restock +Qty<br>restock_book RPC<br>→ inventory + + stock_movements RESTOCK/]:::action
+    INV_ACT -->|Restock +N| RESTOCK[Restock +Qty<br>restock_book RPC<br>→ inventory + + stock_movements RESTOCK]:::action
     RESTOCK --> INV_TABLE
-    INV_ACT -->|Adjust ±| ADJUST[/Adjust Stock ±Change<br>adjust_inventory RPC<br>DAMAGED / CORRECTION + reason<br>→ stock_movements ADJUSTMENT/]:::action
+    INV_ACT -->|Adjust ±| ADJUST[Adjust Stock ±Change<br>adjust_inventory RPC<br>DAMAGED / CORRECTION + reason<br>→ stock_movements ADJUSTMENT]:::action
     ADJUST --> NEG_CHK{Would make<br>inventory negative?}:::decision
     NEG_CHK -->|Yes| ERR_NEG([⊘ Collect returns before removing]):::endDef
     NEG_CHK -->|No| INV_TABLE
@@ -86,32 +86,32 @@ flowchart TD
     REQ_EMPTY -->|No| INV_TABLE
     REQ_EMPTY -->|Yes| REQ_ROW[Row: Book • Student • Requested at]:::data
     REQ_ROW --> REQ_ACT{Resolve}:::decision
-    REQ_ACT -->|Restock 1| DO_RESTOCK[/restockFromRequest<br>restock_book 1 copy<br>Resolves ALL pending for this title/]:::action
+    REQ_ACT -->|Restock 1| DO_RESTOCK[restockFromRequest<br>restock_book 1 copy<br>Resolves ALL pending for this title]:::action
     DO_RESTOCK --> NOTIF_RESOLVED[(Notify students<br>RESTOCK_RESOLVED<br>bell + revalidate)]:::data
     NOTIF_RESOLVED --> INV_TABLE
-    REQ_ACT -->|Dismiss| DISMISS[/dismissRestockRequest<br>→ DISMISSED / resolved_at/]:::action
+    REQ_ACT -->|Dismiss| DISMISS[dismissRestockRequest<br>→ DISMISSED / resolved_at]:::action
     DISMISS --> INV_TABLE
     NAV -->|Manage → Reservations| RES
-    RES[/🎫 Reservations /admin/reservations<br>All / Pending / Ready / Claimed / Cancelled filters/]:::page --> RES_TABLE[Rows: Student • Title • Code • Placed • Status chip]:::data
+    RES[🎫 Reservations /admin/reservations<br>All / Pending / Ready / Claimed / Cancelled filters]:::page --> RES_TABLE[Rows: Student • Title • Code • Placed • Status chip]:::data
     RES_TABLE --> RES_OP{Row action}:::decision
-    RES_OP -->|Mark Ready| OP_READY[/adminReservationAction op=ready<br>PENDING → READY/]:::action
+    RES_OP -->|Mark Ready| OP_READY[adminReservationAction op=ready<br>PENDING → READY]:::action
     OP_READY --> READY_OK{Was PENDING?}:::decision
     READY_OK -->|No| ERR_NOT_PENDING([⊘ Not pending]):::endDef
     READY_OK -->|Yes| NOTIF_READY[(RESERVATION_READY<br>notify student)]:::data
     NOTIF_READY --> RES_TABLE
-    RES_OP -->|Cancel| OP_CANCEL[/adminReservationAction op=cancel<br>PENDING/READY → CANCELLED/]:::action
+    RES_OP -->|Cancel| OP_CANCEL[adminReservationAction op=cancel<br>PENDING/READY → CANCELLED]:::action
     OP_CANCEL --> CANCEL_OK{Was open?}:::decision
     CANCEL_OK -->|No| ERR_CLOSED([⊘ Already closed]):::endDef
     CANCEL_OK -->|Yes| RES_TABLE
-    RES_OP -->|Claim via code| OP_CLAIM[/adminReservationAction op=claim<br>→ claimReservation(code)/]:::action
+    RES_OP -->|Claim via code| OP_CLAIM[adminReservationAction op=claim<br>→ claimReservation(code)]:::action
     OP_CLAIM --> CLAIM_FLOW
     NAV -->|Desk → Claim| CLAIM
-    CLAIM[/🔍 Claim Desk /admin/claim<br>Scan QR camera jsqr • or type code/]:::page --> CLAIM_INPUT{Input}:::decision
+    CLAIM[🔍 Claim Desk /admin/claim<br>Scan QR camera jsqr • or type code]:::page --> CLAIM_INPUT{Input}:::decision
     CLAIM_INPUT -->|Camera scan| SCAN[/QR Scanner component<br>jsqr decode/]:::page
     CLAIM_INPUT -->|Type 6-12| TYPED[/Input CODE_PATTERN<br>trim + uppercase/]:::page
     SCAN --> LOOKUP
     TYPED --> LOOKUP
-    LOOKUP[/Lookup getReservationByCode<br>reservations + books + profile/]:::page --> FOUND{Found?}:::decision
+    LOOKUP[Lookup getReservationByCode<br>reservations + books + profile]:::page --> FOUND{Found?}:::decision
     FOUND -->|No| ERR_NO_MATCH([⊘ No match for code]):::endDef
     FOUND -->|Yes| STATUS_CHK2{Status<br>PENDING / READY?}:::decision
     STATUS_CHK2 -->|CLAIMED| ERR_CLAIMED([⊘ Already CLAIMED]):::endDef
@@ -120,13 +120,13 @@ flowchart TD
     STOCK_CHK -->|No| ERR_STOCK([⊘ Not enough on shelf<br>Restock first → rescan]):::warn
     ERR_STOCK -.->|Fix| INV
     STOCK_CHK -->|Yes| CLAIM_FLOW
-    CLAIM_FLOW[/claimReservation • issue_book RPC<br>p_book_id + p_profile_id + quantity<br>p_notes Reserved CODE/]:::action --> CLAIM_UPDATE[/Update reservations<br>CLAIMED + claimed_at now()/]:::action
+    CLAIM_FLOW[claimReservation • issue_book RPC<br>p_book_id + p_profile_id + quantity<br>p_notes Reserved CODE]:::action --> CLAIM_UPDATE[Update reservations<br>CLAIMED + claimed_at now()]:::action
     CLAIM_UPDATE --> CLAIM_OK[(✅ Checked out<br>book_issues ISSUED • inventory updated<br>stock_movements ISSUE)]:::data
     CLAIM_OK --> RES_TABLE
     NAV -->|Manage → Checkouts| CHECK
-    CHECK[/📤 Checkouts /admin/checkouts<br>ISSUED + PARTIALLY_RETURNED<br>getAdminCheckouts/]:::page --> CHECK_TABLE[Rows: Student • Book • Qty • Due • Status]:::data
+    CHECK[📤 Checkouts /admin/checkouts<br>ISSUED + PARTIALLY_RETURNED<br>getAdminCheckouts]:::page --> CHECK_TABLE[Rows: Student • Book • Qty • Due • Status]:::data
     CHECK_TABLE --> RETURN_CHOOSE{Return?}:::decision
-    RETURN_CHOOSE -->|Return all remaining| DO_RETURN[/returnCheckout<br>return_book RPC<br>p_issue_id • remaining qty/]:::action
+    RETURN_CHOOSE -->|Return all remaining| DO_RETURN[returnCheckout<br>return_book RPC<br>p_issue_id • remaining qty]:::action
     DO_RETURN --> RETURN_OK{All copies?}:::decision
     RETURN_OK -->|Yes| RET_FULL[→ RETURNED]:::data
     RETURN_OK -->|Partial| RET_PART[→ PARTIALLY_RETURNED]:::data
@@ -134,10 +134,10 @@ flowchart TD
     RET_PART --> CHECK_TABLE
     RETURN_CHOOSE -->|No| CHECK_TABLE
     NAV -->|Desk → Chat| CHAT
-    CHAT[/💬 Admin Inbox /admin/chat<br>ChatLive • threads per student/]:::page --> CHAT_DATA[Grouped threads<br>getAdminChatState<br>profiles + lastBody + count]:::data
+    CHAT[💬 Admin Inbox /admin/chat<br>ChatLive • threads per student]:::page --> CHAT_DATA[Grouped threads<br>getAdminChatState<br>profiles + lastBody + count]:::data
     CHAT_DATA --> THREAD_PICK{Pick thread}:::decision
     THREAD_PICK --> LINES[Lines: STUDENT • ADMIN<br>ordered created_at]:::data
-    LINES --> REPLY[/Reply as ADMIN<br>chat_messages sender ADMIN<br>Realtime to student Booky/]:::action
+    LINES --> REPLY[Reply as ADMIN<br>chat_messages sender ADMIN<br>Realtime to student Booky]:::action
     REPLY --> LINES
     DASH -.-> NOTIF_BELL[/🔔 Bell • Notifications<br>getNotifications • unreadCount/]:::page
     DASH --> LOGOUT[/Sign Out/]:::page

@@ -51,78 +51,78 @@ flowchart TD
     classDef wait fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
     classDef data fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000,rx:10,ry:10
     classDef connector fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:50,ry:50
-    START([● Start]):::start --> LANDING[/Landing / <br> Hero + Sign in / Sign up/]:::page
+    START([● Start]):::start --> LANDING[Landing]:::page
     LANDING --> HAS_SESSION{Logged in<br>& session?}:::decision
     HAS_SESSION -->|No| CHOICE{Create or Sign in?}:::decision
     HAS_SESSION -->|Yes| ROLE_CHK{Role Check}:::decision
-    ROLE_CHK -->|Admin| TO_ADMIN@{ shape: pentagon, label: "→ /admin<br>Admin Dashboard<br>Admin Flow<br>Ⓐ" }
+    ROLE_CHK -->|Admin| TO_ADMIN@{ shape: pentagon, label: "Admin Dashboard Ⓐ" }
     ROLE_CHK -->|User| CATALOG
-    CHOICE -->|New student| SIGNUP[/Sign Up /signup<br>full_name • student_id • email • password<br>ICT • Grade 11/12/]:::page
-    CHOICE -->|Existing| LOGIN[/Sign In /login<br>email+password / Google OAuth/]:::page
-    SIGNUP --> AUTH_CB[/Auth Callback /auth/callback<br>Supabase session/]:::page
+    CHOICE -->|New student| SIGNUP[Sign Up]:::page
+    CHOICE -->|Existing| LOGIN[Sign In]:::page
+    SIGNUP --> AUTH_CB[Auth Callback]:::page
     LOGIN --> AUTH_CB
     AUTH_CB --> PROFILE_EXISTS{Profile row<br>exists?}:::decision
-    PROFILE_EXISTS -->|No| COMPLETE{{Complete Profile /complete-profile<br>Pick strand + year level}}
+    PROFILE_EXISTS -->|No| COMPLETE{{Complete Profile}}
     COMPLETE --> ROLE_CHK
     PROFILE_EXISTS -->|Yes • check status| STATUS_CHK{status ACTIVE?}:::decision
     STATUS_CHK -->|DISABLED| BLOCKED([✕ Account disabled<br>Contact admin]):::endDef
     STATUS_CHK -->|ACTIVE| ROLE_CHK
-    subgraph StudentHub["───  STUDENT HUB  /books shell  ───"]
+    subgraph StudentHub["Student Hub"]
       direction TB
-      CATALOG[📚 Catalog /books<br>Search • Filters<br>semester • strand • yearLevel • subject • availability]:::page
+      CATALOG[Catalog]:::page
       CATALOG --> FILTER{Filter?}:::decision
       FILTER -->|Search / availability| CATALOG
-      FILTER -->|View title| DETAIL[Book Detail /books/:id<br>Author • Subject • Stock • Shelf count]:::page
+      FILTER -->|View title| DETAIL[Book Detail]:::page
     end
     DETAIL --> STOCK_Q{available_stock<br>> 0 ?}:::decision
     STOCK_Q -->|YES • in stock| ACTION_CHOICE{Student action}:::decision
-    ACTION_CHOICE -->|Save / Unsave| SAVE_TOGGLE[Toggle Saved ❤<br>saved_books INSERT / DELETE<br>↔ /saved]:::action
+    ACTION_CHOICE -->|Save / Unsave| SAVE_TOGGLE[Save / Unsave]:::action
     SAVE_TOGGLE --> CATALOG
-    ACTION_CHOICE -->|Reserve| RESERVE[Reserve Book<br>reservations PENDING<br>code = 8-hex • QR generated]:::action
+    ACTION_CHOICE -->|Reserve| RESERVE[Reserve]:::action
     RESERVE --> DUP_CHK{Already open<br>reservation?}:::decision
     DUP_CHK -->|Yes 23505| ERR_DUP([⊘ Error: already have open reservation]):::endDef
     DUP_CHK -->|No| MYBOOKS
     STOCK_Q -->|NO • out 0| RESTOCK_ASK{Request<br>restock?}:::decision
-    RESTOCK_ASK -->|Yes| RESTOCK_REQ[/Request Restock<br>restock_requests PENDING<br>Guard: only if 0 on shelf/]:::action
+    RESTOCK_ASK -->|Yes| RESTOCK_REQ[Request Restock]:::action
     RESTOCK_REQ --> RESTOCK_DUP{Duplicate<br>request?}:::decision
     RESTOCK_DUP -->|Yes 23505| ERR_RESTOCK_DUP([⊘ Already requested]):::endDef
-    RESTOCK_DUP -->|No| WAIT_RESTOCK[⏳ Wait • Bell<br>RESTOCK_RESOLVED<br>when admin +1]:::wait
+    RESTOCK_DUP -->|No| WAIT_RESTOCK[Wait for Restock]:::wait
     WAIT_RESTOCK -->|Notification| CATALOG
-    MYBOOKS[🎫 My Books /my-books<br>All reservations • QR • Code • Status]:::page --> RES_STATUS{Status = ?}:::decision
-    RES_STATUS -->|PENDING| PENDING_NOTE[PENDING<br>waiting for admin<br>to mark READY]:::data
-    RES_STATUS -->|READY| READY_NOTE[READY<br>RESERVATION_READY bell<br>Go to desk]:::wait
-    RES_STATUS -->|CLAIMED| CLAIMED_NOTE[CLAIMED<br>checked out → ISSUED<br>see History]:::data
+    MYBOOKS[My Books]:::page --> RES_STATUS{Status = ?}:::decision
+    RES_STATUS -->|PENDING| PENDING_NOTE[Pending]:::data
+    RES_STATUS -->|READY| READY_NOTE[Ready]:::wait
+    RES_STATUS -->|CLAIMED| CLAIMED_NOTE[Claimed]:::data
     RES_STATUS -->|CANCELLED| CANCELLED_NOTE((CANCELLED)):::data
     RES_STATUS -->|RETURNED| RETURNED_NOTE[RETURNED]:::data
     PENDING_NOTE --> CANCEL_OPT{Cancel<br>before claim?}:::decision
-    CANCEL_OPT -->|Yes| CANCEL_ACT[Cancel Reservation<br>PENDING/READY → CANCELLED]:::action
-    READY_NOTE --> SHOW_QR[/Show QR at desk<br>Admin scans @ /admin/claim/]:::page
+    CANCEL_OPT -->|Yes| CANCEL_ACT[Cancel Reservation]:::action
+    READY_NOTE --> SHOW_QR[Show QR]:::page
     SHOW_QR -->|Scanned| CLAIMED_NOTE
     CANCEL_ACT --> MYBOOKS
-    CATALOG --> SAVED[🔖 Saved /saved<br>Wishlist filtered by you]:::page
+    CATALOG --> SAVED[Saved]:::page
     SAVED --> SAVED_ACT{From saved card?}:::decision
     SAVED_ACT -->|Reserve| RESERVE
     SAVED_ACT -->|Unsave| SAVE_TOGGLE
     SAVED_ACT -->|Back| CATALOG
-    CATALOG --> SYLLABI[📖 Syllabi /syllabi<br>Grouped by subject<br>for your strand+yearLevel]:::page
+    CATALOG --> SYLLABI[Syllabi]:::page
     SYLLABI --> SYL_CHK{strand & yearLevel<br>complete?}:::decision
     SYL_CHK -->|No| PROFILE
-    SYL_CHK -->|Yes| SYL_VIEW[Subject groups<br>browse titles]:::data
+    SYL_CHK -->|Yes| SYL_VIEW[Subject Groups]:::data
     SYL_VIEW --> DETAIL
-    CATALOG --> HISTORY[📜 History /history<br>book_issues table<br>ISSUED • PARTIALLY_RETURNED • RETURNED]:::page
-    HISTORY --> ISSUE_ROW[Rows: Book • Qty • Checked out • Due • Status]:::data
-    CATALOG --> PROFILE[👤 Profile /profile<br>full_name • student_id • avatar<br>yearLevel • strand • password<br>Stats: activeIssues • copiesBorrowed • returned]:::page
+    CATALOG --> HISTORY[History]:::page
+    HISTORY --> ISSUE_ROW[Issue Details]:::data
+    CATALOG --> PROFILE[Profile]:::page
     PROFILE --> EDIT{Edit?}:::decision
-    EDIT -->|Update| SAVE_PROFILE[Update profiles<br>avatar upload • yearLevel/strand]:::action
+    EDIT -->|Update| SAVE_PROFILE[Save Profile]:::action
     SAVE_PROFILE --> CATALOG
     EDIT -->|No| CATALOG
-    CATALOG -->|Booky tap| BOOKY[/💬 Booky<br>FAQ • upcoming_restocks RPC<br>Message Admin/]:::page
+    CATALOG -->|Booky tap| BOOKY[Booky]:::page
     BOOKY --> BOOKY_CHOOSE{Tab}:::decision
-    BOOKY_CHOOSE -->|FAQ| BOOKY_FAQ[Answers via restocks view]:::data
-    BOOKY_CHOOSE -->|Admin| BOOKY_SEND[/Send chat_messages<br>sender STUDENT/]:::action
-    BOOKY_SEND -->|Realtime| ADMIN_INBOX[(→ Admin Inbox /admin/chat)]
-    CATALOG -->|Bell| NOTIF[/🔔 Notifications<br>RESERVATION_READY • RESTOCK_RESOLVED/]:::page
-    CATALOG --> LOGOUT[Sign Out<br>supabase.auth.signOut()]:::page
+    BOOKY_CHOOSE -->|FAQ| BOOKY_FAQ[FAQ Answers]:::data
+    BOOKY_CHOOSE -->|Admin| BOOKY_SEND[Send Message]:::action
+    BOOKY_SEND -->|Realtime| ADMIN_INBOX[Admin Inbox]
+    CATALOG -->|Bell| NOTIF[Notifications]:::page
+    CATALOG --> LOGOUT[Sign Out]:::page
     HISTORY --> LOGOUT
     PROFILE --> LOGOUT
     MYBOOKS --> LOGOUT

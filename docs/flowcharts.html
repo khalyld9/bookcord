@@ -256,7 +256,6 @@
       <div class="mermaid-wrap">
         <pre id="user-mermaid" class="mermaid">
 flowchart TD
-    %% ── Styling ──
     classDef start fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
     classDef endDef fill:#000000,stroke:#000000,color:#ffffff,stroke-width:2px,rx:12,ry:12
     classDef page fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
@@ -264,128 +263,60 @@ flowchart TD
     classDef action fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.4px,rx:14,ry:14
     classDef wait fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
     classDef data fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000,rx:10,ry:10
-    classDef connector fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:50,ry:50
-
-    START([● Start]):::start --> LANDING[Landing]:::page
-    LANDING --> HAS_SESSION{Logged in<br>& session?}:::decision
-    HAS_SESSION -->|No| CHOICE{Create or Sign in?}:::decision
-    HAS_SESSION -->|Yes| ROLE_CHK{Role Check}:::decision
-    ROLE_CHK -->|Admin| TO_ADMIN@{ shape: pentagon, label: "Admin Dashboard Ⓐ" }
-    ROLE_CHK -->|User| CATALOG
-
-    CHOICE -->|New student| SIGNUP[Sign Up]:::page
-    CHOICE -->|Existing| LOGIN[Sign In]:::page
-    SIGNUP --> AUTH_CB[Auth Callback]:::page
-    LOGIN --> AUTH_CB
-    AUTH_CB --> PROFILE_EXISTS{Profile row<br>exists?}:::decision
-    PROFILE_EXISTS -->|No| COMPLETE{{Complete Profile}}
-    COMPLETE --> ROLE_CHK
-    PROFILE_EXISTS -->|Yes • check status| STATUS_CHK{status ACTIVE?}:::decision
-    STATUS_CHK -->|DISABLED| BLOCKED([✕ Account disabled<br>Contact admin]):::endDef
-    STATUS_CHK -->|ACTIVE| ROLE_CHK
-
-    subgraph StudentHub["Student Hub"]
-      direction TB
-      CATALOG[Catalog]:::page
-      CATALOG --> FILTER{Filter?}:::decision
-      FILTER -->|Search / availability| CATALOG
-      FILTER -->|View title| DETAIL[Book Detail]:::page
-    end
-
-    DETAIL --> STOCK_Q{available_stock<br>> 0 ?}:::decision
-
-    STOCK_Q -->|YES • in stock| ACTION_CHOICE{Student action}:::decision
-    ACTION_CHOICE -->|Save / Unsave| SAVE_TOGGLE[Save / Unsave]:::action
-    SAVE_TOGGLE --> CATALOG
-
-    ACTION_CHOICE -->|Reserve| RESERVE[Reserve]:::action
-    RESERVE --> DUP_CHK{Already open<br>reservation?}:::decision
-    DUP_CHK -->|Yes 23505| ERR_DUP([⊘ Error: already have open reservation]):::endDef
-    DUP_CHK -->|No| MYBOOKS
-
-    STOCK_Q -->|NO • out 0| RESTOCK_ASK{Request<br>restock?}:::decision
-    RESTOCK_ASK -->|Yes| RESTOCK_REQ[Request Restock]:::action
-    RESTOCK_REQ --> RESTOCK_DUP{Duplicate<br>request?}:::decision
-    RESTOCK_DUP -->|Yes 23505| ERR_RESTOCK_DUP([⊘ Already requested]):::endDef
-    RESTOCK_DUP -->|No| WAIT_RESTOCK[Wait for Restock]:::wait
-
-    WAIT_RESTOCK -->|Notification| CATALOG
-
-    MYBOOKS[My Books]:::page --> RES_STATUS{Status = ?}:::decision
-    RES_STATUS -->|PENDING| PENDING_NOTE[Pending]:::data
-    RES_STATUS -->|READY| READY_NOTE[Ready]:::wait
-    RES_STATUS -->|CLAIMED| CLAIMED_NOTE[Claimed]:::data
-    RES_STATUS -->|CANCELLED| CANCELLED_NOTE((CANCELLED)):::data
-    RES_STATUS -->|RETURNED| RETURNED_NOTE[RETURNED]:::data
-
-    PENDING_NOTE --> CANCEL_OPT{Cancel<br>before claim?}:::decision
-    CANCEL_OPT -->|Yes| CANCEL_ACT[Cancel Reservation]:::action
-    READY_NOTE --> SHOW_QR[Show QR]:::page
-    SHOW_QR -->|Scanned| CLAIMED_NOTE
-    CANCEL_ACT --> MYBOOKS
-
-    %% Hub extra pages
-    CATALOG --> SAVED[Saved]:::page
-    SAVED --> SAVED_ACT{From saved card?}:::decision
-    SAVED_ACT -->|Reserve| RESERVE
-    SAVED_ACT -->|Unsave| SAVE_TOGGLE
-    SAVED_ACT -->|Back| CATALOG
-
-    CATALOG --> SYLLABI[Syllabi]:::page
-    SYLLABI --> SYL_CHK{strand & yearLevel<br>complete?}:::decision
-    SYL_CHK -->|No| PROFILE
-    SYL_CHK -->|Yes| SYL_VIEW[Subject Groups]:::data
-    SYL_VIEW --> DETAIL
-
-    CATALOG --> HISTORY[History]:::page
-    HISTORY --> ISSUE_ROW[Issue Details]:::data
-
-    CATALOG --> PROFILE[Profile]:::page
-    PROFILE --> EDIT{Edit?}:::decision
-    EDIT -->|Update| SAVE_PROFILE[Save Profile]:::action
-    SAVE_PROFILE --> CATALOG
-    EDIT -->|No| CATALOG
-
-    %% Global widgets
-    CATALOG -->|Booky tap| BOOKY[Booky]:::page
-    BOOKY --> BOOKY_CHOOSE{Tab}:::decision
-    BOOKY_CHOOSE -->|FAQ| BOOKY_FAQ[FAQ Answers]:::data
-    BOOKY_CHOOSE -->|Admin| BOOKY_SEND[Send Message]:::action
-    BOOKY_SEND -->|Realtime| ADMIN_INBOX[Admin Inbox]
-
-    CATALOG -->|Bell| NOTIF[Notifications]:::page
-
-    CATALOG --> LOGOUT[Sign Out]:::page
+    START([Start]):::start --> LANDING[/Landing/]:::page
+    LANDING --> LOGGED{Logged in?}:::decision
+    LOGGED -->|No| CHOICE{Create or<br>Sign in?}:::decision
+    LOGGED -->|Yes| AUTH_CB
+    CHOICE -->|New student| SIGNUP[/Sign Up/]:::page
+    SIGNUP --> COMPLETE{{Complete Profile}}
+    COMPLETE --> AUTH_CB[/Auth Callback/]:::page
+    CHOICE -->|Existing| AUTH_CB
+    AUTH_CB --> ROLE{Role Check}:::decision
+    ROLE -->|Admin| TO_ADMIN@{ shape: pentagon, label: "Admin Dashboard Ⓐ" }
+    ROLE -->|User| CATALOG[Catalog]:::page
+    CATALOG --> DETAIL[Book Detail]:::page
+    CATALOG --> SAVED[/Saved/]:::page
+    CATALOG --> SYLLABI[/Syllabi/]:::page
+    CATALOG --> HISTORY[/History/]:::page
+    CATALOG --> PROFILE[/Profile/]:::page
+    DETAIL --> SAVE_TOGGLE[Save / Unsave]:::action
+    SAVE_TOGGLE --> DETAIL
+    DETAIL --> CAN{Can reserve?}:::decision
+    CAN -->|No| WAIT[/Wait for Restock/]:::page
+    WAIT --> CATALOG
+    CAN -->|Yes| RESERVE[Reserve]:::action
+    RESERVE --> MYBOOKS[My Books]:::page
+    MYBOOKS --> CANCEL_CLAIM{Cancel / Claim}:::decision
+    CANCEL_CLAIM -->|Cancel| CANCELLED((CANCELLED)):::data
+    CANCEL_CLAIM -->|Claim| QR[/Show QR/]:::page
+    CANCELLED --> OUT((OUT)):::data
+    QR --> OUT
+    OUT --> MYBOOKS
+    OUT --> CATALOG
+    SAVED --> LOGOUT[Sign Out]:::page
+    SYLLABI --> LOGOUT
     HISTORY --> LOGOUT
     PROFILE --> LOGOUT
-    MYBOOKS --> LOGOUT
-    SAVED --> LOGOUT
-
-    %% ── Added: ensure all remaining flows reach Sign Out (no node/layout change) ──
-    BLOCKED --> LOGOUT
+    LANDING --> LOGOUT
+    LOGGED --> LOGOUT
+    CHOICE --> LOGOUT
+    SIGNUP --> LOGOUT
+    COMPLETE --> LOGOUT
+    AUTH_CB --> LOGOUT
+    ROLE --> LOGOUT
     TO_ADMIN --> LOGOUT
-    ERR_DUP --> LOGOUT
-    ERR_RESTOCK_DUP --> LOGOUT
-    CANCELLED_NOTE --> LOGOUT
-    CLAIMED_NOTE --> LOGOUT
-    RETURNED_NOTE --> LOGOUT
-    ISSUE_ROW --> LOGOUT
-    NOTIF --> LOGOUT
-    BOOKY_FAQ --> LOGOUT
-    ADMIN_INBOX --> LOGOUT
-    BOOKY_SEND --> LOGOUT
-    BOOKY --> LOGOUT
-    BOOKY_CHOOSE --> LOGOUT
-    READY_NOTE --> LOGOUT
-    SHOW_QR --> LOGOUT
-    PENDING_NOTE --> LOGOUT
-    CANCEL_OPT --> LOGOUT
-    SYL_VIEW --> LOGOUT
-    SAVE_PROFILE --> LOGOUT
-    WAIT_RESTOCK --> LOGOUT
-
-    LOGOUT --> END([● End]):::endDef
-        </pre>
+    CATALOG --> LOGOUT
+    DETAIL --> LOGOUT
+    SAVE_TOGGLE --> LOGOUT
+    CAN --> LOGOUT
+    WAIT --> LOGOUT
+    RESERVE --> LOGOUT
+    MYBOOKS --> LOGOUT
+    CANCELLED --> LOGOUT
+    QR --> LOGOUT
+    OUT --> LOGOUT
+    LOGOUT --> END([End]):::endDef
+      </pre>
       </div>
 
       <div class="flow-notes">
@@ -470,181 +401,46 @@ flowchart TD
     classDef decision fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:8,ry:8
     classDef action fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.4px,rx:14,ry:14
     classDef data fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000,rx:10,ry:10
-    classDef warn fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
-    classDef connector fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:50,ry:50
-
-    START([● Start Admin]):::start --> LOGIN[Sign In]:::page
-    LOGIN --> AUTH[Auth Callback]:::page
-    AUTH --> GUARD{Role Check<br>requireAdmin?}:::decision
-    GUARD -->|User| REDIR@{ shape: pentagon, label: "Catalog" }
-    GUARD -->|Admin| DASH
-
-    DASH@{ shape: pentagon, label: "Overview Ⓑ" }
-    DASH --> DASH_DATA[Dashboard Stats]:::data
-    DASH --> NAV{Choose desk}:::decision
-
-    %% ── Inventory ──
-    NAV -->|Manage → Inventory| INV
-    INV[Inventory]:::page --> INV_TABLE[Inventory Table]:::data
-    INV_TABLE --> INV_STATUS{Status badge}:::decision
-    INV_STATUS -->|OUT 0| S_OUT[<span class='badge out'>OUT</span>]:::data
-    INV_STATUS -->|LOW ≤ min| S_LOW[<span class='badge low'>LOW</span>]:::data
-    INV_STATUS -->|OK > min| S_OK[<span class='badge ok'>OK</span>]:::data
-
-    INV_TABLE --> INV_ACT{Action}:::decision
-    INV_ACT -->|Add new title| ADD{{Add Book}}
-    ADD --> AUTHOR_CHK{Author exists<br>ilike?}:::decision
-    AUTHOR_CHK -->|Yes| USE_AUTHOR[Use Author]:::data
-    AUTHOR_CHK -->|No| CREATE_AUTHOR[Create Author]:::action
-    USE_AUTHOR --> INSERT_BOOK
-    CREATE_AUTHOR --> INSERT_BOOK
-    INSERT_BOOK[Create Book]:::action --> HAS_INIT{initial_stock<br>> 0?}:::decision
-    HAS_INIT -->|Yes| RESTOCK_OPEN[Restock]:::action
-    HAS_INIT -->|No| INV_TABLE
-    RESTOCK_OPEN --> INV_TABLE
-
-    INV_ACT -->|Restock +N| RESTOCK[Restock]:::action
-    RESTOCK --> INV_TABLE
-    INV_ACT -->|Adjust ±| ADJUST[Adjust Stock]:::action
-    ADJUST --> NEG_CHK{Would make<br>inventory negative?}:::decision
-    NEG_CHK -->|Yes| ERR_NEG([⊘ Collect returns before removing]):::endDef
-    NEG_CHK -->|No| INV_TABLE
-
-    INV --> REQ_PANEL[Restock Requests]:::page
-    REQ_PANEL --> REQ_EMPTY{Any pending?}:::decision
-    REQ_EMPTY -->|No| INV_TABLE
-    REQ_EMPTY -->|Yes| REQ_ROW[Request]:::data
-    REQ_ROW --> REQ_ACT{Resolve}:::decision
-    REQ_ACT -->|Restock 1| DO_RESTOCK[Restock Book]:::action
-    DO_RESTOCK --> NOTIF_RESOLVED[Notify Students]:::data
-    NOTIF_RESOLVED --> INV_TABLE
-    REQ_ACT -->|Dismiss| DISMISS[Dismiss Request]:::action
-    DISMISS --> INV_TABLE
-
-    %% ── Reservations ──
-    NAV -->|Manage → Reservations| RES
-    RES[Reservations]:::page --> RES_TABLE[Reservation List]:::data
-    RES_TABLE --> RES_OP{Row action}:::decision
-    RES_OP -->|Mark Ready| OP_READY[Mark Ready]:::action
-    OP_READY --> READY_OK{Was PENDING?}:::decision
-    READY_OK -->|No| ERR_NOT_PENDING([⊘ Not pending]):::endDef
-    READY_OK -->|Yes| NOTIF_READY[Notify Ready]:::data
-    NOTIF_READY --> RES_TABLE
-    RES_OP -->|Cancel| OP_CANCEL[Cancel Reservation]:::action
-    OP_CANCEL --> CANCEL_OK{Was open?}:::decision
-    CANCEL_OK -->|No| ERR_CLOSED([⊘ Already closed]):::endDef
-    CANCEL_OK -->|Yes| RES_TABLE
-    RES_OP -->|Claim via code| OP_CLAIM[Claim Reservation]:::action
-    OP_CLAIM --> CLAIM_FLOW
-
-    %% ── Claim Desk ──
-    NAV -->|Desk → Claim| CLAIM
-    CLAIM[Claim Desk]:::page --> CLAIM_INPUT{Input}:::decision
-    CLAIM_INPUT -->|Camera scan| SCAN[Scan QR]:::page
-    CLAIM_INPUT -->|Type 6-12| TYPED[Enter Code]:::page
-    SCAN --> LOOKUP
-    TYPED --> LOOKUP
-    LOOKUP[Lookup Reservation]:::page --> FOUND{Found?}:::decision
-    FOUND -->|No| ERR_NO_MATCH([⊘ No match for code]):::endDef
-    FOUND -->|Yes| STATUS_CHK2{Status<br>PENDING / READY?}:::decision
-    STATUS_CHK2 -->|CLAIMED| ERR_CLAIMED([⊘ Already CLAIMED]):::endDef
-    STATUS_CHK2 -->|CANCELLED / other| ERR_STATE([⊘ Is cancelled/expired]):::endDef
-    STATUS_CHK2 -->|PENDING/READY| STOCK_CHK{available_stock<br>≥ quantity?}:::decision
-    STOCK_CHK -->|No| ERR_STOCK([⊘ Not enough on shelf<br>Restock first → rescan]):::warn
-    ERR_STOCK -->|Fix| INV
-    STOCK_CHK -->|Yes| CLAIM_FLOW
-    CLAIM_FLOW[Claim Reservation]:::action --> CLAIM_UPDATE[Update Reservation]:::action
-    CLAIM_UPDATE --> CLAIM_OK[Checked Out]:::data
-    CLAIM_OK --> RES_TABLE
-
-    %% ── Checkouts ──
-    NAV -->|Manage → Checkouts| CHECK
-    CHECK[Checkouts]:::page --> CHECK_TABLE[Checkout List]:::data
-    CHECK_TABLE --> RETURN_CHOOSE{Return?}:::decision
-    RETURN_CHOOSE -->|Return all remaining| DO_RETURN[Return Book]:::action
-    DO_RETURN --> RETURN_OK{All copies?}:::decision
-    RETURN_OK -->|Yes| RET_FULL[Returned]:::data
-    RETURN_OK -->|Partial| RET_PART[Partially Returned]:::data
-    RET_FULL --> CHECK_TABLE
-    RET_PART --> CHECK_TABLE
-    RETURN_CHOOSE -->|No| CHECK_TABLE
-
-    %% ── Chat ──
-    NAV -->|Desk → Chat| CHAT
-    CHAT[Chat Inbox]:::page --> CHAT_DATA[Chat Threads]:::data
-    CHAT_DATA --> THREAD_PICK{Pick thread}:::decision
-    THREAD_PICK --> LINES[Messages]:::data
-    LINES --> REPLY[Reply]:::action
-    REPLY --> LINES
-
-    %% ── Common ──
-    DASH --> NOTIF_BELL[Notifications]:::page
-    DASH --> LOGOUT[Sign Out]:::page
-    INV --> LOGOUT
+    START([Start]):::start --> LOGIN[/Sign In/]:::page
+    LOGIN --> AUTH[/Auth Callback/]:::page
+    AUTH --> ROLE{Role Check}:::decision
+    ROLE -->|User| REDIR@{ shape: pentagon, label: "Catalog" }
+    ROLE -->|Admin| OVERVIEW@{ shape: pentagon, label: "Overview Ⓑ" }
+    OVERVIEW --> CHOOSE{Choose Desk}:::decision
+    CHOOSE --> BOOKS[Books Desk]:::page
+    CHOOSE --> RES[Reservations Desk]:::page
+    CHOOSE --> CLAIM[/Claim Desk/]:::page
+    CHOOSE --> CHECK[Checkouts Desk]:::page
+    CHOOSE --> CHAT[Chat Desk]:::page
+    BOOKS --> B_ARC[Archived]:::data
+    RES --> R_ARC[Archived]:::data
+    CLAIM --> C_ARC[Archived]:::data
+    CHECK --> K_ARC[Archived]:::data
+    CHAT --> H_ARC[Archived]:::data
+    B_ARC --> OUT((OUT)):::data
+    R_ARC --> OUT
+    C_ARC --> OUT
+    K_ARC --> OUT
+    H_ARC --> OUT
+    LOGIN --> LOGOUT[Sign Out]:::page
+    AUTH --> LOGOUT
+    ROLE --> LOGOUT
+    REDIR --> LOGOUT
+    OVERVIEW --> LOGOUT
+    CHOOSE --> LOGOUT
+    BOOKS --> LOGOUT
     RES --> LOGOUT
     CLAIM --> LOGOUT
     CHECK --> LOGOUT
     CHAT --> LOGOUT
-
-    %% ── Added: ensure all Admin branches reach Sign Out (Sign Out is final) ──
-    DASH_DATA --> LOGOUT
-    NOTIF_BELL --> LOGOUT
-    S_OUT --> LOGOUT
-    S_LOW --> LOGOUT
-    S_OK --> LOGOUT
-    ERR_NEG --> LOGOUT
-    ERR_NOT_PENDING --> LOGOUT
-    ERR_CLOSED --> LOGOUT
-    ERR_NO_MATCH --> LOGOUT
-    ERR_CLAIMED --> LOGOUT
-    ERR_STATE --> LOGOUT
-    ERR_STOCK --> LOGOUT
-    REDIR --> LOGOUT
-    INSERT_BOOK --> LOGOUT
-    USE_AUTHOR --> LOGOUT
-    CREATE_AUTHOR --> LOGOUT
-    HAS_INIT --> LOGOUT
-    INV_STATUS --> LOGOUT
-    REQ_ROW --> LOGOUT
-    REQ_ACT --> LOGOUT
-    NOTIF_RESOLVED --> LOGOUT
-    NOTIF_READY --> LOGOUT
-    READY_OK --> LOGOUT
-    CANCEL_OK --> LOGOUT
-    FOUND --> LOGOUT
-    STATUS_CHK2 --> LOGOUT
-    STOCK_CHK --> LOGOUT
-    CLAIM_FLOW --> LOGOUT
-    CLAIM_UPDATE --> LOGOUT
-    CLAIM_OK --> LOGOUT
-    LOOKUP --> LOGOUT
-    SCAN --> LOGOUT
-    TYPED --> LOGOUT
-    CLAIM_INPUT --> LOGOUT
-    INV_ACT --> LOGOUT
-    CHAT_DATA --> LOGOUT
-    THREAD_PICK --> LOGOUT
-    LINES --> LOGOUT
-    REPLY --> LOGOUT
-    CHECK_TABLE --> LOGOUT
-    RETURN_OK --> LOGOUT
-    RET_FULL --> LOGOUT
-    RET_PART --> LOGOUT
-    DO_RETURN --> LOGOUT
-    RETURN_CHOOSE --> LOGOUT
-    INV_TABLE --> LOGOUT
-    RES_TABLE --> LOGOUT
-    RES_OP --> LOGOUT
-    OP_READY --> LOGOUT
-    OP_CANCEL --> LOGOUT
-    OP_CLAIM --> LOGOUT
-
-    LOGOUT --> END([● End]):::endDef
-
-    %% Cross links
-    INV_TABLE -->|Low/Out| RES_TABLE
-    RES_TABLE -->|Ready → wait| CLAIM
-        </pre>
+    B_ARC --> LOGOUT
+    R_ARC --> LOGOUT
+    C_ARC --> LOGOUT
+    K_ARC --> LOGOUT
+    H_ARC --> LOGOUT
+    OUT --> LOGOUT
+    LOGOUT --> END([End]):::endDef
+      </pre>
       </div>
 
       <div class="flow-notes">

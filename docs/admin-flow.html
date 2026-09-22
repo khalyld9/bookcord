@@ -49,11 +49,14 @@ flowchart TD
     classDef action fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.4px,rx:14,ry:14
     classDef data fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000,rx:10,ry:10
     classDef warn fill:#ffffff,stroke:#000000,stroke-width:1.4px,color:#000000,rx:14,ry:14
+    classDef connector fill:#ffffff,stroke:#000000,color:#000000,stroke-width:1.6px,rx:50,ry:50
     START([● Start Admin]):::start --> LOGIN[/Admin Sign In<br>/login?desk=admin<br>email • password • Google/]:::page
     LOGIN --> AUTH[/Auth Callback /auth/callback<br>updateSession middleware/]:::page
     AUTH --> GUARD{Role Check<br>requireAdmin?}:::decision
-    GUARD -->|User| REDIR[/→ /books<br>Catalog<br>User Flow/]:::page
-    GUARD -->|Admin| DASH
+    GUARD -->|User| CONN_A((A)):::connector
+    CONN_A --> REDIR[/→ /books<br>Catalog<br>User Flow/]:::page
+    GUARD -->|Admin| CONN_B((B)):::connector
+    CONN_B --> DASH
     DASH[/📊 Overview /admin<br>Stat cards • Stock to watch • Latest reservations/]:::page
     DASH --> DASH_DATA[Headlines via getAdminStats & inventory<br>Titles • On shelf • Checked out • Open/Ready<br>Attention = available ≤ minimum_stock]:::data
     DASH --> NAV{Choose desk}:::decision

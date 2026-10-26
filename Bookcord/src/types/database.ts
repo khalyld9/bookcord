@@ -25,6 +25,9 @@ export type HoldStatus =
   | "EXPIRED";
 export type RestockRequestStatus = "PENDING" | "RESTOCKED" | "DISMISSED";
 export type NotificationType =
+  | "ACCOUNT_CREATED"
+  | "PASSWORD_RESET"
+  | "PASSWORD_CHANGED"
   | "RESTOCK_REQUEST"
   | "RESTOCK_RESOLVED"
   | "RESERVATION_READY";

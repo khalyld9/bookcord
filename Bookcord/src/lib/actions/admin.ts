@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 
 import { claimReservation } from "@/lib/actions/reservations";
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { escapeEmailHtml, sendTransactionalEmail } from "@/lib/email";
+import { createAdminDataClient } from "@/lib/supabase/admin-data";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -38,9 +39,14 @@ export async function adminReservationAction(
     return { error: "That reservation does not exist." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
 
   if (op === "ready") {
+    const { data: reservation } = await supabase
+      .from("reservations")
+      .select("profile_id, book_id")
+      .eq("id", id)
+      .maybeSingle();
     const { data, error } = await supabase
       .from("reservations")
       .update({ status: "READY" })
@@ -49,6 +55,22 @@ export async function adminReservationAction(
       .select("id");
     if (error) return { error: error.message };
     if (!data?.length) return { error: "That reservation is not pending." };
+    if (reservation) {
+      const [{ data: profile }, { data: book }] = await Promise.all([
+        supabase.from("profiles").select("id, full_name, email").eq("id", reservation.profile_id).maybeSingle(),
+        supabase.from("books").select("title").eq("id", reservation.book_id).maybeSingle(),
+      ]);
+      if (profile?.email) {
+        const title = book?.title ?? "Your reserved title";
+        await sendTransactionalEmail({
+          to: profile.email,
+          subject: `${title} is ready for pickup`,
+          text: `Hi ${profile.full_name}, ${title} is ready. Show your reservation QR at the counter.`,
+          html: `<p>Hi ${escapeEmailHtml(profile.full_name)},</p><p><strong>${escapeEmailHtml(title)}</strong> is ready for pickup.</p><p>Show your reservation QR at the counter.</p>`,
+          idempotencyKey: `reservation-ready/${id}`,
+        });
+      }
+    }
     revalidateAll();
     return { message: "Marked ready for pickup." };
   }
@@ -90,7 +112,19 @@ export async function restockTitle(
     return { error: "Restock quantity must be a positive number." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
+  const [{ data: book }, { data: pendingRequests }] = await Promise.all([
+    supabase.from("books").select("title").eq("id", bookId).maybeSingle(),
+    supabase
+      .from("restock_requests")
+      .select("profile_id")
+      .eq("book_id", bookId)
+      .eq("status", "PENDING"),
+  ]);
+  const profileIds = [...new Set((pendingRequests ?? []).map((item) => item.profile_id))];
+  const { data: recipients } = profileIds.length
+    ? await supabase.from("profiles").select("id, full_name, email").in("id", profileIds)
+    : { data: [] };
   const { error } = await supabase.rpc("restock_book", {
     p_book_id: bookId,
     p_quantity: quantity,
@@ -98,6 +132,18 @@ export async function restockTitle(
   });
 
   if (error) return { error: error.message };
+  const title = book?.title ?? "A requested title";
+  await Promise.all(
+    (recipients ?? []).filter((recipient) => recipient.email).map((recipient) =>
+      sendTransactionalEmail({
+        to: recipient.email,
+        subject: `${title} is back in stock`,
+        text: `Hi ${recipient.full_name}, ${title} is back on the shelf. Open Bookcords to reserve your copy.`,
+        html: `<p>Hi ${escapeEmailHtml(recipient.full_name)},</p><p><strong>${escapeEmailHtml(title)}</strong> is back on the shelf.</p><p>Open Bookcords to reserve your copy.</p>`,
+        idempotencyKey: `restock/${bookId}/${recipient.id}`,
+      }),
+    ),
+  );
   revalidateAll();
   return { message: `Added ${quantity} ${quantity === 1 ? "copy" : "copies"}.` };
 }
@@ -118,7 +164,7 @@ export async function adjustTitleStock(
     return { error: "Adjustment must be a non-zero whole number." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
   const { error } = await supabase.rpc("adjust_inventory", {
     p_book_id: bookId,
     p_quantity_change: change,
@@ -151,7 +197,7 @@ export async function returnCheckout(
     return { error: "That checkout does not exist." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
   const { data: issue, error: readError } = await supabase
     .from("book_issues")
     .select("id, quantity, returned_quantity")
@@ -205,7 +251,7 @@ export async function addBook(
     return { error: "Stock numbers must be zero or more." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
 
   // Reuse an existing author row when the name matches.
   let authorId: string | null = null;

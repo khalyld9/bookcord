@@ -1,10 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { escapeEmailHtml, sendTransactionalEmail } from "@/lib/email";
 import {
   isSupabaseConfigured,
   SUPABASE_CONFIG_ERROR,
@@ -23,6 +26,28 @@ function isStudentNumberConflict(error: {
   if (error.code !== "23505") return false;
   const description = `${error.message ?? ""} ${error.details ?? ""}`;
   return /profiles_student_id_unique|student_id/i.test(description);
+}
+
+async function requestOrigin() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  }
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  return host ? `${protocol}://${host}` : "http://localhost:3000";
+}
+
+async function sendWelcomeEmail(email: string, fullName: string) {
+  const safeName = escapeEmailHtml(fullName);
+  const siteUrl = await requestOrigin();
+  await sendTransactionalEmail({
+    to: email,
+    subject: "Welcome to Bookcords",
+    text: `Hi ${fullName}, your Bookcords bookstore account is ready. Browse the catalog at ${siteUrl}/books`,
+    html: `<p>Hi ${safeName},</p><p>Your Bookcords bookstore account is ready.</p><p><a href="${siteUrl}/books">Browse the catalog</a></p>`,
+    idempotencyKey: `welcome/${email.toLowerCase()}`,
+  });
 }
 
 export async function staffLogin(
@@ -185,6 +210,7 @@ export async function signup(
     email,
     password: parsed.data.password,
     options: {
+      emailRedirectTo: `${await requestOrigin()}/auth/callback`,
       data: {
         full_name: fullName,
         student_id: studentId,
@@ -219,12 +245,16 @@ export async function signup(
    * (the same path Google sign-ins use). No service-role key needed.
    */
   if (data.session) {
-    const { error: profileError } = await supabase.from("profiles").insert({
-      auth_user_id: data.user.id,
-      full_name: fullName,
-      student_id: studentId,
-      email,
-    });
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .insert({
+        auth_user_id: data.user.id,
+        full_name: fullName,
+        student_id: studentId,
+        email,
+      })
+      .select("id")
+      .single();
 
     if (profileError) {
       if (isStudentNumberConflict(profileError)) {
@@ -236,6 +266,8 @@ export async function signup(
         };
       }
     }
+
+    if (profile) await sendWelcomeEmail(email, fullName);
 
     revalidatePath("/", "layout");
     redirect("/books");
@@ -257,6 +289,57 @@ export async function signOut() {
   revalidatePath("/", "layout");
 
   redirect("/login");
+}
+
+export type PasswordResetRequestState = {
+  error?: string;
+  success?: boolean;
+  message?: string;
+};
+
+export async function requestPasswordReset(
+  _previous: PasswordResetRequestState,
+  formData: FormData,
+): Promise<PasswordResetRequestState> {
+  const parsed = z.string().trim().email("Enter a valid email address").safeParse(
+    formData.get("email"),
+  );
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const email = parsed.data.toLowerCase();
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${await requestOrigin()}/auth/callback?next=/reset-password`,
+  });
+
+  if (error) return { error: "Could not send the reset email. Try again shortly." };
+
+  // Keep the response enumeration-safe while leaving a security notice for
+  // an existing account to see after its next successful sign-in.
+  try {
+    const admin = createAdminClient();
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
+    if (profile) {
+      await admin.from("notifications").insert({
+        profile_id: profile.id,
+        type: "PASSWORD_RESET",
+        title: "Password reset requested",
+        body: "A password reset email was requested for your account.",
+        href: "/profile",
+      });
+    }
+  } catch {
+    // Auth email delivery must not depend on optional in-app notifications.
+  }
+
+  return {
+    success: true,
+    message: "If an account exists for that email, a reset link is on its way.",
+  };
 }
 
 const completeProfileSchema = z.object({
@@ -296,12 +379,17 @@ export async function completeProfile(
     return { error: "Sign in first, then finish your profile." };
   }
 
-  const { error } = await supabase.from("profiles").insert({
-    auth_user_id: user.id,
-    full_name: parsed.data.full_name,
-    student_id: parsed.data.student_id,
-    email: (user.email ?? "").toLowerCase(),
-  });
+  const email = (user.email ?? "").toLowerCase();
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .insert({
+      auth_user_id: user.id,
+      full_name: parsed.data.full_name,
+      student_id: parsed.data.student_id,
+      email,
+    })
+    .select("id")
+    .single();
 
   if (error) {
     if (error.code === "23505") {
@@ -312,6 +400,8 @@ export async function completeProfile(
     }
     return { error: error.message };
   }
+
+  if (profile && email) await sendWelcomeEmail(email, parsed.data.full_name);
 
   revalidatePath("/", "layout");
   redirect("/books");

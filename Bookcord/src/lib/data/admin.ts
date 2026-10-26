@@ -2,7 +2,7 @@ import "server-only";
 
 import { getInventoryOverview } from "@/lib/data/inventory";
 import { isMissingTable } from "@/lib/data/hub";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminDataClient } from "@/lib/supabase/admin-data";
 import type { ReservationStatus, RestockRequestStatus } from "@/types/database";
 
 export type AdminReservationItem = {
@@ -30,7 +30,7 @@ export type AdminReservationItem = {
 export async function getAdminReservations(
   filter: ReservationStatus | null,
 ): Promise<AdminReservationItem[]> {
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
 
   let query = supabase
     .from("reservations")
@@ -72,7 +72,7 @@ export type AdminInventoryItem = {
 
 /** Catalog with live stock per title for the inventory desk. */
 export async function getAdminInventory(): Promise<AdminInventoryItem[]> {
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
   const { data, error } = await supabase
     .from("books")
     .select(
@@ -111,7 +111,7 @@ export type AdminCheckoutItem = {
 
 /** Checkouts that still have copies out with students. */
 export async function getAdminCheckouts(): Promise<AdminCheckoutItem[]> {
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
   const { data, error } = await supabase
     .from("book_issues")
     .select(
@@ -132,7 +132,7 @@ export async function getAdminCheckouts(): Promise<AdminCheckoutItem[]> {
 
 /** Librarian-desk headline numbers: stock plus reservation demand. */
 export async function getAdminStats() {
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
   const [overview, openReservations, readyReservations] = await Promise.all([
     getInventoryOverview(),
     supabase
@@ -162,7 +162,7 @@ export type RestockRequestListItem = {
 
 /** Pending student restock requests, oldest first. Empty until migration 0007 runs. */
 export async function getRestockRequests(): Promise<RestockRequestListItem[]> {
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
 
   const { data, error } = await supabase
     .from("restock_requests")

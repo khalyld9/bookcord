@@ -8,8 +8,10 @@ import {
   BellRing,
   BookOpenCheck,
   CheckCheck,
+  KeyRound,
   PackagePlus,
   PackageSearch,
+  UserRoundCheck,
 } from "lucide-react";
 
 import {
@@ -25,6 +27,9 @@ import type { NotificationListItem } from "@/lib/data/notifications";
 import { cn } from "@/lib/utils";
 
 const TYPE_ICON = {
+  ACCOUNT_CREATED: UserRoundCheck,
+  PASSWORD_RESET: KeyRound,
+  PASSWORD_CHANGED: KeyRound,
   RESTOCK_REQUEST: PackagePlus,
   RESTOCK_RESOLVED: PackageSearch,
   RESERVATION_READY: BookOpenCheck,

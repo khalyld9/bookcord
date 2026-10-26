@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 
 import { login } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
@@ -61,6 +62,15 @@ export function LoginForm({
             <EyeOff className="size-4.5" strokeWidth={1.75} />
           )}
         </button>
+      </div>
+
+      <div className="flex justify-end">
+        <Link
+          href="/forgot-password"
+          className="text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"
+        >
+          Forgot password?
+        </Link>
       </div>
 
       {state.error ? (

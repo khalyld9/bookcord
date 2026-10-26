@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { sendTransactionalEmail } from "@/lib/email";
 import { AVATARS_BUCKET, ensureAvatarsBucket } from "@/lib/storage/avatars";
 
 export type ProfileState = {
@@ -144,12 +145,45 @@ export async function updatePassword(
   }
 
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   const { error } = await supabase.auth.updateUser({
     password: parsed.data.password,
   });
 
   if (error) {
     return { error: `Could not update your password: ${error.message}` };
+  }
+
+  if (user) {
+    try {
+      const admin = createAdminClient();
+      const { data: profile } = await admin
+        .from("profiles")
+        .select("id")
+        .eq("auth_user_id", user.id)
+        .maybeSingle();
+      if (profile) {
+        await admin.from("notifications").insert({
+          profile_id: profile.id,
+          type: "PASSWORD_CHANGED",
+          title: "Password changed",
+          body: "Your account password was changed successfully.",
+          href: "/profile",
+        });
+      }
+    } catch {
+      // Password updates remain available before migration 0009 is installed.
+    }
+
+    if (user.email) {
+      await sendTransactionalEmail({
+        to: user.email,
+        subject: "Your Bookcords password was changed",
+        text: "Your Bookcords password was changed. If this was not you, reset it immediately.",
+        html: "<p>Your Bookcords password was changed.</p><p>If this was not you, reset it immediately.</p>",
+        idempotencyKey: `password-changed/${user.id}/${Date.now()}`,
+      });
+    }
   }
 
   return { success: true, message: "Password updated." };

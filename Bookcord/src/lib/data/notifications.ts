@@ -2,6 +2,7 @@ import "server-only";
 
 import { isMissingTable } from "@/lib/data/hub";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { NotificationType } from "@/types/database";
 
 export type NotificationListItem = {
@@ -53,4 +54,33 @@ export async function getUnreadNotificationCount(
     throw error;
   }
   return count ?? 0;
+}
+
+/** Notifications addressed to active admin profiles, for passcode staff sessions. */
+export async function getStaffNotifications(limit = 10) {
+  const admin = createAdminClient();
+  const { data: profiles } = await admin
+    .from("profiles")
+    .select("id")
+    .eq("role", "ADMIN")
+    .eq("status", "ACTIVE");
+  const ids = (profiles ?? []).map((profile) => profile.id);
+  if (!ids.length) return [];
+  const { data, error } = await admin
+    .from("notifications")
+    .select("id, type, title, body, href, read_at, created_at")
+    .in("profile_id", ids)
+    .order("created_at", { ascending: false })
+    .limit(limit)
+    .overrideTypes<NotificationListItem[], { merge: false }>();
+  if (error) {
+    if (isMissingTable(error)) return [];
+    throw error;
+  }
+  return data ?? [];
+}
+
+export async function getStaffUnreadNotificationCount() {
+  const items = await getStaffNotifications(100);
+  return items.filter((item) => !item.read_at).length;
 }

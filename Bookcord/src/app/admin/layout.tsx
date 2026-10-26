@@ -9,7 +9,12 @@ import { SignOutButton } from "@/components/layout/sign-out-button";
 import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 import { UserMenu } from "@/components/layout/user-menu";
 import { requireAdmin } from "@/lib/auth";
-import { getNotifications, getUnreadNotificationCount } from "@/lib/data/notifications";
+import {
+  getNotifications,
+  getStaffNotifications,
+  getStaffUnreadNotificationCount,
+  getUnreadNotificationCount,
+} from "@/lib/data/notifications";
 
 export default async function AdminLayout({
   children,
@@ -22,10 +27,15 @@ export default async function AdminLayout({
   // empty, quiet state instead of erroring.
   let [notifications, unreadCount] = [ [] as Awaited<ReturnType<typeof getNotifications>>, 0 ];
   try {
-    [notifications, unreadCount] = await Promise.all([
-      getNotifications(profile.id),
-      getUnreadNotificationCount(profile.id),
-    ]);
+    [notifications, unreadCount] = profile.id === "staff-passcode"
+      ? await Promise.all([
+          getStaffNotifications(),
+          getStaffUnreadNotificationCount(),
+        ])
+      : await Promise.all([
+          getNotifications(profile.id),
+          getUnreadNotificationCount(profile.id),
+        ]);
   } catch {
     // fall through with the empty state
   }

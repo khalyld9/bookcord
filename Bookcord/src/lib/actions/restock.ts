@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 
 import { requireAdmin, requireUser } from "@/lib/auth";
 import { isMissingTable } from "@/lib/data/hub";
+import { escapeEmailHtml, sendTransactionalEmail } from "@/lib/email";
+import { createAdminDataClient } from "@/lib/supabase/admin-data";
 import { createClient } from "@/lib/supabase/server";
 
 const UUID_PATTERN =
@@ -66,7 +68,7 @@ export async function restockFromRequest(
     return { error: "That request does not exist." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
 
   const { data: request, error: fetchError } = await supabase
     .from("restock_requests")
@@ -83,6 +85,19 @@ export async function restockFromRequest(
     return { error: "That request was already resolved." };
   }
 
+  const [{ data: book }, { data: pendingRequests }] = await Promise.all([
+    supabase.from("books").select("title").eq("id", request.book_id).maybeSingle(),
+    supabase
+      .from("restock_requests")
+      .select("profile_id")
+      .eq("book_id", request.book_id)
+      .eq("status", "PENDING"),
+  ]);
+  const profileIds = [...new Set((pendingRequests ?? []).map((item) => item.profile_id))];
+  const { data: recipients } = profileIds.length
+    ? await supabase.from("profiles").select("id, full_name, email").in("id", profileIds)
+    : { data: [] };
+
   const { error: rpcError } = await supabase.rpc("restock_book", {
     p_book_id: request.book_id,
     p_quantity: 1,
@@ -90,6 +105,19 @@ export async function restockFromRequest(
   });
 
   if (rpcError) return { error: rpcError.message };
+
+  const title = book?.title ?? "A requested title";
+  await Promise.all(
+    (recipients ?? []).filter((recipient) => recipient.email).map((recipient) =>
+      sendTransactionalEmail({
+        to: recipient.email,
+        subject: `${title} is back in stock`,
+        text: `Hi ${recipient.full_name}, ${title} is back on the shelf. Open Bookcords to reserve your copy.`,
+        html: `<p>Hi ${escapeEmailHtml(recipient.full_name)},</p><p><strong>${escapeEmailHtml(title)}</strong> is back on the shelf.</p><p>Open Bookcords to reserve your copy.</p>`,
+        idempotencyKey: `restock/${request.book_id}/${recipient.id}`,
+      }),
+    ),
+  );
 
   revalidatePath("/admin/inventory");
   revalidatePath("/admin");
@@ -107,7 +135,7 @@ export async function dismissRestockRequest(
     return { error: "That request does not exist." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
 
   const { data, error } = await supabase
     .from("restock_requests")

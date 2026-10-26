@@ -1,9 +1,9 @@
 import "server-only";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminDataClient } from "@/lib/supabase/admin-data";
 
 export async function getInventoryOverview() {
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
   const [books, inventory, issues, profiles] = await Promise.all([
     supabase.from("books").select("id", { count: "exact", head: true }).is("archived_at", null),
     supabase

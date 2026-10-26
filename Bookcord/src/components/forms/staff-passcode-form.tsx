@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { KeyRound } from "lucide-react";
 
 import { staffLogin } from "@/lib/actions/auth";
@@ -10,7 +10,19 @@ const initialState = { error: "" };
 export function StaffPasscodeForm() {
   const [state, formAction, pending] = useActionState(staffLogin, initialState);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
+  const formRef = useRef<HTMLFormElement>(null);
   const inputs = useRef<Array<HTMLInputElement | null>>([]);
+  const lastSubmitted = useRef("");
+
+  const passcode = digits.join("");
+
+  useEffect(() => {
+    if (passcode.length !== 6 || pending || lastSubmitted.current === passcode) {
+      return;
+    }
+    lastSubmitted.current = passcode;
+    formRef.current?.requestSubmit();
+  }, [passcode, pending]);
 
   function updateDigit(index: number, value: string) {
     const digit = value.replace(/\D/g, "").slice(-1);
@@ -40,7 +52,7 @@ export function StaffPasscodeForm() {
   }
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form ref={formRef} action={formAction} className="space-y-4">
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground">Enter your 6-digit admin passcode</p>
         <div className="grid grid-cols-6 gap-2 sm:gap-3" role="group" aria-label="Admin passcode">
@@ -66,7 +78,7 @@ export function StaffPasscodeForm() {
             />
           ))}
         </div>
-        <input type="hidden" name="passcode" value={digits.join("")} />
+        <input type="hidden" name="passcode" value={passcode} />
       </div>
 
       {state.error ? (

@@ -40,6 +40,8 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
   const isAuthPage = path === "/login" || path === "/signup";
+  const isAdminDesk =
+    path === "/login" && request.nextUrl.searchParams.get("desk") === "admin";
   const hasStaffCookie = Boolean(
     request.cookies.get("bookcord_staff_access")?.value,
   );
@@ -51,7 +53,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && isAuthPage) {
+  if (user && isAuthPage && !isAdminDesk) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")

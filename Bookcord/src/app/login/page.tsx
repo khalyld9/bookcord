@@ -13,18 +13,21 @@ type PageProps = {
 };
 
 export default async function LoginPage({ searchParams }: PageProps) {
-  const session = await getSessionProfile();
-
-  if (session) {
-    redirect(session.profile.role === "ADMIN" ? "/admin" : "/books");
-  }
-
   const params = await searchParams;
   const desk = Array.isArray(params.desk) ? params.desk[0] : params.desk;
   const adminDesk = desk === "admin";
 
   if (adminDesk && (await hasStaffAccess())) {
     redirect("/admin");
+  }
+
+  // A customer may also be signed in on this browser. Keep the dedicated
+  // admin entrance accessible so the passcode can elevate this app session.
+  if (!adminDesk) {
+    const session = await getSessionProfile();
+    if (session) {
+      redirect(session.profile.role === "ADMIN" ? "/admin" : "/books");
+    }
   }
 
   return (

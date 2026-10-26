@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | Bookcords",
   },
   description:
-    "School library system for checking textbook stock and reserving titles.",
+    "Bookstore catalog for discovering books, checking stock and reserving titles.",
 };
 
 export default function RootLayout({

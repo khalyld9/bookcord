@@ -89,7 +89,7 @@ export function StudentNav({
 
   return (
     <div className="flex flex-col gap-6">
-      <nav aria-label="Student" className="flex w-full flex-col gap-1">
+      <nav aria-label="Customer" className="flex w-full flex-col gap-1">
         {primaryLinks.map((link) => (
           <NavRow
             key={link.href}
@@ -100,9 +100,9 @@ export function StudentNav({
         ))}
       </nav>
 
-      <nav aria-label="Library" className="flex w-full flex-col gap-1">
+      <nav aria-label="Discover" className="flex w-full flex-col gap-1">
         <p className="px-4 pb-1 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground/80">
-          Library
+          Discover
         </p>
         {hubLinks.map((link) => (
           <NavRow

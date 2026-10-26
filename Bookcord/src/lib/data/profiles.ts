@@ -2,6 +2,7 @@ import "server-only";
 
 import { ACTIVE_STRAND, ACTIVE_YEAR_LEVELS } from "@/lib/data/books";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { Profile, Strand, YearLevel } from "@/types/database";
 
 export type ProfileDetail = Profile & {
@@ -35,6 +36,10 @@ export async function getProfileDetail(id: string) {
 }
 
 export async function getProfileOptions() {
+  if (!isSupabaseConfigured()) {
+    return { yearLevels: [], strands: [] };
+  }
+
   const supabase = await createClient();
   const [yearLevels, strands] = await Promise.all([
     supabase

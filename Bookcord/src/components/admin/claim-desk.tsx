@@ -67,7 +67,7 @@ export function ClaimDesk({
             <Input
               id="claim-code"
               name="code"
-              placeholder="Type the code from the student's reservation"
+              placeholder="Type the code from the customer's reservation"
               defaultValue={queriedCode ?? ""}
               autoComplete="off"
               className="font-mono uppercase"
@@ -95,7 +95,7 @@ export function ClaimDesk({
         <div className="rounded-2xl border border-dashed border-border bg-card/60 p-6 text-sm text-muted-foreground">
           No reservation matches{" "}
           <code className="font-mono text-xs">{queriedCode}</code>. Ask the
-          student to open My Reservations and show you their QR code.
+          customer to open My Reservations and show you their QR code.
         </div>
       ) : null}
 
@@ -121,10 +121,10 @@ export function ClaimDesk({
           <dl className="grid gap-4 text-sm sm:grid-cols-2">
             <div>
               <dt className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Student
+                Customer
               </dt>
               <dd className="mt-1">
-                {reservation.profile?.full_name ?? "Unknown student"}
+                {reservation.profile?.full_name ?? "Unknown customer"}
               </dd>
               <dd className="text-xs text-muted-foreground">
                 {[reservation.profile?.student_id, reservation.profile?.email]

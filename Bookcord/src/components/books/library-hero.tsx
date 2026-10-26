@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { LibraryBig } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
 import heroBanner from "@/assets/bookcord-hero-banner.png";
 
@@ -26,8 +26,8 @@ export function LibraryHero() {
       <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
-            <LibraryBig className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-            Library, Book catalog
+            <BookOpen className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+            Bookstore, Catalog
           </p>
 
           <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-[-0.04em] text-balance sm:text-5xl">
@@ -37,12 +37,12 @@ export function LibraryHero() {
           </h1>
 
           <p className="mt-4 max-w-md text-sm leading-relaxed text-espresso-muted text-pretty">
-            Search by title, author or ISBN, then narrow the shelf by semester,
-            strand, year level and subject.
+            Search by title, author or ISBN, then narrow the shelves by subject
+            and availability.
           </p>
         </div>
       </div>
     </section>
   );
 }
-// keep library in sync with login AuthShell
+// Keep the catalog hero in sync with the login AuthShell.

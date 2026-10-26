@@ -32,16 +32,12 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
-      {/* Sidebar, same gray as the page, librarian items. */}
+      {/* Sidebar, same gray as the page, store management items. */}
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col px-4 py-6 md:flex [@media(pointer:fine)]:flex">
         <Link href="/admin" className="flex items-center gap-2.5 px-2">
           <BrandMark />
           <span className="font-display text-2xl font-bold tracking-tight">Bookcords</span>
         </Link>
-        <p className="mt-1 px-2 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground/80">
-          Librarian desk
-        </p>
-
         <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
           <AdminNav />
         </div>
@@ -62,7 +58,7 @@ export default async function AdminLayout({
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col p-4 md:p-6">
         <BottomNav variant="admin" />
-        <main className="mx-auto w-full max-w-7xl flex-1 rounded-[28px] bg-card p-4 pt-6 pb-24 shadow-shelf sm:p-6 md:p-8 md:pb-8">
+        <main className="mx-auto w-full max-w-7xl flex-1 rounded-[28px] bg-muted/35 p-4 pt-6 pb-24 shadow-shelf ring-1 ring-border/70 sm:p-6 md:p-8 md:pb-8">
           {children}
         </main>
       </div>

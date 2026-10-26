@@ -15,7 +15,7 @@ const CODE_PATTERN = /^[A-Z0-9]{6,12}$/;
 export type ReservationResult = { success?: boolean; error?: string };
 
 const SETUP_ERROR =
-  "Reservations are not set up yet. Ask the librarian to run migration 0005.";
+  "Reservations are not set up yet. Ask the store administrator to run migration 0005.";
 
 /** Student reserves a title; a PENDING row with a claim code is created. */
 export async function reserveBook(

@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import type { ReservationStatus } from "@/types/database";
 
 export const metadata: Metadata = {
-  title: "Reservations, Librarian Desk",
+  title: "Reservations, Store Dashboard",
 };
 
 const FILTERS: { value: ReservationStatus | null; label: string }[] = [
@@ -75,7 +75,7 @@ export default async function AdminReservationsPage({ searchParams }: PageProps)
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Student</TableHead>
+                <TableHead>Customer</TableHead>
                 <TableHead>Title</TableHead>
                 <TableHead>Code</TableHead>
                 <TableHead>Placed</TableHead>
@@ -95,7 +95,7 @@ export default async function AdminReservationsPage({ searchParams }: PageProps)
                   <TableRow key={reservation.id}>
                     <TableCell>
                       <p className="text-sm font-medium">
-                        {reservation.profile?.full_name ?? "Unknown student"}
+                        {reservation.profile?.full_name ?? "Unknown customer"}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {reservation.profile?.student_id ?? reservation.profile?.email}

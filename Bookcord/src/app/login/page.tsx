@@ -3,9 +3,10 @@ import Link from "next/link";
 import { KeyRound, UserRound } from "lucide-react";
 
 import { AuthShell } from "@/components/layout/auth-shell";
-import { GoogleSignInButton } from "@/components/forms/oauth-buttons";
 import { LoginForm } from "@/components/forms/login-form";
+import { StaffPasscodeForm } from "@/components/forms/staff-passcode-form";
 import { getSessionProfile } from "@/lib/auth";
+import { hasStaffAccess } from "@/lib/staff-access";
 
 type PageProps = {
   searchParams: Promise<{ desk?: string | string[] }>;
@@ -22,38 +23,34 @@ export default async function LoginPage({ searchParams }: PageProps) {
   const desk = Array.isArray(params.desk) ? params.desk[0] : params.desk;
   const adminDesk = desk === "admin";
 
+  if (adminDesk && (await hasStaffAccess())) {
+    redirect("/admin");
+  }
+
   return (
     <AuthShell
-      title={adminDesk ? "Librarian sign in" : "Welcome back"}
+      title={adminDesk ? "Admin sign in" : "Welcome back"}
       actionLink={
         adminDesk
-          ? { href: "/login", label: "Student sign in" }
+          ? { href: "/login", label: "Customer sign in" }
           : { href: "/signup", label: "Create account" }
       }
     >
-      <GoogleSignInButton />
-
-      <div className="my-8 flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="h-px flex-1 bg-border" aria-hidden="true" />
-        or with email
-        <span className="h-px flex-1 bg-border" aria-hidden="true" />
-      </div>
-
-      <LoginForm />
+      {adminDesk ? <StaffPasscodeForm /> : <LoginForm />}
 
       {adminDesk ? (
         <p className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">
-          Librarians land on the admin dashboard automatically.
+          Admins land on the management dashboard automatically.
         </p>
       ) : null}
 
-      {/* The librarian entrance is a quiet icon at the bottom right: a
+      {/* The staff entrance is a quiet icon at the bottom right: a
           person with a key badge. */}
       {!adminDesk ? (
         <Link
           href="/login?desk=admin"
-          aria-label="Librarian sign in"
-          title="Librarian sign in"
+          aria-label="Admin sign in"
+          title="Admin sign in"
           className="fixed bottom-5 right-5 z-40 grid size-12 place-items-center rounded-full bg-card text-foreground shadow-[0_18px_44px_-20px_rgba(23,12,16,0.35)] ring-1 ring-black/10 transition-transform duration-300 ease-out hover:-translate-y-0.5 dark:ring-white/15"
         >
           <UserRound

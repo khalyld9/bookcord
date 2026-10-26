@@ -13,28 +13,8 @@ export type ProfileState = {
   message?: string;
 };
 
-const UUID_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-/** Empty select value means "unset"; anything else must be a real id. */
-const optionalId = z
-  .string()
-  .trim()
-  .refine((value) => value === "" || UUID_PATTERN.test(value), {
-    message: "Select a valid option",
-  })
-  .transform((value) => (value === "" ? null : value));
-
-const optionalText = z
-  .string()
-  .trim()
-  .transform((value) => (value === "" ? null : value));
-
 const updateProfileSchema = z.object({
   full_name: z.string().trim().min(2, "Enter your full name"),
-  student_id: optionalText,
-  year_level_id: optionalId,
-  strand_id: optionalId,
 });
 
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
@@ -63,9 +43,6 @@ export async function updateProfile(
 ): Promise<ProfileState> {
   const parsed = updateProfileSchema.safeParse({
     full_name: formData.get("full_name"),
-    student_id: formData.get("student_id"),
-    year_level_id: formData.get("year_level_id"),
-    strand_id: formData.get("strand_id"),
   });
 
   if (!parsed.success) {
@@ -136,9 +113,6 @@ export async function updateProfile(
     .from("profiles")
     .update({
       full_name: parsed.data.full_name,
-      student_id: parsed.data.student_id,
-      year_level_id: parsed.data.year_level_id,
-      strand_id: parsed.data.strand_id,
       ...avatarUpdate,
       updated_at: new Date().toISOString(),
     })

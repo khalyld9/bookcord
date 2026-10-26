@@ -29,8 +29,8 @@ export default async function HomePage() {
 
         <Reveal delay={160}>
           <p className="mt-4 max-w-xl text-lg font-normal text-muted-foreground">
-            School library system for checking textbook stock and reserving
-            titles.
+            Your bookstore catalog for discovering books, checking stock and
+            reserving titles.
           </p>
         </Reveal>
 
@@ -52,7 +52,7 @@ export default async function HomePage() {
             href="/login?desk=admin"
             className="font-semibold text-ochre-deep transition-colors hover:text-ochre"
           >
-            Librarian sign in
+            Store staff sign in
           </Link>
         </Reveal>
       </div>

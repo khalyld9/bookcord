@@ -12,7 +12,7 @@ const UUID_PATTERN =
 export type RestockResult = { success?: boolean; error?: string };
 
 const SETUP_ERROR =
-  "Restock requests are not set up yet. Ask the librarian to run migration 0007.";
+  "Restock requests are not set up yet. Ask the store administrator to run migration 0007.";
 
 /**
  * Student asks the library to restock an out-of-stock title. The database

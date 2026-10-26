@@ -44,16 +44,19 @@ export type SyllabiResult = {
 };
 
 /**
- * Postgres SQLSTATE 42P01, the table does not exist. The hub tables ship in
- * migration 0003, so a project that has not run it yet should see a setup
- * notice rather than a 500.
+ * PostgreSQL reports a missing table as 42P01. PostgREST reports the same
+ * condition as PGRST205 when the relation is absent from its schema cache.
+ * Optional feature tables should produce a setup notice or an empty state,
+ * never a server error.
  */
 export function isMissingTable(error: unknown) {
   return (
     typeof error === "object" &&
     error !== null &&
     "code" in error &&
-    (error as { code?: string | null }).code === "42P01"
+    ["42P01", "PGRST205"].includes(
+      (error as { code?: string | null }).code ?? "",
+    )
   );
 }
 

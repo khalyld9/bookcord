@@ -8,7 +8,7 @@ import { requireAdmin } from "@/lib/auth";
 import { getAdminChatState, isMissingSchemaObject } from "@/lib/data/booky";
 
 export const metadata: Metadata = {
-  title: "Librarian inbox",
+  title: "Store team inbox",
 };
 
 type PageProps = {
@@ -16,8 +16,11 @@ type PageProps = {
 };
 
 export default async function AdminChatPage({ searchParams }: PageProps) {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const params = await searchParams;
+  const needsServiceKey =
+    admin.userId === "staff-passcode" &&
+    !process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   let state: Awaited<ReturnType<typeof getAdminChatState>> = {
     threads: [],
@@ -25,11 +28,13 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
   };
   let needsSetup = false;
 
-  try {
-    state = await getAdminChatState(params.profile);
-  } catch (error) {
-    if (!isMissingSchemaObject(error)) throw error;
-    needsSetup = true;
+  if (!needsServiceKey) {
+    try {
+      state = await getAdminChatState(params.profile);
+    } catch (error) {
+      if (!isMissingSchemaObject(error)) throw error;
+      needsSetup = true;
+    }
   }
 
   return (
@@ -37,10 +42,10 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
-            Librarian inbox
+            Store team inbox
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Messages students sent Booky on your behalf. New ones appear live.
+            Messages customers sent Booky on your behalf. New ones appear live.
           </p>
         </div>
         <Link
@@ -52,11 +57,27 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
             strokeWidth={1.75}
             aria-hidden="true"
           />
-          Back to the library
+          Back to the store
         </Link>
       </header>
 
-      {needsSetup ? (
+      {needsServiceKey ? (
+        <div className="rounded-3xl border border-dashed border-border bg-card p-6 shadow-sm sm:p-8">
+          <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
+            Connect admin replies
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            Add the server-only Supabase service role key as{" "}
+            <code className="font-mono text-xs">
+              SUPABASE_SERVICE_ROLE_KEY
+            </code>{" "}
+            in <code className="font-mono text-xs">.env.local</code>, then
+            restart the preview. This lets the verified six-digit admin session
+            read customer threads and send replies without exposing the key to
+            the browser.
+          </p>
+        </div>
+      ) : needsSetup ? (
         <div className="rounded-3xl border border-dashed border-border bg-card/60 p-6 sm:p-8">
           <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
             Chat tables are missing
@@ -72,7 +93,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
       ) : state.threads.length === 0 ? (
         <EmptyState
           title="No conversations yet"
-          description="When a student messages the Librarian tab, the thread lands here."
+          description="When a customer messages the Store team tab, the thread lands here."
         />
       ) : (
         <ChatLive

@@ -5,6 +5,31 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/server";
+import {
+  isSupabaseConfigured,
+  SUPABASE_CONFIG_ERROR,
+} from "@/lib/supabase/config";
+import {
+  clearStaffAccess,
+  grantStaffAccess,
+  isValidStaffPasscode,
+} from "@/lib/staff-access";
+
+export async function staffLogin(
+  _prevState: { error: string },
+  formData: FormData,
+) {
+  const passcode = String(formData.get("passcode") ?? "");
+  if (!/^\d{6}$/.test(passcode)) {
+    return { error: "Enter the six-digit admin passcode." };
+  }
+  if (!isValidStaffPasscode(passcode)) {
+    return { error: "Incorrect admin passcode." };
+  }
+
+  await grantStaffAccess();
+  redirect("/admin");
+}
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -15,6 +40,10 @@ export async function login(
   _prevState: { error: string },
   formData: FormData,
 ) {
+  if (!isSupabaseConfigured()) {
+    return { error: SUPABASE_CONFIG_ERROR };
+  }
+
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -77,11 +106,6 @@ const signupSchema = z
       .trim()
       .min(2, "Enter your full name"),
 
-    student_id: z
-      .string()
-      .trim()
-      .min(1, "Student ID is required"),
-
     email: z
       .string()
       .trim()
@@ -93,13 +117,6 @@ const signupSchema = z
 
     confirm_password: z.string(),
 
-    year_level_id: z
-      .string()
-      .min(1, "Select a year level"),
-
-    strand_id: z
-      .string()
-      .min(1, "Select a strand"),
   })
   .refine(
     (data) => data.password === data.confirm_password,
@@ -119,14 +136,15 @@ export async function signup(
   _prevState: SignupState,
   formData: FormData,
 ) {
+  if (!isSupabaseConfigured()) {
+    return { error: SUPABASE_CONFIG_ERROR };
+  }
+
   const parsed = signupSchema.safeParse({
     full_name: formData.get("full_name"),
-    student_id: formData.get("student_id"),
     email: formData.get("email"),
     password: formData.get("password"),
     confirm_password: formData.get("confirm_password"),
-    year_level_id: formData.get("year_level_id"),
-    strand_id: formData.get("strand_id"),
   });
 
   if (!parsed.success) {
@@ -141,7 +159,6 @@ export async function signup(
 
   const email = parsed.data.email.toLowerCase().trim();
   const fullName = parsed.data.full_name.trim();
-  const studentId = parsed.data.student_id.trim();
 
   /*
    * Create Supabase Auth account.
@@ -181,10 +198,7 @@ export async function signup(
     const { error: profileError } = await supabase.from("profiles").insert({
       auth_user_id: data.user.id,
       full_name: fullName,
-      student_id: studentId,
       email,
-      year_level_id: parsed.data.year_level_id,
-      strand_id: parsed.data.strand_id,
     });
 
     if (profileError && profileError.code !== "23505") {
@@ -205,6 +219,7 @@ export async function signup(
 }
 
 export async function signOut() {
+  await clearStaffAccess();
   const supabase = await createClient();
 
   await supabase.auth.signOut();
@@ -216,9 +231,6 @@ export async function signOut() {
 
 const completeProfileSchema = z.object({
   full_name: z.string().trim().min(2, "Enter your full name"),
-  student_id: z.string().trim().min(1, "Student ID is required"),
-  year_level_id: z.string().min(1, "Select a year level"),
-  strand_id: z.string().min(1, "Select a strand"),
 });
 
 /**
@@ -232,9 +244,6 @@ export async function completeProfile(
 ) {
   const parsed = completeProfileSchema.safeParse({
     full_name: formData.get("full_name"),
-    student_id: formData.get("student_id"),
-    year_level_id: formData.get("year_level_id"),
-    strand_id: formData.get("strand_id"),
   });
 
   if (!parsed.success) {
@@ -255,10 +264,7 @@ export async function completeProfile(
   const { error } = await supabase.from("profiles").insert({
     auth_user_id: user.id,
     full_name: parsed.data.full_name,
-    student_id: parsed.data.student_id,
     email: (user.email ?? "").toLowerCase(),
-    year_level_id: parsed.data.year_level_id,
-    strand_id: parsed.data.strand_id,
   });
 
   if (error) {

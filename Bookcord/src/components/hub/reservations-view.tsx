@@ -33,9 +33,9 @@ export function ReservationsView({
       <Reveal>
         <HubHeader
           icon={QrCode}
-          eyebrow="Student hub, Checkout"
+          eyebrow="Customer account, Pickup"
           title="My reservations"
-          description="Reserve a textbook, then show its QR code at the counter. The librarian scans it and hands your copy over."
+          description="Reserve a book, then show its QR code at the counter. Store staff scan it and hand your copy over."
           image="/banners/reservations-2.png"
         />
       </Reveal>

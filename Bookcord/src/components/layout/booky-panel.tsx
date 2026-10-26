@@ -21,7 +21,7 @@ type BotMessage = { id: number; role: "user" | "bot"; text: string };
 const GREETING: BotMessage = {
   id: 0,
   role: "bot",
-  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works, or flip to the Librarian tab to message a real human.",
+  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works, or message the store team for more help.",
 };
 
 /* The panel is intentionally light in every theme (light, dark, OLED), so
@@ -164,7 +164,7 @@ export function BookyPanel({
                 Booky
               </p>
               <p className="truncate font-mono text-xs uppercase tracking-[0.18em] text-[#a08579]">
-                Library helper
+                Bookstore helper
               </p>
             </div>
             <button
@@ -181,7 +181,7 @@ export function BookyPanel({
             {(
               [
                 { id: "bot", label: "Ask Booky" },
-                { id: "librarian", label: "Librarian" },
+                { id: "librarian", label: "Store team" },
               ] as const
             ).map((item) => (
               <button
@@ -240,7 +240,7 @@ export function BookyPanel({
                 : thread.length === 0
                   ? (
                     <p className="rounded-2xl border border-dashed border-[#e0cdbd] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">
-                      No messages yet. Write to the librarian below, replies
+                      No messages yet. Write to the store team below, replies
                       show up here.
                     </p>
                   )
@@ -293,8 +293,8 @@ export function BookyPanel({
               <input
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
-                placeholder="Message the librarian…"
-                aria-label="Message the librarian"
+                placeholder="Message the store team…"
+                aria-label="Message the store team"
                 className={inputClasses}
               />
               <button

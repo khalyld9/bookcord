@@ -94,7 +94,7 @@ export async function restockTitle(
   const { error } = await supabase.rpc("restock_book", {
     p_book_id: bookId,
     p_quantity: quantity,
-    p_notes: "Restocked from the librarian desk",
+    p_notes: "Restocked from the store dashboard",
   });
 
   if (error) return { error: error.message };
@@ -123,7 +123,7 @@ export async function adjustTitleStock(
     p_book_id: bookId,
     p_quantity_change: change,
     p_reason: change < 0 ? "DAMAGED" : "CORRECTION",
-    p_notes: "Adjusted from the librarian desk",
+    p_notes: "Adjusted from the store dashboard",
   });
 
   if (error) {
@@ -169,7 +169,7 @@ export async function returnCheckout(
   const { error } = await supabase.rpc("return_book", {
     p_issue_id: issueId,
     p_quantity: remaining,
-    p_notes: "Returned at the librarian desk",
+    p_notes: "Returned at the store counter",
   });
 
   if (error) return { error: error.message };

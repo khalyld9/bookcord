@@ -33,8 +33,8 @@ export function SyllabiView({
       <Reveal>
         <HubHeader
           icon={LibraryBig}
-          eyebrow="Student hub, Course syllabi"
-          title="Reading list for your course"
+          eyebrow="Customer account, Reading lists"
+          title="Recommended reading"
           description={
             profileIncomplete
               ? "Add your strand and year level in your profile and the catalog files your required textbooks here automatically."
@@ -55,8 +55,8 @@ export function SyllabiView({
                 Your course is not set yet
               </h2>
               <p className="mt-1 max-w-xl text-sm text-muted-foreground">
-                Pick your strand and year level so the library can build your
-                syllabus from the catalog.
+                Add your reading preferences so the store can build a more
+                useful list from the catalog.
               </p>
             </div>
             <Link
@@ -72,7 +72,7 @@ export function SyllabiView({
           <EmptyState
             compact
             title="No textbooks filed for this course yet"
-            description="Once the librarian assigns titles to your strand and year level, they show up here grouped by subject."
+            description="Once store staff curate titles for your interests, they show up here grouped by subject."
           />
         </Reveal>
       ) : (

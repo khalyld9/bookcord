@@ -42,8 +42,8 @@ export default async function ClaimDeskPage({ searchParams }: PageProps) {
               Claim desk
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Scan a student&apos;s reservation QR to mark it claimed and check
-              the book out.
+              Scan a customer&apos;s reservation QR to mark it claimed and prepare
+              the book for pickup.
             </p>
           </div>
           <Link
@@ -55,7 +55,7 @@ export default async function ClaimDeskPage({ searchParams }: PageProps) {
               strokeWidth={1.75}
               aria-hidden="true"
             />
-            Back to the library
+            Back to the store
           </Link>
         </div>
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import {
   BadgeCheck,
   History,
-  LibraryBig,
+  ShoppingBag,
   ShieldCheck,
   UserRound,
 } from "lucide-react";
@@ -125,7 +125,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
 
             <div className="mt-4 flex flex-wrap gap-2">
               <HeroChip>
-                {profile.role === "ADMIN" ? "Administrator" : "Student"}
+                {profile.role === "ADMIN" ? "Store staff" : "Customer"}
               </HeroChip>
               <HeroChip>
                 {profile.status === "ACTIVE" ? "Active" : "Disabled"}
@@ -143,10 +143,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
 export function ProfileView({ profile }: { profile: ProfileViewData }) {
   const account = [
     { label: "Email", value: profile.email },
-    { label: "Student ID", value: profile.studentId ?? "N/A" },
-    { label: "Year level", value: profile.yearLevelName ?? "N/A" },
-    { label: "Strand", value: profile.strandName ?? "N/A" },
-    { label: "Role", value: profile.role === "ADMIN" ? "Administrator" : "Student" },
+    { label: "Role", value: profile.role === "ADMIN" ? "Store staff" : "Customer" },
     { label: "Member since", value: formatDate(profile.memberSince) },
   ];
 
@@ -161,20 +158,15 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
           <Panel
             delay={100}
             title="Your details"
-            description="Shown to librarians when you check out a textbook."
+            description="Shown to store staff when you collect a reservation."
             icon={UserRound}
           >
             <ProfileForm
               revision={profile.revision}
               defaultValues={{
                 fullName: profile.fullName,
-                studentId: profile.studentId ?? "",
-                yearLevelId: profile.yearLevelId,
-                strandId: profile.strandId,
                 avatarUrl: profile.avatarUrl ?? "",
               }}
-              yearLevels={profile.yearLevels}
-              strands={profile.strands}
             />
           </Panel>
 
@@ -202,7 +194,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
             </dl>
           </Panel>
 
-          <Panel delay={250} title="Library activity" icon={LibraryBig}>
+          <Panel delay={250} title="Store activity" icon={ShoppingBag}>
             <Link
               href="/history"
               className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"

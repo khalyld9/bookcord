@@ -39,8 +39,8 @@ export function RequestRestockButton({
         </span>
         <p className="text-sm text-muted-foreground">
           {demoMode
-            ? "Preview only, nothing was sent. On the live site the librarian sees this request on the inventory page."
-            : "The librarian has been notified. Fresh copies will show up here as soon as they arrive."}
+            ? "Preview only, nothing was sent. On the live site the store team sees this request on the inventory page."
+            : "The store team has been notified. Fresh copies will show up here as soon as they arrive."}
         </p>
       </div>
     );
@@ -76,7 +76,7 @@ export function RequestRestockButton({
       <p className="text-xs text-muted-foreground">
         {demoMode
           ? "Preview only, clicking plays the flow without sending anything."
-          : "Every copy is out, tell the librarian to order more so it returns to the shelf."}
+          : "Every copy is out, ask the store team to order more so it returns to the shelf."}
       </p>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}

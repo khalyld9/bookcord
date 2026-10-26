@@ -117,7 +117,7 @@ export async function getAdminCheckouts(): Promise<AdminCheckoutItem[]> {
     .select(
       `
       id, quantity, returned_quantity, date_issued, expected_return_date, status,
-      profile:profiles(full_name, student_id),
+      profile:profiles!book_issues_profile_id_fkey(full_name, student_id),
       books:books(id, title, isbn)
       `,
     )

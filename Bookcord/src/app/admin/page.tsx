@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { getAdminReservations, getAdminInventory, getAdminStats } from "@/lib/data/admin";
 
 export const metadata: Metadata = {
-  title: "Librarian Desk",
+  title: "Store Dashboard",
 };
 
 function StatCard({
@@ -21,7 +21,7 @@ function StatCard({
   tone?: "default" | "warn" | "alert";
 }) {
   return (
-    <div className="flex flex-col gap-1 rounded-2xl bg-card p-5 ring-1 ring-border">
+    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-5 shadow-sm">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </p>
@@ -59,17 +59,17 @@ export default async function AdminOverviewPage() {
     <div className="flex flex-col gap-8">
       <Reveal as="header">
         <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
-          Librarian desk
+          Store dashboard
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Stock, reservations and checkouts for the whole library at a glance.
+          Stock, reservations and customer pickups at a glance.
         </p>
       </Reveal>
 
-      <Reveal as="section" delay={80} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Library statistics">
-        <StatCard label="Titles" value={stats.totalBooks} hint={`${stats.activeUsers} active students`} />
-        <StatCard label="Copies on shelf" value={stats.availableStock} hint={`${stats.totalStock} total in the library`} />
-        <StatCard label="Checked out" value={stats.issuedBooks} hint="Copies with students right now" />
+      <Reveal as="section" delay={80} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Store statistics">
+        <StatCard label="Titles" value={stats.totalBooks} hint={`${stats.activeUsers} active customers`} />
+        <StatCard label="Copies on shelf" value={stats.availableStock} hint={`${stats.totalStock} total in the store`} />
+        <StatCard label="Collected" value={stats.issuedBooks} hint="Copies collected by customers" />
         <StatCard
           label="Open reservations"
           value={stats.openReservations}
@@ -130,7 +130,7 @@ export default async function AdminOverviewPage() {
           </div>
           {latestReservations.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No reservations yet. They will appear here as students reserve titles.
+              No reservations yet. They will appear here as customers reserve titles.
             </p>
           ) : (
             <ul className="flex flex-col divide-y divide-border">
@@ -141,7 +141,7 @@ export default async function AdminOverviewPage() {
                       {reservation.books?.title ?? "Title removed"}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {reservation.profile?.full_name ?? "Unknown student"} ·{" "}
+                      {reservation.profile?.full_name ?? "Unknown customer"} ·{" "}
                       {new Date(reservation.created_at).toLocaleDateString("en-PH", {
                         month: "short",
                         day: "numeric",

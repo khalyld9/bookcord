@@ -3,28 +3,14 @@
 import { useActionState, useState } from "react";
 import { LoaderCircle, Save, Upload } from "lucide-react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { updateProfile, type ProfileState } from "@/lib/actions/profile";
 import { initials } from "@/lib/utils";
-
-type Option = { id: string; name: string };
 
 type ProfileFormProps = {
   defaultValues: {
     fullName: string;
-    studentId: string;
-    yearLevelId: string;
-    strandId: string;
     avatarUrl: string;
   };
-  yearLevels: Option[];
-  strands: Option[];
   /** Bumping this remounts the form so saved values become the new defaults. */
   revision: string;
 };
@@ -39,8 +25,6 @@ const labelClasses =
 
 export function ProfileForm({
   defaultValues,
-  yearLevels,
-  strands,
   revision,
 }: ProfileFormProps) {
   const [state, formAction, pending] = useActionState(updateProfile, initialState);
@@ -139,70 +123,6 @@ export function ProfileForm({
           placeholder="Juan Dela Cruz"
           className={fieldClasses}
         />
-      </div>
-
-      <div>
-        <label htmlFor="profile-student-id" className={labelClasses}>
-          Student ID
-        </label>
-        <input
-          id="profile-student-id"
-          name="student_id"
-          type="text"
-          defaultValue={defaultValues.studentId}
-          placeholder="2026-00001"
-          className={fieldClasses}
-        />
-      </div>
-
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label htmlFor="profile-year-level" className={labelClasses}>
-            Year level
-          </label>
-          <Select
-            name="year_level_id"
-            defaultValue={defaultValues.yearLevelId || undefined}
-          >
-            <SelectTrigger
-              id="profile-year-level"
-              className="h-12 rounded-xl px-5 text-sm"
-            >
-              <SelectValue placeholder="Not set" />
-            </SelectTrigger>
-            <SelectContent>
-              {yearLevels.map((item) => (
-                <SelectItem key={item.id} value={item.id}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <label htmlFor="profile-strand" className={labelClasses}>
-            Strand
-          </label>
-          <Select
-            name="strand_id"
-            defaultValue={defaultValues.strandId || undefined}
-          >
-            <SelectTrigger
-              id="profile-strand"
-              className="h-12 rounded-xl px-5 text-sm"
-            >
-              <SelectValue placeholder="Not set" />
-            </SelectTrigger>
-            <SelectContent>
-              {strands.map((item) => (
-                <SelectItem key={item.id} value={item.id}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
       </div>
 
       {state.error ? (

@@ -33,6 +33,10 @@ const deskLinks: NavItem[] = [
 ];
 
 function isActive(href: string, pathname: string) {
+  if (href === "/admin") {
+    return pathname === href;
+  }
+
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -86,7 +90,7 @@ export function AdminNav({
   const pathname = activeHref ?? routePathname;
 
   return (
-    <nav className="flex flex-col gap-1" aria-label="Librarian navigation">
+    <nav className="flex flex-col gap-1" aria-label="Store management navigation">
       <p className="px-4 pb-1 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         Manage
       </p>

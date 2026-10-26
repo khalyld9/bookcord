@@ -7,25 +7,6 @@ import { signup, type SignupState } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-type SignupFormProps = {
-  yearLevels: {
-    id: string;
-    name: string;
-  }[];
-
-  strands: {
-    id: string;
-    name: string;
-  }[];
-};
 
 const initialState: SignupState = {
   error: "",
@@ -33,10 +14,7 @@ const initialState: SignupState = {
   message: "",
 };
 
-export function SignupForm({
-  yearLevels,
-  strands,
-}: SignupFormProps) {
+export function SignupForm() {
   const [state, formAction, pending] = useActionState(
     signup,
     initialState,
@@ -55,20 +33,6 @@ export function SignupForm({
           placeholder="Juan Dela Cruz"
           required
           autoComplete="name"
-          className="h-12 rounded-xl text-base"
-        />
-      </div>
-
-      {/* STUDENT ID */}
-      <div className="space-y-2">
-        <Label htmlFor="student_id">Student ID</Label>
-
-        <Input
-          id="student_id"
-          name="student_id"
-          type="text"
-          placeholder="2026-00001"
-          required
           className="h-12 rounded-xl text-base"
         />
       </div>
@@ -124,63 +88,6 @@ export function SignupForm({
             autoComplete="new-password"
             className="h-12 rounded-xl text-base"
           />
-        </div>
-      </div>
-
-      {/* YEAR LEVEL + STRAND */}
-      <div className="grid gap-6 sm:grid-cols-2">
-        {/* YEAR LEVEL */}
-        <div className="space-y-2">
-          <Label htmlFor="year_level_id">
-            Year Level / Grade Level
-          </Label>
-
-          <Select name="year_level_id" required defaultValue="">
-            <SelectTrigger id="year_level_id" className="h-12 rounded-xl text-base">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent >
-              {yearLevels.map((item) => (
-                <SelectItem key={item.id} value={item.id} className="rounded-lg px-3 py-2 text-base">
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {yearLevels.length === 0 && (
-            <p className="text-xs text-destructive">
-              No year levels available yet, the librarian needs to run
-              migration 0005.
-            </p>
-          )}
-        </div>
-
-        {/* STRAND */}
-        <div className="space-y-2">
-          <Label htmlFor="strand_id">
-            Strand
-          </Label>
-
-          <Select name="strand_id" required defaultValue="">
-            <SelectTrigger id="strand_id" className="h-12 rounded-xl text-base">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent >
-              {strands.map((item) => (
-                <SelectItem key={item.id} value={item.id} className="rounded-lg px-3 py-2 text-base">
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {strands.length === 0 && (
-            <p className="text-xs text-destructive">
-              No strands available yet, the librarian needs to run migration
-              0005 (it adds the ICT strand).
-            </p>
-          )}
         </div>
       </div>
 

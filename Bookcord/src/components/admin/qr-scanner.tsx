@@ -191,7 +191,7 @@ export function QrScanner({ claimHref = "/admin/claim" }: { claimHref?: string }
           </p>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Opens the camera and reads the student&apos;s reservation QR, no
+            Opens the camera and reads the customer&apos;s reservation QR, no
             separate scanner app needed.
           </p>
         )}
@@ -232,7 +232,7 @@ export function QrScanner({ claimHref = "/admin/claim" }: { claimHref?: string }
               ? "Starting the camera…"
               : foreign
                 ? "That QR is not a Bookcord reservation, keep scanning."
-                : "Point the camera at the student's reservation QR."}
+                : "Point the camera at the customer's reservation QR."}
         </p>
         {camera === "live" || camera === "starting" ? (
           <Button

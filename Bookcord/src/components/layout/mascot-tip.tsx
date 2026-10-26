@@ -85,7 +85,7 @@ const DEFAULT_TIP: Tip = {
   mode: "exact",
   pose: pose10,
   alt: "Booky cheering between two shelves of books",
-  text: "Hi, I'm Booky! Press me to ask about restocks or message the librarian.",
+  text: "Hi, I'm Booky! Press me to ask about restocks or message the store team.",
 };
 
 function tipFor(pathname: string): Tip {

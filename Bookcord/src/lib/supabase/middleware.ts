@@ -40,8 +40,11 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
   const isAuthPage = path === "/login" || path === "/signup";
+  const hasStaffCookie = Boolean(
+    request.cookies.get("bookcord_staff_access")?.value,
+  );
 
-  if (!user && path.startsWith("/admin")) {
+  if (!user && !hasStaffCookie && path.startsWith("/admin")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", path);

@@ -22,7 +22,7 @@ export function AuthShell({
       <section className="relative isolate hidden overflow-hidden bg-espresso lg:block">
         <Image
           src={authPanel}
-          alt="Booky, the Bookcords mascot, jumping joyfully among colorful textbooks in a library"
+          alt="Booky, the Bookcords mascot, jumping joyfully among colorful books in a bookstore"
           fill
           priority
           sizes="50vw"
@@ -33,8 +33,8 @@ export function AuthShell({
             Bookcords
           </p>
           <p className="max-w-xs text-sm leading-relaxed text-white/75 text-pretty">
-            Your school library companion for checking stock and reserving
-            textbooks.
+            Your bookstore companion for discovering books, checking stock
+            and reserving titles.
           </p>
         </div>
       </section>

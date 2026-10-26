@@ -9,7 +9,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Book catalog",
-  description: "Browse the school textbook catalog by semester, strand, year level and subject.",
+  description: "Browse the bookstore catalog by title, author, subject and availability.",
 };
 
 type SearchParams = Promise<{

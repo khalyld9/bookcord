@@ -14,6 +14,8 @@ import {
   type ChatThreadSummary,
 } from "@/lib/data/booky";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { hasStaffAccess } from "@/lib/staff-access";
 import { formatDate } from "@/lib/utils";
 
 const UUID_PATTERN =
@@ -38,7 +40,7 @@ async function answerRestocks(): Promise<BookyReply> {
     if (rows.length === 0) {
       return {
         answer:
-          "No restocks on the calendar right now. The moment a copy lands I'll flip it to available, or tap the Librarian tab and ask!",
+          "No restocks on the calendar right now. The moment a copy lands I'll flip it to available, or message the Store team and ask!",
       };
     }
     const lines = rows.map(
@@ -51,7 +53,7 @@ async function answerRestocks(): Promise<BookyReply> {
       return {
         needsSetup: true,
         answer:
-          "I can't peek at the restock schedule yet, the librarian hasn't run migration 0004 in the database.",
+          "I can't peek at the restock schedule yet because the store database still needs migration 0004.",
       };
     }
     throw error;
@@ -103,7 +105,7 @@ export async function askBooky(question: string): Promise<BookyReply> {
   if (/(reserv|claim|qr|check ?out|pick ?up|hold)/.test(q)) {
     return {
       answer:
-        "Open the book's page and press “Reserve this book”, that creates your claim QR. Find it under My Reservations, show it at the counter, and the librarian scans it and hands your copy over. It goes from Pending to Claimed right there!",
+        "Open the book's page and press “Reserve this book”, that creates your claim QR. Find it under My Reservations, show it at the counter, and store staff scan it and hand your copy over.",
     };
   }
 
@@ -132,17 +134,17 @@ export async function askBooky(question: string): Promise<BookyReply> {
     };
   }
 
-  if (/(hour|open|close|when.*library|time)/.test(q)) {
+  if (/(hour|open|close|when.*store|time)/.test(q)) {
     return {
       answer:
-        "The library desk follows school hours, drop by any weekday and the librarian will sort you out.",
+        "Store hours are available at the counter. Drop by during opening hours and the team will help you out.",
     };
   }
 
-  if (/(librarian|admin|human|real person|teacher)/.test(q)) {
+  if (/(staff|team|admin|human|real person|help)/.test(q)) {
     return {
       answer:
-        "Flip to the Librarian tab up top and say hi, your message lands straight in the librarian's inbox.",
+        "Flip to the Store team tab up top and say hi, your message lands straight in the staff inbox.",
     };
   }
 
@@ -153,17 +155,17 @@ export async function askBooky(question: string): Promise<BookyReply> {
   if (/(^(hi|hello|hey|yo)\b|good (morning|afternoon|evening)|kumusta)/.test(q)) {
     return {
       answer:
-        "Hello hello! Ask me what's restocking, what's available, or how reserving works, or message the librarian in the other tab.",
+        "Hello hello! Ask me what's restocking, what's available, or how reserving works, or message the store team in the other tab.",
     };
   }
 
   return {
     answer:
-      "Hmm, that one's above my pay grade. I'm best at restocks, availability and reserving, or send it to the librarian in the Librarian tab!",
+      "Hmm, that one's above my pay grade. I'm best at restocks, availability and reserving, or send it to the store team in the Store team tab!",
   };
 }
 
-/** Student -> librarian message. */
+/** Customer -> admin message. */
 export async function sendChatMessage(
   body: string,
 ): Promise<{ error?: string; needsSetup?: boolean }> {
@@ -203,7 +205,7 @@ export async function fetchChatThread(): Promise<{
   }
 }
 
-/** Librarian reply from /admin/chat. */
+/** Admin reply from /admin/chat. */
 export async function adminSendChat(formData: FormData): Promise<{
   error?: string;
 }> {
@@ -216,7 +218,22 @@ export async function adminSendChat(formData: FormData): Promise<{
   if (!body) return { error: "Write a reply first." };
 
   await requireAdmin();
-  const supabase = await createClient();
+  const supabase = (await hasStaffAccess())
+    ? createAdminClient()
+    : await createClient();
+
+  // Only reply to an existing customer conversation. This prevents a crafted
+  // action request from turning the inbox into an arbitrary messaging API.
+  const { data: conversation, error: conversationError } = await supabase
+    .from("chat_messages")
+    .select("id")
+    .eq("profile_id", profileId)
+    .limit(1)
+    .maybeSingle();
+
+  if (conversationError || !conversation) {
+    return { error: "That conversation doesn't exist." };
+  }
 
   const { error } = await supabase.from("chat_messages").insert({
     profile_id: profileId,
@@ -224,7 +241,7 @@ export async function adminSendChat(formData: FormData): Promise<{
     body,
   });
 
-  if (error) return { error: "Could not send the reply." };
+  if (error) return { error: `Could not send the reply: ${error.message}` };
 
   revalidatePath("/admin/chat");
   return {};

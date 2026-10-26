@@ -44,7 +44,7 @@ export function RestockRequestsPanel({
             Restock requests
           </h2>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Students asking for out-of-stock titles.
+            Customers asking for out-of-stock titles.
           </p>
         </div>
         <Badge variant="secondary">
@@ -64,7 +64,7 @@ export function RestockRequestsPanel({
               </p>
               <p className="text-xs text-muted-foreground">
                 {[
-                  request.profile?.full_name ?? "Unknown student",
+                  request.profile?.full_name ?? "Unknown customer",
                   request.profile?.student_id,
                 ]
                   .filter(Boolean)

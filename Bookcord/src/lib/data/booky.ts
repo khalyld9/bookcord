@@ -1,6 +1,8 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { hasStaffAccess } from "@/lib/staff-access";
 import type { ChatMessage } from "@/types/database";
 
 export type RestockInfo = {
@@ -20,8 +22,14 @@ export type AdminThreadLine = ChatThreadLine & {
   profiles: { full_name: string; student_id: string | null } | null;
 };
 
-/** 42P01 missing table, 42883 missing function, 42P02 missing parameter. */
-const MISSING_CODES = new Set(["42P01", "42883", "42P02"]);
+/** PostgreSQL and PostgREST missing table/function/parameter codes. */
+const MISSING_CODES = new Set([
+  "42P01",
+  "42883",
+  "42P02",
+  "PGRST202",
+  "PGRST205",
+]);
 
 export function isMissingSchemaObject(error: unknown) {
   return (
@@ -63,7 +71,12 @@ export async function getChatThread(profileId: string) {
 
 /** Every conversation, for the librarian inbox. */
 export async function getAdminThreads() {
-  const supabase = await createClient();
+  // Passcode admins are authenticated by the app's signed cookie rather than
+  // Supabase Auth, so their server-side inbox queries need the service client.
+  // Supabase-authenticated admins keep using their own RLS-protected session.
+  const supabase = (await hasStaffAccess())
+    ? createAdminClient()
+    : await createClient();
   const { data, error } = await supabase
     .from("chat_messages")
     .select(
@@ -111,15 +124,24 @@ export async function getAdminChatState(activeProfileId?: string): Promise<{
     grouped.set(line.profile_id, entry);
   }
 
-  const threads = [...grouped.entries()].map(([profileId, thread]) => ({
-    profileId,
-    name: thread.name,
-    studentId: thread.studentId,
-    lastBody: thread.lines[thread.lines.length - 1]?.body ?? "",
-    count: thread.lines.length,
-  }));
+  const threads = [...grouped.entries()]
+    .sort(([, a], [, b]) =>
+      (b.lines[b.lines.length - 1]?.created_at ?? "").localeCompare(
+        a.lines[a.lines.length - 1]?.created_at ?? "",
+      ),
+    )
+    .map(([profileId, thread]) => ({
+      profileId,
+      name: thread.name,
+      studentId: thread.studentId,
+      lastBody: thread.lines[thread.lines.length - 1]?.body ?? "",
+      count: thread.lines.length,
+    }));
 
-  const active = activeProfileId ?? threads[0]?.profileId ?? null;
+  const active =
+    activeProfileId && grouped.has(activeProfileId)
+      ? activeProfileId
+      : (threads[0]?.profileId ?? null);
 
   return {
     threads,

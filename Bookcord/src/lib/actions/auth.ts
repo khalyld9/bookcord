@@ -15,6 +15,16 @@ import {
   isValidStaffPasscode,
 } from "@/lib/staff-access";
 
+function isStudentNumberConflict(error: {
+  code?: string | null;
+  message?: string;
+  details?: string | null;
+}) {
+  if (error.code !== "23505") return false;
+  const description = `${error.message ?? ""} ${error.details ?? ""}`;
+  return /profiles_student_id_unique|student_id/i.test(description);
+}
+
 export async function staffLogin(
   _prevState: { error: string },
   formData: FormData,
@@ -106,6 +116,12 @@ const signupSchema = z
       .trim()
       .min(2, "Enter your full name"),
 
+    student_id: z
+      .string()
+      .trim()
+      .min(2, "Enter your student number")
+      .max(50, "Student number must be 50 characters or fewer"),
+
     email: z
       .string()
       .trim()
@@ -142,6 +158,7 @@ export async function signup(
 
   const parsed = signupSchema.safeParse({
     full_name: formData.get("full_name"),
+    student_id: formData.get("student_id"),
     email: formData.get("email"),
     password: formData.get("password"),
     confirm_password: formData.get("confirm_password"),
@@ -159,6 +176,7 @@ export async function signup(
 
   const email = parsed.data.email.toLowerCase().trim();
   const fullName = parsed.data.full_name.trim();
+  const studentId = parsed.data.student_id.trim();
 
   /*
    * Create Supabase Auth account.
@@ -166,6 +184,12 @@ export async function signup(
   const { data, error } = await supabase.auth.signUp({
     email,
     password: parsed.data.password,
+    options: {
+      data: {
+        full_name: fullName,
+        student_id: studentId,
+      },
+    },
   });
 
   if (error) {
@@ -198,13 +222,19 @@ export async function signup(
     const { error: profileError } = await supabase.from("profiles").insert({
       auth_user_id: data.user.id,
       full_name: fullName,
+      student_id: studentId,
       email,
     });
 
-    if (profileError && profileError.code !== "23505") {
-      return {
-        error: `Account was created, but your profile could not be created: ${profileError.message}`,
-      };
+    if (profileError) {
+      if (isStudentNumberConflict(profileError)) {
+        return { error: "That student number is already registered." };
+      }
+      if (profileError.code !== "23505") {
+        return {
+          error: `Account was created, but your profile could not be created: ${profileError.message}`,
+        };
+      }
     }
 
     revalidatePath("/", "layout");
@@ -231,12 +261,16 @@ export async function signOut() {
 
 const completeProfileSchema = z.object({
   full_name: z.string().trim().min(2, "Enter your full name"),
+  student_id: z
+    .string()
+    .trim()
+    .min(2, "Enter your student number")
+    .max(50, "Student number must be 50 characters or fewer"),
 });
 
 /**
- * First Google sign-in creates the auth account but no student profile.
- * The visitor (now signed in) completes it here; the "profiles insert
- * self" policy covers the insert.
+ * A verified auth account without a profile completes it here; the
+ * "profiles insert self" policy covers the insert.
  */
 export async function completeProfile(
   _prevState: SignupState | null,
@@ -244,6 +278,7 @@ export async function completeProfile(
 ) {
   const parsed = completeProfileSchema.safeParse({
     full_name: formData.get("full_name"),
+    student_id: formData.get("student_id"),
   });
 
   if (!parsed.success) {
@@ -258,17 +293,21 @@ export async function completeProfile(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Sign in with Google first, then finish your profile." };
+    return { error: "Sign in first, then finish your profile." };
   }
 
   const { error } = await supabase.from("profiles").insert({
     auth_user_id: user.id,
     full_name: parsed.data.full_name,
+    student_id: parsed.data.student_id,
     email: (user.email ?? "").toLowerCase(),
   });
 
   if (error) {
     if (error.code === "23505") {
+      if (isStudentNumberConflict(error)) {
+        return { error: "That student number is already registered." };
+      }
       redirect("/books");
     }
     return { error: error.message };

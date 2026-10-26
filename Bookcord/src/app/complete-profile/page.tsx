@@ -24,9 +24,12 @@ export default async function CompleteProfilePage() {
   return (
     <AuthShell
       title="Almost there"
-      description="Your Google account is connected. Add your name to finish setting up your bookstore account."
+      description="Add your student details to finish setting up your bookstore account."
     >
-      <CompleteProfileForm />
+      <CompleteProfileForm
+        defaultName={String(user.user_metadata.full_name ?? "")}
+        defaultStudentId={String(user.user_metadata.student_id ?? "")}
+      />
     </AuthShell>
   );
 }

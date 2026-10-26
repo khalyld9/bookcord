@@ -37,6 +37,23 @@ export function SignupForm() {
         />
       </div>
 
+      {/* STUDENT NUMBER */}
+      <div className="space-y-2">
+        <Label htmlFor="student_id">Student Number</Label>
+
+        <Input
+          id="student_id"
+          name="student_id"
+          type="text"
+          placeholder="e.g. 2026-00123"
+          required
+          minLength={2}
+          maxLength={50}
+          autoComplete="off"
+          className="h-12 rounded-xl text-base"
+        />
+      </div>
+
       {/* EMAIL */}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>

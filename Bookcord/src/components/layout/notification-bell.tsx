@@ -135,7 +135,7 @@ export function NotificationBell({
       <DropdownMenuContent
         align="start"
         side="top"
-        className="w-80 overflow-hidden p-0"
+        className="w-[min(20rem,calc(100vw-2rem))] overflow-hidden p-0"
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">

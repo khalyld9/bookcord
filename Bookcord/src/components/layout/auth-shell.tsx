@@ -17,7 +17,7 @@ export function AuthShell({
   actionLink?: { href: string; label: string };
 }) {
   return (
-    <main className="grid min-h-screen w-full bg-paper dark:bg-background lg:grid-cols-2">
+    <main className="grid min-h-dvh w-full bg-paper dark:bg-background lg:grid-cols-2">
       {/* Left: full-height brand panel with Booky (desktop only). */}
       <section className="relative isolate hidden overflow-hidden bg-espresso lg:block">
         <Image
@@ -40,12 +40,12 @@ export function AuthShell({
       </section>
 
       {/* Right: the form column. */}
-      <section className="relative flex min-h-screen flex-col px-6 py-6 sm:px-12 lg:px-16 lg:py-8">
+      <section className="relative flex min-h-dvh min-w-0 flex-col px-4 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-16 lg:py-8">
         <header className="flex justify-end">
           <ThemeSwitcher />
         </header>
 
-        <div className="mx-auto my-auto w-full max-w-lg py-10">
+        <div className="mx-auto my-auto w-full max-w-lg py-8 sm:py-10">
           <h1 className="font-display text-4xl font-bold tracking-[-0.04em] sm:text-5xl">
             {title}
           </h1>

@@ -43,7 +43,7 @@ export default async function AdminLayout({
   return (
     <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
       {/* Sidebar, same gray as the page, store management items. */}
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col px-4 py-6 md:flex [@media(pointer:fine)]:flex">
+      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col px-4 py-5 lg:flex xl:w-72 xl:px-5 xl:py-6">
         <Link href="/admin" className="flex items-center gap-2.5 px-2">
           <BrandMark />
           <span className="font-display text-2xl font-bold tracking-tight">Bookcords</span>
@@ -53,7 +53,7 @@ export default async function AdminLayout({
         </div>
 
         <div className="flex flex-col gap-4 pt-5">
-          <div className="relative z-10 -mt-16">
+          <div className="relative z-10 [@media(max-height:720px)]:hidden">
             <BookyWidget />
           </div>
           <ThemeSwitcher />
@@ -66,9 +66,9 @@ export default async function AdminLayout({
       </aside>
 
       {/* Main content */}
-      <div className="flex min-w-0 flex-1 flex-col p-4 md:p-6">
+      <div className="flex min-w-0 flex-1 flex-col p-2 sm:p-4 lg:p-6">
         <BottomNav variant="admin" />
-        <main className="mx-auto w-full max-w-7xl flex-1 rounded-[28px] bg-muted/35 p-4 pt-6 pb-24 shadow-shelf ring-1 ring-border/70 sm:p-6 md:p-8 md:pb-8">
+        <main className="mx-auto w-full max-w-7xl flex-1 overflow-x-hidden rounded-[20px] bg-muted/35 p-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-5 shadow-shelf ring-1 ring-border/70 sm:rounded-[28px] sm:p-6 sm:pb-28 lg:p-8 lg:pb-8">
           {children}
         </main>
       </div>

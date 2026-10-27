@@ -74,7 +74,7 @@ export function StaffPasscodeForm() {
               onKeyDown={(event) => handleKeyDown(index, event)}
               onPaste={handlePaste}
               aria-label={`Admin passcode digit ${index + 1}`}
-              className="aspect-square min-w-0 rounded-xl border border-input bg-card text-center font-mono text-2xl font-semibold text-foreground outline-none transition-all focus:border-ochre focus:ring-4 focus:ring-ochre/15"
+              className="aspect-square min-w-0 rounded-xl border border-input bg-card text-center font-mono text-xl font-semibold text-foreground outline-none transition-all focus:border-ochre focus:ring-4 focus:ring-ochre/15 sm:text-2xl"
             />
           ))}
         </div>

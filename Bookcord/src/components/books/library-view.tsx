@@ -94,7 +94,7 @@ export function LibraryView({
         <CatalogCarousel books={books} bookHrefPrefix={bookHrefPrefix} />
       </section>
 
-      <footer className="mt-4 flex items-center justify-between gap-4 border-t border-border pt-6 text-xs text-muted-foreground">
+      <footer className="mt-4 flex flex-col items-start gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <p>© 2026 Bookcords · Book stock &amp; reservations</p>
       </footer>
     </div>

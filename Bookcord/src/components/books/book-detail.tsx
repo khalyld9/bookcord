@@ -118,7 +118,7 @@ export function BookDetail({
               Stock information
             </h2>
 
-            <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-2xl bg-border ring-1 ring-border">
+            <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-border ring-1 ring-border min-[390px]:grid-cols-3">
               {stock.map((item) => (
                 <div key={item.label} className="bg-card px-4 py-4">
                   <dt className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">

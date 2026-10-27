@@ -160,7 +160,7 @@ export function MascotTip({
   const tip = tipFor(pathname);
 
   return (
-    <div className="flex flex-col items-center gap-2 px-1" aria-label="Booky says">
+    <div className="flex flex-col items-center gap-1.5 px-1" aria-label="Booky says">
       {/* Cartoon balloon, stays white in every theme, like a comic strip. */}
       <div className="relative w-full rounded-2xl bg-white px-3.5 py-2.5 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.7)]">
         <p className="min-h-10 text-xs leading-relaxed text-[#472a21]">
@@ -178,7 +178,7 @@ export function MascotTip({
         aria-expanded={open}
         aria-label={open ? "Close the chat with Booky" : "Press Booky to open the chat"}
         title="Chat with Booky"
-        className="relative h-32 w-full cursor-pointer transition-transform duration-200 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ochre"
+        className="relative h-24 w-full cursor-pointer transition-transform duration-200 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ochre xl:h-28"
       >
         <span className="sr-only">{tip.alt}</span>
         <AnimatePresence initial={false} mode="popLayout">

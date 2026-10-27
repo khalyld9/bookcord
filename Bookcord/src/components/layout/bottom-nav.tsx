@@ -36,8 +36,8 @@ function isActive(href: string, pathname: string) {
 }
 
 /**
- * Phone navigation: a fixed bottom tab bar. Desktop keeps the sidebar,
- * this bar is hidden from md up.
+ * Phone and tablet navigation: a fixed bottom tab bar. The full sidebar
+ * begins at the large-screen breakpoint so narrow laptop windows stay usable.
  */
 export function BottomNav({
   variant = "student",
@@ -59,7 +59,7 @@ export function BottomNav({
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-50 grid border-t border-border bg-card/95 backdrop-blur md:hidden [@media(pointer:fine)]:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 grid border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-10px_30px_-24px_rgba(23,12,16,0.45)] backdrop-blur lg:hidden"
       style={{ gridTemplateColumns: `repeat(${exitHref ? tabs.length + 1 : tabs.length}, minmax(0, 1fr))` }}
     >
       {tabs.map((tab) => {
@@ -71,7 +71,7 @@ export function BottomNav({
             key={tab.href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex flex-col items-center gap-1 px-1 py-2.5 text-[11px] font-medium transition-colors ${
+            className={`flex min-w-0 flex-col items-center gap-1 px-0.5 py-2 text-[10px] font-medium transition-colors min-[390px]:px-1 min-[390px]:py-2.5 min-[390px]:text-[11px] ${
               active
                 ? "text-ochre-deep"
                 : "text-muted-foreground hover:text-foreground"
@@ -85,7 +85,7 @@ export function BottomNav({
       {exitHref ? (
         <Link
           href={exitHref}
-          className="flex flex-col items-center gap-1 px-1 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+          className="flex min-w-0 flex-col items-center gap-1 px-0.5 py-2 text-[10px] font-medium text-muted-foreground transition-colors hover:text-foreground min-[390px]:px-1 min-[390px]:py-2.5 min-[390px]:text-[11px]"
         >
           <LogOut className="size-5" strokeWidth={1.75} aria-hidden="true" />
           Exit

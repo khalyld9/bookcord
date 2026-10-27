@@ -33,6 +33,7 @@ export default async function LoginPage({ searchParams }: PageProps) {
   return (
     <AuthShell
       title={adminDesk ? "Admin sign in" : "Welcome back"}
+      mobileMascot={!adminDesk}
       actionLink={
         adminDesk
           ? { href: "/login", label: "Customer sign in" }

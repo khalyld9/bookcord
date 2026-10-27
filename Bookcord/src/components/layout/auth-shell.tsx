@@ -3,18 +3,22 @@ import Image from "next/image";
 
 import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 import authPanel from "@/assets/bookcord-auth-panel.png";
+import seatedBooky from "@/assets/mascot/pose-8.png";
 
 export function AuthShell({
   children,
   title,
   description,
   actionLink,
+  mobileMascot = false,
 }: {
   children: React.ReactNode;
   title: string;
   description?: string;
   /** Rendered under the form as a full-width secondary button. */
   actionLink?: { href: string; label: string };
+  /** Perches the seated Booky mascot on the title on small screens. */
+  mobileMascot?: boolean;
 }) {
   return (
     <main className="grid min-h-dvh w-full bg-paper dark:bg-background lg:grid-cols-2">
@@ -41,14 +45,31 @@ export function AuthShell({
 
       {/* Right: the form column. */}
       <section className="relative flex min-h-dvh min-w-0 flex-col px-4 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-16 lg:py-8">
-        <header className="flex justify-end">
+        <header className="flex justify-start lg:justify-end">
           <ThemeSwitcher />
         </header>
 
         <div className="mx-auto my-auto w-full max-w-lg py-8 sm:py-10">
-          <h1 className="font-display text-4xl font-bold tracking-[-0.04em] sm:text-5xl">
-            {title}
-          </h1>
+          <div
+            className={
+              mobileMascot
+                ? "relative pt-24 sm:pt-28 lg:pt-0"
+                : undefined
+            }
+          >
+            {mobileMascot ? (
+              <Image
+                src={seatedBooky}
+                alt="Booky sitting and reading a book"
+                priority
+                sizes="(max-width: 639px) 6rem, 7rem"
+                className="absolute right-3 top-0 h-auto w-24 drop-shadow-[0_10px_12px_rgba(23,12,16,0.14)] sm:right-5 sm:w-28 lg:hidden"
+              />
+            ) : null}
+            <h1 className="font-display text-4xl font-bold tracking-[-0.04em] sm:text-5xl">
+              {title}
+            </h1>
+          </div>
           {description ? (
             <p className="mt-3 text-base leading-relaxed text-muted-foreground">
               {description}

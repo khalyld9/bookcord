@@ -57,18 +57,20 @@ export function AuthShell({
                 : undefined
             }
           >
-            {mobileMascot ? (
-              <Image
-                src={seatedBooky}
-                alt="Booky sitting and reading a book"
-                priority
-                sizes="(max-width: 639px) 6rem, 7rem"
-                className="absolute right-3 top-0 h-auto w-24 drop-shadow-[0_10px_12px_rgba(23,12,16,0.14)] sm:right-5 sm:w-28 lg:hidden"
-              />
-            ) : null}
-            <h1 className="font-display text-4xl font-bold tracking-[-0.04em] sm:text-5xl">
-              {title}
-            </h1>
+            <div className="relative w-fit">
+              {mobileMascot ? (
+                <Image
+                  src={seatedBooky}
+                  alt="Booky sitting and reading a book"
+                  priority
+                  sizes="(max-width: 639px) 6rem, 7rem"
+                  className="absolute bottom-[calc(100%-0.125rem)] -right-10 h-auto w-24 drop-shadow-[0_10px_12px_rgba(23,12,16,0.14)] sm:-right-12 sm:w-28 lg:hidden"
+                />
+              ) : null}
+              <h1 className="font-display text-4xl font-bold tracking-[-0.04em] sm:text-5xl">
+                {title}
+              </h1>
+            </div>
           </div>
           {description ? (
             <p className="mt-3 text-base leading-relaxed text-muted-foreground">

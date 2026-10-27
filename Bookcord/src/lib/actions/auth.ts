@@ -58,7 +58,7 @@ export async function staffLogin(
   if (!/^\d{6}$/.test(passcode)) {
     return { error: "Enter the six-digit admin passcode." };
   }
-  if (!isValidStaffPasscode(passcode)) {
+  if (!(await isValidStaffPasscode(passcode))) {
     return { error: "Incorrect admin passcode." };
   }
 

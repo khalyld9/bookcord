@@ -1,21 +1,41 @@
 import "server-only";
 
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const STAFF_COOKIE = "bookcord_staff_access";
 
 function sessionToken() {
-  const secret = process.env.STAFF_SESSION_SECRET ?? process.env.STAFF_PASSCODE ?? "";
+  const secret =
+    process.env.STAFF_SESSION_SECRET ??
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    "";
   return createHmac("sha256", secret)
     .update("bookcord-store-staff")
     .digest("hex");
 }
 
-export function isValidStaffPasscode(value: string) {
-  const expected = process.env.STAFF_PASSCODE ?? "";
-  if (!/^\d{6}$/.test(value) || !/^\d{6}$/.test(expected)) return false;
-  return timingSafeEqual(Buffer.from(value), Buffer.from(expected));
+export async function isValidStaffPasscode(value: string) {
+  if (!/^\d{6}$/.test(value)) return false;
+
+  const candidateHash = createHash("sha256").update(value).digest("hex");
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("app_settings")
+    .select("value_hash")
+    .eq("key", "admin_passcode")
+    .maybeSingle();
+
+  if (error || !data?.value_hash || data.value_hash.length !== candidateHash.length) {
+    return false;
+  }
+
+  return timingSafeEqual(
+    Buffer.from(candidateHash),
+    Buffer.from(data.value_hash),
+  );
 }
 
 export async function grantStaffAccess() {

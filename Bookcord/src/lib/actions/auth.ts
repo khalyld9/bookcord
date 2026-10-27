@@ -238,14 +238,16 @@ export async function signup(
   /*
    * Create the profile.
    *
-   * If email confirmation is disabled, signUp returns a session and the
-   * profile is inserted through the "profiles insert self" policy. When
-   * confirmation is enabled there is no session yet: the visitor verifies
-   * the email, signs in, and finishes the profile at /complete-profile
-   * (the same path Google sign-ins use). No service-role key needed.
+   * If email confirmation is disabled, signUp returns a session and this
+   * trusted server action creates the matching profile with the service
+   * client. This avoids depending on the new session cookie being readable
+   * during the same request while still fixing auth_user_id to data.user.id.
+   * When confirmation is enabled there is no session yet: the visitor
+   * verifies the email, signs in, and finishes at /complete-profile.
    */
   if (data.session) {
-    const { data: profile, error: profileError } = await supabase
+    const admin = createAdminClient();
+    const { data: profile, error: profileError } = await admin
       .from("profiles")
       .insert({
         auth_user_id: data.user.id,
@@ -352,8 +354,9 @@ const completeProfileSchema = z.object({
 });
 
 /**
- * A verified auth account without a profile completes it here; the
- * "profiles insert self" policy covers the insert.
+ * A verified auth account without a profile completes it here. The user is
+ * resolved from Supabase Auth, then the trusted server action inserts only
+ * that user's profile through the service client.
  */
 export async function completeProfile(
   _prevState: SignupState | null,
@@ -380,7 +383,8 @@ export async function completeProfile(
   }
 
   const email = (user.email ?? "").toLowerCase();
-  const { data: profile, error } = await supabase
+  const admin = createAdminClient();
+  const { data: profile, error } = await admin
     .from("profiles")
     .insert({
       auth_user_id: user.id,

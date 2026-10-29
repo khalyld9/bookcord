@@ -45,7 +45,16 @@ export function AuthShell({
 
       {/* Right: the form column. */}
       <section className="relative flex min-h-dvh min-w-0 flex-col px-4 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-16 lg:py-8">
-        <header className="flex justify-start lg:justify-end">
+        <header className="flex items-start justify-between lg:justify-end">
+          {!mobileMascot ? (
+            <Image
+              src={seatedBooky}
+              alt="Booky sitting and reading a book"
+              priority
+              sizes="4rem"
+              className="h-auto w-16 drop-shadow-[0_8px_10px_rgba(23,12,16,0.12)] lg:hidden"
+            />
+          ) : null}
           <ThemeSwitcher />
         </header>
 

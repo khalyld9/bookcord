@@ -59,7 +59,8 @@ export default async function StudentLayout({
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col p-2 sm:p-4 lg:p-6">
         <BottomNav />
-        <main className="mx-auto w-full max-w-7xl flex-1 overflow-x-hidden rounded-[20px] bg-card p-4 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-5 shadow-shelf sm:rounded-[28px] sm:p-6 sm:pb-28 lg:p-8 lg:pb-8">
+        <BookyWidget compact />
+        <main className="mx-auto w-full max-w-7xl flex-1 overflow-x-hidden rounded-[20px] bg-card p-4 pb-[calc(9rem+env(safe-area-inset-bottom))] pt-5 shadow-shelf sm:rounded-[28px] sm:p-6 sm:pb-36 lg:p-8 lg:pb-8">
           {children}
         </main>
       </div>

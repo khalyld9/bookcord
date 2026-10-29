@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -23,6 +24,12 @@ const GREETING: BotMessage = {
   role: "bot",
   text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works, or message the store team for more help.",
 };
+
+const QUICK_QUESTIONS = [
+  "What books are available?",
+  "How do I reserve a book?",
+  "What's restocking soon?",
+];
 
 /* The panel is intentionally light in every theme (light, dark, OLED), so
    all colors below are literal, no tokens that could invert. */
@@ -47,8 +54,10 @@ export function BookyPanel({
   const [thread, setThread] = useState<ChatThreadLine[]>([]);
   const [needsSetup, setNeedsSetup] = useState(false);
   const [message, setMessage] = useState("");
+  const pathname = usePathname();
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const nextMessageId = useRef(2);
   // The panel portals to <body> so no ancestor stacking context (the sticky
   // sidebar, transformed cards) can ever paint above it.
   const mounted = useMounted();
@@ -92,26 +101,49 @@ export function BookyPanel({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [botMessages, thread, tab, open]);
 
-  async function submitQuestion(event: React.FormEvent) {
-    event.preventDefault();
-    const text = question.trim();
+  async function sendQuestion(rawQuestion: string) {
+    const text = rawQuestion.trim();
     if (!text || busy || demo) return;
 
     setQuestion("");
     setBusy(true);
-    const id = Date.now();
+    const id = nextMessageId.current;
+    nextMessageId.current += 2;
     setBotMessages((messages) => [
       ...messages,
       { id, role: "user", text },
     ]);
 
-    const reply = await askBooky(text);
-    if (reply.needsSetup) setNeedsSetup(true);
-    setBotMessages((messages) => [
-      ...messages,
-      { id: id + 1, role: "bot", text: reply.answer },
-    ]);
-    setBusy(false);
+    try {
+      const reply = await askBooky(text, {
+        pathname,
+        history: botMessages.slice(-6).map(({ role, text: body }) => ({
+          role,
+          text: body,
+        })),
+      });
+      if (reply.needsSetup) setNeedsSetup(true);
+      setBotMessages((messages) => [
+        ...messages,
+        { id: id + 1, role: "bot", text: reply.answer },
+      ]);
+    } catch {
+      setBotMessages((messages) => [
+        ...messages,
+        {
+          id: id + 1,
+          role: "bot",
+          text: "I couldn't reach the Bookcords catalog just now. Try again in a moment or message the Store team.",
+        },
+      ]);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function submitQuestion(event: React.FormEvent) {
+    event.preventDefault();
+    void sendQuestion(question);
   }
 
   async function submitMessage(event: React.FormEvent) {
@@ -214,19 +246,37 @@ export function BookyPanel({
             className="flex min-h-64 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4"
           >
             {tab === "bot"
-              ? botMessages.map((item) => (
-                  <div
-                    key={item.id}
-                    className={cn(
-                      "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
-                      item.role === "bot"
-                        ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#f4f4f5]"
-                        : "self-end rounded-br-md bg-espresso text-[#fff5ee]",
-                    )}
-                  >
-                    {item.text}
-                  </div>
-                ))
+              ? (
+                <>
+                  {botMessages.map((item) => (
+                    <div
+                      key={item.id}
+                      className={cn(
+                        "max-w-[85%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed",
+                        item.role === "bot"
+                          ? "self-start rounded-bl-md bg-white text-[#472a21] ring-1 ring-[#f4f4f5]"
+                          : "self-end rounded-br-md bg-espresso text-[#fff5ee]",
+                      )}
+                    >
+                      {item.text}
+                    </div>
+                  ))}
+                  {botMessages.length === 1 ? (
+                    <div className="flex flex-wrap gap-2" aria-label="Suggested questions">
+                      {QUICK_QUESTIONS.map((prompt) => (
+                        <button
+                          key={prompt}
+                          type="button"
+                          onClick={() => void sendQuestion(prompt)}
+                          className="rounded-full border border-[#e5cfc4] bg-white px-3 py-1.5 text-left text-[11px] font-medium text-[#6f4d42] transition-colors hover:border-ochre hover:text-ochre-deep"
+                        >
+                          {prompt}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </>
+              )
               : needsSetup
                 ? (
                   <p className="rounded-2xl border border-dashed border-[#d4d4d8] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">

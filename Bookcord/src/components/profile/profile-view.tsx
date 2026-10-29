@@ -58,9 +58,9 @@ function Panel({
     <Reveal
       as="section"
       delay={delay}
-      className="rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border sm:p-8"
+      className="rounded-2xl bg-card p-4 shadow-shelf ring-1 ring-border sm:rounded-3xl sm:p-8"
     >
-      <header className="mb-6 flex flex-col gap-1.5">
+      <header className="mb-4 flex flex-col gap-1 sm:mb-6 sm:gap-1.5">
         <h2 className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
           {Icon ? (
             <Icon className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
@@ -90,7 +90,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
     .join(" · ");
 
   return (
-    <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8 lg:p-10">
+    <section className="relative isolate overflow-hidden rounded-2xl bg-espresso p-4 text-espresso-foreground shadow-shelf sm:rounded-3xl sm:p-8 lg:p-10">
       <Image
         src="/banners/profile-2.png"
         alt=""
@@ -101,9 +101,9 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
       {/* Flat legibility layer for narrow screens, where the crop puts the
           illustration behind the avatar. Hidden on large screens. */}
       <div className="absolute inset-0 -z-10 bg-espresso/60 lg:hidden" />
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-center gap-5">
-          <Avatar className="size-20 rounded-2xl ring-1 ring-espresso-foreground/25">
+      <div className="flex flex-col gap-5 sm:gap-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-center gap-3 sm:gap-5">
+          <Avatar className="size-16 rounded-xl ring-1 ring-espresso-foreground/25 sm:size-20 sm:rounded-2xl">
             {profile.avatarUrl ? (
               <AvatarImage src={profile.avatarUrl} alt={profile.fullName} />
             ) : null}
@@ -113,17 +113,17 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
           </Avatar>
 
           <div className="min-w-0">
-            <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted sm:text-[13px] sm:tracking-[0.22em]">
               Account, Profile
             </p>
-            <h1 className="mt-2 truncate font-display text-3xl font-bold leading-tight tracking-[-0.04em] sm:text-4xl">
+            <h1 className="mt-1 truncate font-display text-2xl font-bold leading-tight tracking-[-0.04em] sm:mt-2 sm:text-4xl">
               {profile.fullName}
             </h1>
-            <p className="mt-1.5 truncate text-sm text-espresso-muted">
+            <p className="mt-1 truncate text-xs text-espresso-muted sm:mt-1.5 sm:text-sm">
               {profile.email}
             </p>
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-2.5 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2">
               <HeroChip>
                 {profile.role === "ADMIN" ? "Store staff" : "Customer"}
               </HeroChip>
@@ -148,13 +148,13 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
   ];
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5 sm:gap-8">
       <Reveal>
         <ProfileHero profile={profile} />
       </Reveal>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        <div className="flex flex-col gap-6">
+      <div className="grid items-start gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <div className="flex flex-col gap-4 sm:gap-6">
           <Panel
             delay={100}
             title="Your details"
@@ -180,7 +180,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
           </Panel>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
           <Panel delay={150} title="Account" icon={BadgeCheck}>
             <dl className="flex flex-col gap-4">
               {account.map((item) => (

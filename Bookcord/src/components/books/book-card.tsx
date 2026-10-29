@@ -27,7 +27,7 @@ export function BookCard({
       href={
         bookHrefPrefix ? `${bookHrefPrefix}${book.id}` : `/books/${book.id}`
       }
-      className="group relative flex h-[28rem] flex-col justify-end overflow-hidden rounded-[30px] bg-neutral-950 shadow-[0_12px_32px_-20px_rgba(23,12,16,0.3)] ring-1 ring-white/15 transition-[box-shadow,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_18px_44px_-22px_rgba(23,12,16,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="group relative flex h-[22rem] flex-col justify-end overflow-hidden rounded-[24px] bg-neutral-950 shadow-[0_12px_32px_-20px_rgba(23,12,16,0.3)] ring-1 ring-white/15 transition-[box-shadow,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_18px_44px_-22px_rgba(23,12,16,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-[28rem] sm:rounded-[30px]"
     >
       {/* The cover fills the whole card; its own colors become the card. */}
       <BookCover
@@ -55,13 +55,13 @@ export function BookCard({
       {/* Glass edges: hairline inner highlight, brightening as you hover. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-[30px] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_0_0_1px_rgba(255,255,255,0.1)] transition-shadow duration-500 group-hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.32),inset_0_0_0_1px_rgba(255,255,255,0.18)]"
+        className="pointer-events-none absolute inset-0 rounded-[24px] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_0_0_1px_rgba(255,255,255,0.1)] transition-shadow duration-500 group-hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.32),inset_0_0_0_1px_rgba(255,255,255,0.18)] sm:rounded-[30px]"
       />
 
       {/* Content rides at the bottom of the same surface. */}
-      <div className="relative flex flex-col gap-3 p-6">
+      <div className="relative flex flex-col gap-2 p-4 sm:gap-3 sm:p-6">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="line-clamp-2 font-display text-lg font-semibold leading-snug tracking-[-0.02em] text-white">
+          <h3 className="line-clamp-2 font-display text-base font-semibold leading-snug tracking-[-0.02em] text-white sm:text-lg">
             {book.title}
           </h3>
           {available === 0 ? (
@@ -75,7 +75,7 @@ export function BookCard({
           )}
         </div>
 
-        <p className="line-clamp-1 text-sm text-white/65">
+        <p className="line-clamp-1 text-xs text-white/65 sm:text-sm">
           {[
             book.author?.name ?? "Unknown author",
             book.subject?.name,
@@ -97,7 +97,7 @@ export function BookCard({
           </ul>
         ) : null}
 
-        <span className="mt-1 flex h-10 w-fit items-center gap-1.5 self-start rounded-full bg-white px-5 text-sm font-semibold text-espresso shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_14px_30px_-10px_rgba(0,0,0,0.65)]">
+        <span className="mt-1 flex h-9 w-fit items-center gap-1.5 self-start rounded-full bg-white px-4 text-xs font-semibold text-espresso shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_14px_30px_-10px_rgba(0,0,0,0.65)] sm:h-10 sm:px-5 sm:text-sm">
           View book
           <ArrowRight
             className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"

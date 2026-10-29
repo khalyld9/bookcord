@@ -22,7 +22,7 @@ export function HubHeader({
   stats?: { label: string; value: string | number }[];
 }) {
   return (
-    <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8">
+    <section className="relative isolate overflow-hidden rounded-2xl bg-espresso p-4 text-espresso-foreground shadow-shelf sm:rounded-3xl sm:p-8">
       {image ? (
         <>
           <Image
@@ -38,18 +38,18 @@ export function HubHeader({
         </>
       ) : null}
 
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-4 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
+          <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted sm:text-[13px] sm:tracking-[0.22em]">
             <Icon className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
             {eyebrow}
           </p>
 
-          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-[-0.04em] text-balance sm:text-5xl">
+          <h1 className="mt-3 font-display text-3xl font-bold leading-[1.05] tracking-[-0.04em] text-balance sm:mt-5 sm:text-5xl">
             {title}
           </h1>
 
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-espresso-muted text-pretty">
+          <p className="mt-2 max-w-md text-xs leading-relaxed text-espresso-muted text-pretty sm:mt-4 sm:text-sm">
             {description}
           </p>
         </div>

@@ -39,11 +39,11 @@ export function CatalogCarousel({
   }
 
   return (
-    <ul className="-mt-4 -mb-8 flex snap-x snap-mandatory gap-6 overflow-x-auto pt-4 pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <ul className="-mt-2 -mb-5 flex snap-x snap-mandatory gap-3 overflow-x-auto pt-2 pb-5 [scrollbar-width:none] sm:-mt-4 sm:-mb-8 sm:gap-6 sm:pt-4 sm:pb-8 [&::-webkit-scrollbar]:hidden">
       {books.map((book) => (
         <li
           key={book.id}
-          className="w-[76vw] shrink-0 snap-center sm:w-[44%] lg:w-[calc((100%-3rem)/3)]"
+          className="w-[68vw] shrink-0 snap-center sm:w-[44%] lg:w-[calc((100%-3rem)/3)]"
         >
           <BookCard book={book} bookHrefPrefix={bookHrefPrefix} />
         </li>

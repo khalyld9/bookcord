@@ -66,10 +66,10 @@ export default async function AdminLayout({
       </aside>
 
       {/* Main content */}
-      <div className="flex min-w-0 flex-1 flex-col p-2 sm:p-4 lg:p-6">
+      <div className="flex min-w-0 flex-1 flex-col p-0 sm:p-4 lg:p-6">
         <BottomNav variant="admin" />
         <BookyWidget compact />
-        <main className="mx-auto w-full max-w-7xl flex-1 overflow-x-hidden rounded-[20px] bg-muted/35 p-4 pb-[calc(9rem+env(safe-area-inset-bottom))] pt-5 shadow-shelf ring-1 ring-border/70 sm:rounded-[28px] sm:p-6 sm:pb-36 lg:p-8 lg:pb-8">
+        <main className="mx-auto w-full max-w-7xl flex-1 overflow-x-hidden bg-muted/35 p-3 pb-[calc(6.25rem+env(safe-area-inset-bottom))] pt-4 sm:rounded-[28px] sm:p-6 sm:pb-[calc(7rem+env(safe-area-inset-bottom))] sm:shadow-shelf sm:ring-1 sm:ring-border/70 lg:p-8 lg:pb-8">
           {children}
         </main>
       </div>

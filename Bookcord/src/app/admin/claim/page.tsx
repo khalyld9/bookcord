@@ -35,10 +35,10 @@ export default async function ClaimDeskPage({ searchParams }: PageProps) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
+            <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
               Claim desk
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">

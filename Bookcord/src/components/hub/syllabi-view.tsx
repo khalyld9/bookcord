@@ -29,7 +29,7 @@ export function SyllabiView({
   const { groups, strandName, yearLevelName, profileIncomplete } = syllabi;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5 sm:gap-8">
       <Reveal>
         <HubHeader
           icon={LibraryBig}
@@ -46,7 +46,7 @@ export function SyllabiView({
 
       {profileIncomplete ? (
         <Reveal delay={100}>
-          <div className="flex flex-col items-start gap-4 rounded-3xl border border-dashed border-border bg-card/60 p-6 sm:flex-row sm:items-center sm:p-8">
+          <div className="flex flex-col items-start gap-3 rounded-2xl border border-dashed border-border bg-card/60 p-4 sm:flex-row sm:items-center sm:gap-4 sm:rounded-3xl sm:p-8">
             <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-espresso text-espresso-foreground">
               <UserRound className="size-5" strokeWidth={1.75} aria-hidden="true" />
             </span>
@@ -76,15 +76,15 @@ export function SyllabiView({
           />
         </Reveal>
       ) : (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
           {groups.map((group, index) => (
             <Reveal
               key={group.subject}
               as="section"
               delay={Math.min(index, 4) * 80}
-              className="rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border sm:p-8"
+              className="rounded-2xl bg-card p-4 shadow-shelf ring-1 ring-border sm:rounded-3xl sm:p-8"
             >
-              <header className="mb-5 flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-4">
+              <header className="mb-3 flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3 sm:mb-5 sm:pb-4">
                 <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
                   {group.subject}
                 </h2>
@@ -109,7 +109,7 @@ export function SyllabiView({
                             ? `${bookHrefPrefix}${book.id}`
                             : `/books/${book.id}`
                         }
-                        className="group flex items-center justify-between gap-4 py-3.5 transition-colors hover:text-primary"
+                        className="group flex items-center justify-between gap-3 py-3 transition-colors hover:text-primary sm:gap-4 sm:py-3.5"
                       >
                         <span className="min-w-0">
                           <span className="line-clamp-1 block text-sm font-medium">

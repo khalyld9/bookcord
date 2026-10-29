@@ -22,9 +22,12 @@ import { useMounted } from "@/hooks/use-mounted";
 export function ClaimQr({
   code,
   size = 128,
+  compactOnMobile = false,
 }: {
   code: string;
   size?: number;
+  /** Uses a smaller QR inside dense mobile reservation rows. */
+  compactOnMobile?: boolean;
 }) {
   const mounted = useMounted();
   const [zoom, setZoom] = useState(false);
@@ -32,13 +35,17 @@ export function ClaimQr({
   if (!mounted) {
     return (
       <div
-        className="grid place-items-center rounded-2xl bg-white p-3 ring-1 ring-border"
-        style={{ width: size + 24, height: size + 24 }}
+        className={compactOnMobile
+          ? "grid size-[5.5rem] place-items-center rounded-xl bg-white p-2 ring-1 ring-border sm:size-[8.5rem] sm:rounded-2xl sm:p-3"
+          : "grid place-items-center rounded-2xl bg-white p-3 ring-1 ring-border"}
+        style={compactOnMobile ? undefined : { width: size + 24, height: size + 24 }}
         aria-hidden="true"
       >
         <div
-          className="animate-pulse rounded-xl bg-neutral-200"
-          style={{ width: size, height: size }}
+          className={compactOnMobile
+            ? "size-[4.5rem] animate-pulse rounded-lg bg-neutral-200 sm:size-28 sm:rounded-xl"
+            : "animate-pulse rounded-xl bg-neutral-200"}
+          style={compactOnMobile ? undefined : { width: size, height: size }}
         />
       </div>
     );
@@ -53,7 +60,9 @@ export function ClaimQr({
         onClick={() => setZoom(true)}
         title="Enlarge QR code"
         aria-label={`Enlarge the QR code for reservation ${code}`}
-        className="group/qr relative inline-flex flex-col items-center gap-2 rounded-2xl bg-white p-3 ring-1 ring-border transition-all hover:ring-ochre/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className={compactOnMobile
+          ? "group/qr relative inline-flex flex-col items-center gap-1.5 rounded-xl bg-white p-2 ring-1 ring-border transition-all hover:ring-ochre/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:gap-2 sm:rounded-2xl sm:p-3"
+          : "group/qr relative inline-flex flex-col items-center gap-2 rounded-2xl bg-white p-3 ring-1 ring-border transition-all hover:ring-ochre/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"}
       >
         {/* Fixed dark-on-white so the QR stays scannable in every theme. */}
         <QRCode
@@ -62,13 +71,21 @@ export function ClaimQr({
           level="M"
           fgColor="#3d0a14"
           bgColor="#ffffff"
+          className={compactOnMobile ? "size-[4.5rem] sm:size-auto" : undefined}
         />
-        <span className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-[#7d625c]">
+        <span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-[#7d625c] sm:text-xs sm:tracking-[0.2em]">
           <Maximize2
             className="size-3 opacity-0 transition-opacity group-hover/qr:opacity-100"
             aria-hidden="true"
           />
-          Show at the counter
+          {compactOnMobile ? (
+            <>
+              <span className="sm:hidden">Show QR</span>
+              <span className="hidden sm:inline">Show at the counter</span>
+            </>
+          ) : (
+            "Show at the counter"
+          )}
         </span>
       </button>
 

@@ -42,8 +42,8 @@ export function ClaimDesk({
     (reservation.status === "PENDING" || reservation.status === "READY");
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-5 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
+      <div className="flex flex-col gap-4 rounded-2xl bg-card p-4 ring-1 ring-border sm:gap-5 sm:p-6">
         <QrScanner claimHref={claimHref} />
 
         <div className="relative" aria-hidden="true">
@@ -81,7 +81,7 @@ export function ClaimDesk({
       </div>
 
       {needsMigration ? (
-        <div className="rounded-2xl border border-dashed border-border bg-card/60 p-6 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-border bg-card/60 p-4 text-sm text-muted-foreground sm:p-6">
           The <code className="font-mono text-xs">reservations</code> table is
           not in this database yet. Run{" "}
           <code className="font-mono text-xs">
@@ -92,7 +92,7 @@ export function ClaimDesk({
       ) : null}
 
       {!needsMigration && queriedCode && !reservation ? (
-        <div className="rounded-2xl border border-dashed border-border bg-card/60 p-6 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-border bg-card/60 p-4 text-sm text-muted-foreground sm:p-6">
           No reservation matches{" "}
           <code className="font-mono text-xs">{queriedCode}</code>. Ask the
           customer to open My Reservations and show you their QR code.
@@ -100,7 +100,7 @@ export function ClaimDesk({
       ) : null}
 
       {reservation ? (
-        <div className="flex flex-col gap-5 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+        <div className="flex flex-col gap-4 rounded-2xl bg-card p-4 ring-1 ring-border sm:gap-5 sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
               <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">

@@ -37,7 +37,7 @@ export function RestockRequestsPanel({
   };
 
   return (
-    <section className="flex flex-col gap-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+    <section className="flex flex-col gap-3 rounded-2xl bg-card p-4 ring-1 ring-border sm:gap-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">

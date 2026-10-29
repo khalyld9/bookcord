@@ -31,9 +31,9 @@ export default async function AdminCheckoutsPage() {
   today.setHours(0, 0, 0, 0);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
+        <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
           Customer pickups
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">

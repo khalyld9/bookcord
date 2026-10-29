@@ -32,7 +32,7 @@ export function BookyWidget({
           aria-expanded={open}
           aria-label={open ? "Close the chat with Booky" : "Chat with Booky"}
           title="Chat with Booky"
-          className={`fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] right-3 z-[60] grid size-14 place-items-center rounded-2xl bg-white shadow-[0_16px_36px_-16px_rgba(23,12,16,0.55)] ring-1 ring-black/10 transition-[opacity,transform] duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ochre dark:ring-white/15 lg:hidden ${
+          className={`fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom))] right-2.5 z-[60] grid size-12 place-items-center rounded-2xl bg-white shadow-[0_16px_36px_-16px_rgba(23,12,16,0.55)] ring-1 ring-black/10 transition-[opacity,transform] duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ochre dark:ring-white/15 sm:bottom-[calc(4.75rem+env(safe-area-inset-bottom))] sm:right-3 sm:size-14 lg:hidden ${
             open ? "pointer-events-none scale-90 opacity-0" : "opacity-100"
           }`}
         >
@@ -41,7 +41,7 @@ export function BookyWidget({
             alt=""
             width={42}
             height={36}
-            className="h-auto w-10"
+            className="h-auto w-8 sm:w-10"
           />
           <span className="absolute -left-1 -top-1 rounded-full bg-espresso px-1.5 py-0.5 font-mono text-[8px] font-semibold uppercase tracking-[0.12em] text-espresso-foreground shadow-sm">
             Booky

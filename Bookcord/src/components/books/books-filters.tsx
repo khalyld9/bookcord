@@ -42,7 +42,7 @@ function FilterSelect({
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger
         aria-label={label}
-        className="h-12 w-auto shrink-0 rounded-xl text-base"
+        className="h-10 w-auto shrink-0 rounded-xl text-sm sm:h-12 sm:text-base"
       >
         <SelectValue />
       </SelectTrigger>
@@ -108,7 +108,7 @@ export function BooksFilters({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       <div className="relative">
         <label htmlFor="catalog-search" className="sr-only">
           Search the catalog
@@ -124,7 +124,7 @@ export function BooksFilters({
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search by title, author, ISBN or subject…"
-          className="h-12 w-full rounded-xl border border-input bg-card pl-11 pr-24 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15 [&::-webkit-search-cancel-button]:appearance-none"
+          className="h-10 w-full rounded-xl border border-input bg-card pl-11 pr-12 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground hover:border-ochre/60 focus:border-ochre focus:ring-4 focus:ring-ochre/15 sm:h-12 sm:pr-24 [&::-webkit-search-cancel-button]:appearance-none"
         />
         {search ? (
           <button
@@ -139,7 +139,7 @@ export function BooksFilters({
       </div>
 
       <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <span className="flex shrink-0 items-center gap-2 pr-1 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
+        <span className="flex shrink-0 items-center gap-1.5 pr-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:gap-2 sm:text-[13px] sm:tracking-[0.22em]">
           <SlidersHorizontal className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
           Refine
         </span>

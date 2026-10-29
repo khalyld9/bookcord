@@ -28,9 +28,9 @@ export default async function AdminInventoryPage() {
   ]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
+        <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
           Inventory
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -120,11 +120,11 @@ export default async function AdminInventoryPage() {
         </div>
       </div>
 
-      <section className="rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+      <section className="rounded-2xl bg-card p-4 ring-1 ring-border sm:p-6">
         <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
           Add a title
         </h2>
-        <p className="mb-5 mt-1 text-sm text-muted-foreground">
+        <p className="mb-4 mt-1 text-sm text-muted-foreground sm:mb-5">
           New titles appear in the customer catalog immediately.
         </p>
         <AddBookForm

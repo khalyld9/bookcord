@@ -29,7 +29,7 @@ export function ReservationsView({
   bookHrefPrefix?: string;
 }) {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5 sm:gap-8">
       <Reveal>
         <HubHeader
           icon={QrCode}
@@ -64,20 +64,20 @@ export function ReservationsView({
           />
         </Reveal>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-3 sm:gap-4">
           {items.map((item, index) => {
             const isOpen = OPEN.includes(item.status);
 
             return (
               <Reveal key={item.id} as="li" delay={Math.min(index, 5) * 60}>
-                <div className="flex flex-col gap-5 rounded-2xl bg-card p-5 ring-1 ring-border sm:flex-row sm:items-center sm:p-6">
+                <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-3 gap-y-3 rounded-2xl bg-card p-3 ring-1 ring-border sm:flex sm:items-center sm:gap-5 sm:p-6">
                   <Link
                     href={
                       bookHrefPrefix
                         ? `${bookHrefPrefix}${item.books?.id ?? ""}`
                         : `/books/${item.books?.id ?? ""}`
                     }
-                    className="relative block aspect-[3/4] h-36 shrink-0 overflow-hidden rounded-xl bg-espresso sm:h-40"
+                    className="relative block aspect-[3/4] h-24 shrink-0 overflow-hidden rounded-lg bg-espresso sm:h-40 sm:rounded-xl"
                     tabIndex={item.books ? undefined : -1}
                     aria-label={item.books?.title ?? "Book"}
                   >
@@ -90,15 +90,15 @@ export function ReservationsView({
                   </Link>
 
                   <div className="min-w-0 flex-1">
-                    <h2 className="line-clamp-2 font-display text-lg font-semibold tracking-[-0.02em] sm:text-xl">
+                    <h2 className="line-clamp-2 font-display text-base font-semibold leading-tight tracking-[-0.02em] sm:text-xl">
                       {item.books?.title ?? "Title no longer in the catalog"}
                     </h2>
-                    <p className="mt-1 line-clamp-1 text-sm text-muted-foreground sm:text-base">
+                    <p className="mt-1 line-clamp-1 text-xs text-muted-foreground sm:text-base">
                       {[item.books?.author?.name, item.books?.subject?.name]
                         .filter(Boolean)
                         .join(" · ") || "Unknown author"}
                     </p>
-                    <p className="mt-2 font-mono text-[13px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground sm:text-[13px] sm:tracking-[0.16em]">
                       Reserved {formatDate(item.created_at, "MMM d, yyyy")}
                       {item.status === "CLAIMED" && item.claimed_at
                         ? ` · claimed ${formatDate(item.claimed_at, "MMM d, yyyy")}`
@@ -106,16 +106,18 @@ export function ReservationsView({
                     </p>
                   </div>
 
-                  <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end">
+                  <div className="col-span-2 flex shrink-0 flex-col items-start gap-3 border-t border-border pt-3 sm:items-end sm:border-0 sm:pt-0">
                     <ReservationStatusChip status={item.status} />
 
                     {isOpen ? (
-                      <div className="flex flex-col items-start gap-3 sm:items-end">
-                        <ClaimQr code={item.code} size={112} />
-                        <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-muted-foreground">
-                          Code {item.code}
-                        </p>
-                        <CancelReservationButton reservationId={item.id} />
+                      <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:flex-col sm:items-end">
+                        <ClaimQr code={item.code} size={112} compactOnMobile />
+                        <div className="flex flex-col items-end gap-2">
+                          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[13px] sm:tracking-[0.18em]">
+                            Code {item.code}
+                          </p>
+                          <CancelReservationButton reservationId={item.id} />
+                        </div>
                       </div>
                     ) : null}
                   </div>

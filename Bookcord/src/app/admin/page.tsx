@@ -21,17 +21,17 @@ function StatCard({
   tone?: "default" | "warn" | "alert";
 }) {
   return (
-    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-5 shadow-sm">
+    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-3.5 shadow-sm sm:p-5">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </p>
       <p
         className={
           tone === "alert"
-            ? "font-display text-3xl font-bold tracking-[-0.02em] text-primary"
+            ? "font-display text-2xl font-bold tracking-[-0.02em] text-primary sm:text-3xl"
             : tone === "warn"
-              ? "font-display text-3xl font-bold tracking-[-0.02em] text-ochre-deep"
-              : "font-display text-3xl font-bold tracking-[-0.02em]"
+              ? "font-display text-2xl font-bold tracking-[-0.02em] text-ochre-deep sm:text-3xl"
+              : "font-display text-2xl font-bold tracking-[-0.02em] sm:text-3xl"
         }
       >
         {value}
@@ -56,9 +56,9 @@ export default async function AdminOverviewPage() {
   const latestReservations = reservations.slice(0, 6);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5 sm:gap-8">
       <Reveal as="header">
-        <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
+        <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
           Store dashboard
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -66,7 +66,7 @@ export default async function AdminOverviewPage() {
         </p>
       </Reveal>
 
-      <Reveal as="section" delay={80} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Store statistics">
+      <Reveal as="section" delay={80} className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4" aria-label="Store statistics">
         <StatCard label="Titles" value={stats.totalBooks} hint={`${stats.activeUsers} active customers`} />
         <StatCard label="Copies on shelf" value={stats.availableStock} hint={`${stats.totalStock} total in the store`} />
         <StatCard label="Collected" value={stats.issuedBooks} hint="Copies collected by customers" />
@@ -77,8 +77,8 @@ export default async function AdminOverviewPage() {
         />
       </Reveal>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Reveal as="section" delay={160} className="flex flex-col gap-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
+        <Reveal as="section" delay={160} className="flex flex-col gap-3 rounded-2xl bg-card p-4 ring-1 ring-border sm:gap-4 sm:p-6">
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
               Stock to watch
@@ -116,7 +116,7 @@ export default async function AdminOverviewPage() {
           )}
         </Reveal>
 
-        <Reveal as="section" delay={240} className="flex flex-col gap-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6">
+        <Reveal as="section" delay={240} className="flex flex-col gap-3 rounded-2xl bg-card p-4 ring-1 ring-border sm:gap-4 sm:p-6">
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
               Latest reservations

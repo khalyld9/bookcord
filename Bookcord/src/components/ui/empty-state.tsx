@@ -19,8 +19,8 @@ export function EmptyState({
 }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-4 rounded-3xl bg-card px-6 text-center shadow-shelf ${
-        compact ? "py-8" : "py-12"
+      className={`flex flex-col items-center justify-center gap-3 rounded-2xl bg-card px-4 text-center shadow-shelf sm:gap-4 sm:rounded-3xl sm:px-6 ${
+        compact ? "py-6 sm:py-8" : "py-7 sm:py-12"
       }`}
     >
       <Image
@@ -28,7 +28,7 @@ export function EmptyState({
         alt=""
         width={compact ? 128 : 208}
         height={compact ? 128 : 208}
-        className={compact ? "size-28 sm:size-32" : "size-44 sm:size-52"}
+        className={compact ? "size-20 sm:size-32" : "size-28 sm:size-52"}
       />
       <div className="flex max-w-sm flex-col gap-1.5">
         <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">

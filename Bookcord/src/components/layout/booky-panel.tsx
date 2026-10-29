@@ -179,7 +179,7 @@ export function BookyPanel({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 24, scale: 0.96 }}
           transition={{ type: "spring", stiffness: 380, damping: 30 }}
-          className="fixed inset-x-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-[70] flex max-h-[min(68dvh,38rem)] w-auto flex-col overflow-hidden overscroll-contain rounded-2xl bg-[#ffffff] shadow-shelf ring-1 ring-[#e4e4e7] sm:inset-x-auto sm:bottom-6 sm:left-6 sm:max-h-[min(78dvh,42rem)] sm:w-[min(24rem,calc(100vw-3rem))] sm:rounded-3xl"
+          className="fixed inset-x-2 bottom-[calc(4.1rem+env(safe-area-inset-bottom))] z-[70] flex max-h-[calc(100dvh-5rem-env(safe-area-inset-bottom))] w-auto flex-col overflow-hidden overscroll-contain rounded-2xl bg-[#ffffff] shadow-shelf ring-1 ring-[#e4e4e7] sm:inset-x-auto sm:bottom-6 sm:left-6 sm:max-h-[min(78dvh,42rem)] sm:w-[min(24rem,calc(100vw-3rem))] sm:rounded-3xl"
         >
           <header className="flex items-center gap-3 border-b border-[#e7d8c9] px-4 py-3">
             <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-white ring-1 ring-[#e7d8c9]">
@@ -243,7 +243,7 @@ export function BookyPanel({
 
           <div
             ref={scrollRef}
-            className="flex min-h-64 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4"
+            className="flex min-h-48 flex-1 flex-col gap-3 overflow-y-auto px-3 py-3 sm:min-h-64 sm:px-4 sm:py-4"
           >
             {tab === "bot"
               ? (

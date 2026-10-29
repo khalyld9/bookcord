@@ -50,7 +50,7 @@ export function LibraryView({
   const count = books.length;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5 sm:gap-8">
       <Reveal>
         <LibraryHero />
       </Reveal>
@@ -59,7 +59,7 @@ export function LibraryView({
         as="section"
         delay={100}
         aria-label="Search and filter the catalog"
-        className="rounded-3xl bg-card p-5 shadow-shelf ring-1 ring-border sm:p-6"
+        className="rounded-2xl bg-card p-3 shadow-shelf ring-1 ring-border sm:rounded-3xl sm:p-6"
       >
         <Suspense fallback={<FiltersSkeleton />}>
           <BooksFilters
@@ -72,21 +72,21 @@ export function LibraryView({
         </Suspense>
       </Reveal>
 
-      <section aria-label="Catalog results" className="flex flex-col gap-5">
+      <section aria-label="Catalog results" className="flex flex-col gap-3 sm:gap-5">
         <Reveal
           as="header"
           delay={150}
-          className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4"
+          className="flex flex-wrap items-end justify-between gap-2 border-b border-border pb-3 sm:gap-3 sm:pb-4"
         >
           <div>
             <p className="font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
               Catalog
             </p>
-            <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em]">
+            <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.03em] sm:mt-2 sm:text-2xl">
               {count} {count === 1 ? "title" : "titles"}
             </h2>
           </div>
-          <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[13px] sm:tracking-[0.18em]">
             Newest additions first
           </p>
         </Reveal>
@@ -94,7 +94,7 @@ export function LibraryView({
         <CatalogCarousel books={books} bookHrefPrefix={bookHrefPrefix} />
       </section>
 
-      <footer className="mt-4 flex flex-col items-start gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <footer className="mt-1 flex flex-col items-start gap-2 border-t border-border pt-4 text-xs text-muted-foreground sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pt-6">
         <p>© 2026 Bookcords · Book stock &amp; reservations</p>
       </footer>
     </div>

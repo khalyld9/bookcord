@@ -50,10 +50,10 @@ export function BookDetail({
   ];
 
   return (
-    <Reveal className="overflow-hidden rounded-3xl bg-card shadow-shelf ring-1 ring-border">
-      <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[16rem_1fr] lg:gap-10 lg:p-10">
-        <div className="flex flex-col items-start gap-4">
-          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-espresso ring-1 ring-border">
+    <Reveal className="overflow-hidden rounded-2xl bg-card shadow-shelf ring-1 ring-border sm:rounded-3xl">
+      <div className="grid gap-5 p-4 sm:gap-8 sm:p-8 lg:grid-cols-[16rem_1fr] lg:gap-10 lg:p-10">
+        <div className="flex flex-col items-center gap-3 sm:items-start sm:gap-4">
+          <div className="relative aspect-[3/4] w-36 overflow-hidden rounded-xl bg-espresso ring-1 ring-border sm:w-52 sm:rounded-2xl lg:w-full">
             <BookCover
               src={book.cover_image_url}
               title={book.title}
@@ -70,14 +70,14 @@ export function BookDetail({
           />
         </div>
 
-        <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-5 sm:gap-6">
           <header className="flex flex-col gap-3">
             <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-muted-foreground">
               <Hash className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
               {book.isbn ?? "No ISBN on record"}
             </p>
 
-            <h1 className="font-display text-3xl font-bold leading-tight tracking-[-0.04em] text-balance sm:text-4xl">
+            <h1 className="font-display text-2xl font-bold leading-tight tracking-[-0.04em] text-balance sm:text-4xl">
               {book.title}
             </h1>
 
@@ -100,13 +100,13 @@ export function BookDetail({
 
           <Separator />
 
-          <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-8 sm:gap-y-4">
             {details.map((item) => (
               <div key={item.label} className="flex flex-col gap-1">
                 <dt className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   {item.label}
                 </dt>
-                <dd className="text-sm font-medium">{item.value}</dd>
+                <dd className="break-words text-sm font-medium">{item.value}</dd>
               </div>
             ))}
           </dl>
@@ -118,13 +118,13 @@ export function BookDetail({
               Stock information
             </h2>
 
-            <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-border ring-1 ring-border min-[390px]:grid-cols-3">
+            <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-xl bg-border ring-1 ring-border sm:rounded-2xl">
               {stock.map((item) => (
-                <div key={item.label} className="bg-card px-4 py-4">
-                  <dt className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                <div key={item.label} className="bg-card px-2.5 py-3 sm:px-4 sm:py-4">
+                  <dt className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground sm:text-xs sm:tracking-[0.18em]">
                     {item.label}
                   </dt>
-                  <dd className="mt-2 font-display text-2xl font-semibold tracking-[-0.03em] tabular-nums">
+                  <dd className="mt-1 font-display text-xl font-semibold tracking-[-0.03em] tabular-nums sm:mt-2 sm:text-2xl">
                     {item.value}
                   </dd>
                 </div>

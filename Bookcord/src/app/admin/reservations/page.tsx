@@ -42,10 +42,10 @@ export default async function AdminReservationsPage({ searchParams }: PageProps)
   const reservations = await getAdminReservations(active);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
+          <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
             Reservations
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">

@@ -175,7 +175,7 @@ export function ChatLive({
   if (!active) return null;
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[16rem_1fr]">
+    <div className="grid items-start gap-4 sm:gap-6 lg:grid-cols-[16rem_1fr]">
       <nav aria-label="Conversations" className="flex flex-col gap-1.5">
         {state.threads.map((thread) => (
           <button
@@ -198,7 +198,7 @@ export function ChatLive({
         ))}
       </nav>
 
-      <section className="flex flex-col gap-5 rounded-3xl bg-card p-6 shadow-shelf ring-1 ring-border">
+      <section className="flex flex-col gap-4 rounded-2xl bg-card p-4 shadow-shelf ring-1 ring-border sm:gap-5 sm:rounded-3xl sm:p-6">
         <header className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-4">
           <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
             {active.name}

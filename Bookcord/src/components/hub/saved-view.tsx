@@ -21,7 +21,7 @@ export function SavedView({
   bookHrefPrefix?: string;
 }) {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5 sm:gap-8">
       <Reveal>
         <HubHeader
           icon={Bookmark}
@@ -52,48 +52,51 @@ export function SavedView({
           />
         </Reveal>
       ) : (
-        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {items.map((item, index) => (
             <Reveal key={item.id} as="li" delay={(index % 6) * 70}>
-              <article className="flex h-full flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-border">
+              <article className="flex h-full flex-row overflow-hidden rounded-2xl bg-card ring-1 ring-border sm:flex-col">
                 <Link
                   href={
                     bookHrefPrefix
                       ? `${bookHrefPrefix}${item.book_id}`
                       : `/books/${item.book_id}`
                   }
-                  className="group relative block aspect-[3/4] w-full overflow-hidden bg-espresso"
+                  className="group relative block aspect-[3/4] w-24 shrink-0 overflow-hidden bg-espresso sm:w-full"
                 >
                   <BookCover
                     src={item.books?.cover_image_url}
                     title={item.books?.title ?? "Untitled textbook"}
-                    eyebrow={item.books?.subject?.name ?? item.books?.isbn}
-                    author={item.books?.author?.name}
+                    caption={false}
                     className="transition-transform duration-500 group-hover:scale-[1.04]"
                   />
-                  <div className="absolute right-3 top-3">
+                  <div className="absolute right-1.5 top-1.5 sm:right-3 sm:top-3">
                     <BookStatusBadge
                       inventory={item.books?.inventory ?? null}
                       minimumStock={item.books?.minimum_stock ?? 0}
+                      className="gap-1 px-1.5 py-0.5 text-[8px] tracking-[0.08em] sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-xs sm:tracking-[0.16em]"
                     />
                   </div>
                 </Link>
 
-                <div className="flex flex-1 flex-col gap-3 p-5">
+                <div className="flex min-w-0 flex-1 flex-col gap-2 p-3 sm:gap-3 sm:p-5">
                   <div>
-                    <p className="line-clamp-1 text-sm font-medium">
+                    <h2 className="line-clamp-2 font-display text-sm font-semibold leading-tight tracking-[-0.02em] sm:text-base">
+                      {item.books?.title ?? "Untitled textbook"}
+                    </h2>
+                    <p className="mt-1 line-clamp-1 text-xs text-muted-foreground sm:text-sm sm:font-medium sm:text-foreground">
                       {item.books?.author?.name ?? "Unknown author"}
                     </p>
-                    <p className="mt-1 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                    <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground sm:text-xs sm:tracking-[0.16em]">
                       Saved {formatDate(item.created_at, "MMM d, yyyy")}
                     </p>
                   </div>
 
                   {item.note ? (
-                    <p className="text-sm text-muted-foreground">{item.note}</p>
+                    <p className="line-clamp-2 text-xs text-muted-foreground sm:text-sm">{item.note}</p>
                   ) : null}
 
-                  <div className="mt-auto pt-2">
+                  <div className="mt-auto pt-1 sm:pt-2">
                     <SaveBookButton bookId={item.book_id} saved size="sm" />
                   </div>
                 </div>

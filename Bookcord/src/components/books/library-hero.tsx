@@ -10,7 +10,7 @@ import heroBanner from "@/assets/bookcord-hero-banner.png";
  */
 export function LibraryHero() {
   return (
-    <section className="relative isolate overflow-hidden rounded-3xl bg-espresso p-6 text-espresso-foreground shadow-shelf sm:p-8 lg:p-10">
+    <section className="relative isolate overflow-hidden rounded-2xl bg-espresso p-4 text-espresso-foreground shadow-shelf sm:rounded-3xl sm:p-8 lg:p-10">
       <Image
         src={heroBanner}
         alt=""
@@ -23,20 +23,20 @@ export function LibraryHero() {
           illustration behind the headline. Hidden on large screens. */}
       <div className="absolute inset-0 -z-10 bg-espresso/60 lg:hidden" />
 
-      <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-5 sm:gap-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="flex items-center gap-2 font-mono text-[13px] uppercase tracking-[0.22em] text-espresso-muted">
+          <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-espresso-muted sm:text-[13px] sm:tracking-[0.22em]">
             <BookOpen className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
             Bookstore, Catalog
           </p>
 
-          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-[-0.04em] text-balance sm:text-5xl">
+          <h1 className="mt-3 font-display text-3xl font-bold leading-[1.05] tracking-[-0.04em] text-balance sm:mt-5 sm:text-5xl">
             Every textbook
             <br />
             accounted for
           </h1>
 
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-espresso-muted text-pretty">
+          <p className="mt-2 max-w-md text-xs leading-relaxed text-espresso-muted text-pretty sm:mt-4 sm:text-sm">
             Search by title, author or ISBN, then narrow the shelves by subject
             and availability.
           </p>

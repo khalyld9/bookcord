@@ -38,10 +38,10 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 sm:gap-6">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">
+          <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
             Store team inbox
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -62,7 +62,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
       </header>
 
       {needsServiceKey ? (
-        <div className="rounded-3xl border border-dashed border-border bg-card p-6 shadow-sm sm:p-8">
+        <div className="rounded-2xl border border-dashed border-border bg-card p-4 shadow-sm sm:rounded-3xl sm:p-8">
           <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
             Connect admin replies
           </h2>
@@ -78,7 +78,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
           </p>
         </div>
       ) : needsSetup ? (
-        <div className="rounded-3xl border border-dashed border-border bg-card/60 p-6 sm:p-8">
+        <div className="rounded-2xl border border-dashed border-border bg-card/60 p-4 sm:rounded-3xl sm:p-8">
           <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
             Chat tables are missing
           </h2>

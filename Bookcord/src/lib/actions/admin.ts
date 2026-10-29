@@ -5,6 +5,13 @@ import { revalidatePath } from "next/cache";
 import { claimReservation } from "@/lib/actions/reservations";
 import { requireAdmin } from "@/lib/auth";
 import { escapeEmailHtml, sendTransactionalEmail } from "@/lib/email";
+import {
+  BOOK_COVERS_BUCKET,
+  bookCoverExtension,
+  bookCoverPathFromUrl,
+  ensureBookCoversBucket,
+  validateBookCover,
+} from "@/lib/storage/book-covers";
 import { createAdminDataClient } from "@/lib/supabase/admin-data";
 
 const UUID_PATTERN =
@@ -20,10 +27,92 @@ const ADMIN_REVALIDATE = [
   "/admin/claim",
   "/books",
   "/my-books",
+  "/saved",
+  "/history",
+  "/syllabi",
 ];
 
 function revalidateAll() {
   for (const path of ADMIN_REVALIDATE) revalidatePath(path);
+  revalidatePath("/books", "layout");
+}
+
+async function uploadBookCover(
+  supabase: Awaited<ReturnType<typeof createAdminDataClient>>,
+  file: File,
+  bookId: string,
+) {
+  const validationError = validateBookCover(file);
+  if (validationError) return { error: validationError } as const;
+
+  try {
+    await ensureBookCoversBucket(supabase);
+  } catch (error) {
+    return {
+      error: `Could not prepare cover storage: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    } as const;
+  }
+
+  const path = `${bookId}/${crypto.randomUUID()}.${bookCoverExtension(file)}`;
+  const { error: uploadError } = await supabase.storage
+    .from(BOOK_COVERS_BUCKET)
+    .upload(path, await file.arrayBuffer(), {
+      contentType: file.type,
+      upsert: false,
+    });
+
+  if (uploadError) {
+    return { error: `Could not upload the cover: ${uploadError.message}` } as const;
+  }
+
+  const { data } = supabase.storage.from(BOOK_COVERS_BUCKET).getPublicUrl(path);
+  return { path, publicUrl: data.publicUrl } as const;
+}
+
+/** Adds or replaces the cover of an existing catalog title. */
+export async function updateBookCover(
+  _previous: AdminResult | null,
+  formData: FormData,
+): Promise<AdminResult> {
+  await requireAdmin();
+
+  const bookId = String(formData.get("bookId") ?? "");
+  const file = formData.get("cover");
+  if (!UUID_PATTERN.test(bookId)) return { error: "That book does not exist." };
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: "Choose a cover image first." };
+  }
+
+  const supabase = await createAdminDataClient();
+  const { data: book, error: readError } = await supabase
+    .from("books")
+    .select("cover_image_url")
+    .eq("id", bookId)
+    .maybeSingle();
+  if (readError || !book) return { error: "That book does not exist." };
+
+  const uploaded = await uploadBookCover(supabase, file, bookId);
+  if ("error" in uploaded) return { error: uploaded.error };
+
+  const { error: updateError } = await supabase
+    .from("books")
+    .update({ cover_image_url: uploaded.publicUrl })
+    .eq("id", bookId);
+
+  if (updateError) {
+    await supabase.storage.from(BOOK_COVERS_BUCKET).remove([uploaded.path]);
+    return { error: `Could not save the cover: ${updateError.message}` };
+  }
+
+  const previousPath = bookCoverPathFromUrl(book.cover_image_url);
+  if (previousPath) {
+    await supabase.storage.from(BOOK_COVERS_BUCKET).remove([previousPath]);
+  }
+
+  revalidateAll();
+  return { message: "Book cover updated." };
 }
 
 /** Row-level reservation ops from the reservations desk. */
@@ -239,6 +328,7 @@ export async function addBook(
   const yearLevelId = String(formData.get("yearLevelId") ?? "") || null;
   const minimumStock = Number(formData.get("minimumStock") ?? 0);
   const initialStock = Number(formData.get("initialStock") ?? 0);
+  const cover = formData.get("cover");
 
   if (title.length < 2) return { error: "Give the title a name." };
   if (authorName.length < 2) return { error: "Give the author a name." };
@@ -252,6 +342,11 @@ export async function addBook(
   }
 
   const supabase = await createAdminDataClient();
+
+  if (cover instanceof File && cover.size > 0) {
+    const coverError = validateBookCover(cover);
+    if (coverError) return { error: coverError };
+  }
 
   // Reuse an existing author row when the name matches.
   let authorId: string | null = null;
@@ -274,9 +369,18 @@ export async function addBook(
     authorId = newAuthor.id;
   }
 
+  const bookId = crypto.randomUUID();
+  let uploadedCover: { path: string; publicUrl: string } | null = null;
+  if (cover instanceof File && cover.size > 0) {
+    const uploaded = await uploadBookCover(supabase, cover, bookId);
+    if ("error" in uploaded) return { error: uploaded.error };
+    uploadedCover = uploaded;
+  }
+
   const { data: book, error: bookError } = await supabase
     .from("books")
     .insert({
+      id: bookId,
       title,
       author_id: authorId,
       isbn,
@@ -285,11 +389,15 @@ export async function addBook(
       strand_id: strandId,
       year_level_id: yearLevelId,
       minimum_stock: minimumStock,
+      cover_image_url: uploadedCover?.publicUrl ?? null,
     })
     .select("id")
     .single();
 
   if (bookError) {
+    if (uploadedCover) {
+      await supabase.storage.from(BOOK_COVERS_BUCKET).remove([uploadedCover.path]);
+    }
     if (bookError.code === "23505") {
       return { error: "A book with that ISBN is already cataloged." };
     }

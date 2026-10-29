@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { AddBookForm } from "@/components/admin/add-book-form";
+import { BookCoverManager } from "@/components/admin/book-cover-manager";
 import { RestockRequestsPanel } from "@/components/admin/restock-requests-panel";
 import { StockActions } from "@/components/admin/stock-actions";
 import { Badge } from "@/components/ui/badge";
@@ -74,11 +75,23 @@ export default async function AdminInventoryPage() {
                   return (
                     <TableRow key={book.id}>
                       <TableCell>
-                        <p className="max-w-64 truncate text-sm font-medium">{book.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {[book.author?.name, book.isbn].filter(Boolean).join(" · ") ||
-                            "Unknown author"}
-                        </p>
+                        <div className="flex min-w-52 items-center gap-3">
+                          <BookCoverManager
+                            bookId={book.id}
+                            title={book.title}
+                            coverUrl={book.cover_image_url}
+                          />
+                          <div className="min-w-0">
+                            <p className="max-w-64 truncate text-sm font-medium">{book.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {[book.author?.name, book.isbn].filter(Boolean).join(" · ") ||
+                                "Unknown author"}
+                            </p>
+                            <p className="mt-0.5 text-[11px] text-muted-foreground">
+                              {book.cover_image_url ? "Click cover to replace" : "Click to add cover"}
+                            </p>
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {book.subject?.name ?? "N/A"}

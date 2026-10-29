@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
+  experimental: {
+    serverActions: {
+      // Covers are limited to 4 MB; leave room for the rest of the form body.
+      bodySizeLimit: "5mb",
+    },
+  },
   images: {
     // Book covers and profile pictures are served from the project's
     // Supabase storage buckets (`book-covers` + `avatars`; the avatars

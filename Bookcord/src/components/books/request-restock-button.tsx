@@ -8,7 +8,7 @@ import { requestRestock } from "@/lib/actions/restock";
 
 /**
  * Out-of-stock escape hatch: ask the library to order more copies. The
- * librarian sees the request on the inventory page, and any restock
+ * the admin sees the request on the inventory page, and any restock
  * resolves it automatically.
  */
 export function RequestRestockButton({
@@ -39,8 +39,8 @@ export function RequestRestockButton({
         </span>
         <p className="text-sm text-muted-foreground">
           {demoMode
-            ? "Preview only, nothing was sent. On the live site the store team sees this request on the inventory page."
-            : "The store team has been notified. Fresh copies will show up here as soon as they arrive."}
+            ? "Preview only, nothing was sent. On the live site the Bookstore team sees this request on the inventory page."
+            : "The Bookstore team has been notified. Fresh copies will show up here as soon as they arrive."}
         </p>
       </div>
     );
@@ -76,7 +76,7 @@ export function RequestRestockButton({
       <p className="text-xs text-muted-foreground">
         {demoMode
           ? "Preview only, clicking plays the flow without sending anything."
-          : "Every copy is out, ask the store team to order more so it returns to the shelf."}
+          : "Every copy is out, ask the Bookstore team to order more so it returns to the shelf."}
       </p>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}

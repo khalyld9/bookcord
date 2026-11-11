@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BookOpen, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronRight, Info } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
@@ -45,6 +45,13 @@ export default async function HomePage() {
           <Button asChild variant="outline">
             <Link href="/signup">Create an account</Link>
           </Button>
+
+          <Button asChild variant="ghost">
+            <Link href="/about">
+              <Info className="mr-2 size-4" />
+              About Bookcords
+            </Link>
+          </Button>
         </Reveal>
 
         <Reveal delay={320} className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
@@ -52,7 +59,7 @@ export default async function HomePage() {
             href="/login?desk=admin"
             className="font-semibold text-ochre-deep transition-colors hover:text-ochre"
           >
-            Store staff sign in
+            Admin sign in
           </Link>
         </Reveal>
       </div>

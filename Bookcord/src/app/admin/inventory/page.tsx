@@ -17,7 +17,7 @@ import { getAcademicOptions } from "@/lib/data/books";
 import { getAdminInventory, getRestockRequests } from "@/lib/data/admin";
 
 export const metadata: Metadata = {
-  title: "Inventory, Store Dashboard",
+  title: "Inventory, Bookstore Dashboard",
 };
 
 export default async function AdminInventoryPage() {
@@ -125,7 +125,7 @@ export default async function AdminInventoryPage() {
           Add a title
         </h2>
         <p className="mb-4 mt-1 text-sm text-muted-foreground sm:mb-5">
-          New titles appear in the customer catalog immediately.
+          New titles appear in the student catalog immediately.
         </p>
         <AddBookForm
           semesters={options.semesters}

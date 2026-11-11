@@ -13,7 +13,7 @@ import type { RestockRequestListItem } from "@/lib/data/admin";
 import { formatDate } from "@/lib/utils";
 
 /**
- * Librarian view of student restock requests. "Restock +1" adds a copy
+ * Admin view of student restock requests. "Restock +1" adds a copy
  * through the audited RPC, which also resolves every pending request
  * for the title, and "Dismiss" clears a request without restocking.
  */
@@ -44,7 +44,7 @@ export function RestockRequestsPanel({
             Restock requests
           </h2>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Customers asking for out-of-stock titles.
+            Students asking for out-of-stock titles.
           </p>
         </div>
         <Badge variant="secondary">
@@ -64,7 +64,7 @@ export function RestockRequestsPanel({
               </p>
               <p className="text-xs text-muted-foreground">
                 {[
-                  request.profile?.full_name ?? "Unknown customer",
+                  request.profile?.full_name ?? "Unknown student",
                   request.profile?.student_id,
                 ]
                   .filter(Boolean)

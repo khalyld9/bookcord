@@ -1,27 +1,47 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useCallback, useState, useTransition } from "react";
 
 import face from "@/assets/mascot/face.png";
 import { BookyPanel } from "@/components/layout/booky-panel";
 import { MascotTip } from "@/components/layout/mascot-tip";
+import { markBookyChatNotificationsRead } from "@/lib/actions/notifications";
 
 /**
  * Booky at the bottom of the sidebar. Pressing the mascot opens the chat
- * panel with the FAQ bot and the librarian thread.
+ * panel with the FAQ bot and the Bookstore team thread.
  */
 export function BookyWidget({
   pathnameOverride,
   demo = false,
   compact = false,
+  unreadCount = 0,
 }: {
   pathnameOverride?: string;
   demo?: boolean;
   /** Small floating launcher used when the desktop sidebar is hidden. */
   compact?: boolean;
+  /** Unread replies from the Bookstore team. */
+  unreadCount?: number;
 }) {
   const [open, setOpen] = useState(false);
+  const [unread, setUnread] = useState(unreadCount);
+  const [, startTransition] = useTransition();
+
+  const [seenUnread, setSeenUnread] = useState(unreadCount);
+  if (seenUnread !== unreadCount) {
+    setSeenUnread(unreadCount);
+    setUnread(unreadCount);
+  }
+
+  const markTeamViewed = useCallback(() => {
+    if (demo || unread === 0) return;
+    setUnread(0);
+    startTransition(async () => {
+      await markBookyChatNotificationsRead();
+    });
+  }, [demo, unread]);
 
   return (
     <>
@@ -34,7 +54,7 @@ export function BookyWidget({
           title="Chat with Booky"
           className={`fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom))] right-2.5 z-[60] grid size-12 place-items-center rounded-2xl bg-white shadow-[0_16px_36px_-16px_rgba(23,12,16,0.55)] ring-1 ring-black/10 transition-[opacity,transform] duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ochre dark:ring-white/15 sm:bottom-[calc(4.75rem+env(safe-area-inset-bottom))] sm:right-3 sm:size-14 lg:hidden ${
             open ? "pointer-events-none scale-90 opacity-0" : "opacity-100"
-          }`}
+          } ${unread > 0 ? "ring-2 ring-ochre shadow-[0_0_0_6px_rgba(213,146,49,0.14),0_16px_36px_-16px_rgba(23,12,16,0.55)]" : ""}`}
         >
           <Image
             src={face}
@@ -46,15 +66,27 @@ export function BookyWidget({
           <span className="absolute -left-1 -top-1 rounded-full bg-espresso px-1.5 py-0.5 font-mono text-[8px] font-semibold uppercase tracking-[0.12em] text-espresso-foreground shadow-sm">
             Booky
           </span>
+          {unread > 0 ? (
+            <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full bg-ochre px-1 py-0.5 font-mono text-[9px] font-bold text-[#2a1512] shadow-sm">
+              {unread > 9 ? "9+" : unread}
+            </span>
+          ) : null}
         </button>
       ) : (
         <MascotTip
           pathnameOverride={pathnameOverride}
           open={open}
           onPress={() => setOpen((value) => !value)}
+          unreadCount={unread}
         />
       )}
-      <BookyPanel open={open} onClose={() => setOpen(false)} demo={demo} />
+      <BookyPanel
+        open={open}
+        onClose={() => setOpen(false)}
+        demo={demo}
+        unreadCount={unread}
+        onTeamViewed={markTeamViewed}
+      />
     </>
   );
 }

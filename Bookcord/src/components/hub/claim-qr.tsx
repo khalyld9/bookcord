@@ -14,7 +14,7 @@ import {
 import { useMounted } from "@/hooks/use-mounted";
 
 /**
- * The QR the librarian scans at the counter. It encodes the claim desk URL
+ * The QR the admin scans at the counter. It encodes the claim desk URL
  * with the reservation code, so any camera app works as a scanner. The
  * origin is only known in the browser, hence the mounted gate. Tap it to
  * enlarge for easier scanning at the desk.

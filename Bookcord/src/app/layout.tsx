@@ -9,12 +9,13 @@ import "./globals.css";
    Apple devices and to each platform's system UI face elsewhere. */
 
 export const metadata: Metadata = {
+  applicationName: "Bookcords",
   title: {
     default: "Bookcords",
     template: "%s | Bookcords",
   },
   description:
-    "Bookstore catalog for discovering books, checking stock and reserving titles.",
+    "Bookcords is Lyceum of Alabang's bookstore catalog for discovering books, checking stock and reserving titles.",
 };
 
 export default function RootLayout({

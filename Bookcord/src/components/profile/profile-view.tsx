@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   BadgeCheck,
   History,
+  Info,
   ShoppingBag,
   ShieldCheck,
   UserRound,
@@ -125,7 +126,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
 
             <div className="mt-2.5 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2">
               <HeroChip>
-                {profile.role === "ADMIN" ? "Store staff" : "Customer"}
+                {profile.role === "ADMIN" ? "Admin" : "Student"}
               </HeroChip>
               <HeroChip>
                 {profile.status === "ACTIVE" ? "Active" : "Disabled"}
@@ -143,7 +144,7 @@ function ProfileHero({ profile }: { profile: ProfileViewData }) {
 export function ProfileView({ profile }: { profile: ProfileViewData }) {
   const account = [
     { label: "Email", value: profile.email },
-    { label: "Role", value: profile.role === "ADMIN" ? "Store staff" : "Customer" },
+    { label: "Role", value: profile.role === "ADMIN" ? "Admin" : "Student" },
     { label: "Member since", value: formatDate(profile.memberSince) },
   ];
 
@@ -158,7 +159,7 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
           <Panel
             delay={100}
             title="Your details"
-            description="Shown to store staff when you collect a reservation."
+            description="Shown to bookstore staff when you collect a reservation."
             icon={UserRound}
           >
             <ProfileForm
@@ -192,6 +193,13 @@ export function ProfileView({ profile }: { profile: ProfileViewData }) {
                 </div>
               ))}
             </dl>
+            <Link
+              href="/about"
+              className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-ochre-deep transition-colors hover:text-ochre"
+            >
+              <Info className="size-4" strokeWidth={1.75} aria-hidden="true" />
+              About Bookcords
+            </Link>
           </Panel>
 
           <Panel delay={250} title="Store activity" icon={ShoppingBag}>

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { adminReservationAction } from "@/lib/actions/admin";
 import type { ReservationStatus } from "@/types/database";
 
-/** Per-row librarian controls: set ready, claim & check out, or cancel. */
+/** Per-row admin controls: set ready, claim and check out, or cancel. */
 export function ReservationRowActions({
   id,
   code,

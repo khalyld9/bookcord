@@ -29,6 +29,9 @@ export default async function StudentLayout({
   } catch {
     // fall through with the empty state
   }
+  const bookyUnreadCount = notifications.filter(
+    (item) => item.type === "BOOKY_CHAT" && !item.read_at,
+  ).length;
 
   return (
     <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
@@ -45,7 +48,7 @@ export default async function StudentLayout({
 
         <div className="flex flex-col gap-4 pt-5">
           <div className="relative z-10 [@media(max-height:720px)]:hidden">
-            <BookyWidget />
+            <BookyWidget unreadCount={bookyUnreadCount} />
           </div>
           <ThemeSwitcher />
           <NotificationBell items={notifications} unreadCount={unreadCount} />
@@ -59,7 +62,7 @@ export default async function StudentLayout({
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col p-0 sm:p-4 lg:p-6">
         <BottomNav />
-        <BookyWidget compact />
+        <BookyWidget compact unreadCount={bookyUnreadCount} />
         <main className="mx-auto w-full max-w-7xl flex-1 overflow-x-hidden bg-card p-3 pb-[calc(6.25rem+env(safe-area-inset-bottom))] pt-4 sm:rounded-[28px] sm:p-6 sm:pb-[calc(7rem+env(safe-area-inset-bottom))] sm:shadow-shelf lg:p-8 lg:pb-8">
           {children}
         </main>

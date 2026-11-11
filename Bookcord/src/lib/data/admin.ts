@@ -130,7 +130,7 @@ export async function getAdminCheckouts(): Promise<AdminCheckoutItem[]> {
   return data ?? [];
 }
 
-/** Librarian-desk headline numbers: stock plus reservation demand. */
+/** Bookstore-dashboard headline numbers: stock plus reservation demand. */
 export async function getAdminStats() {
   const supabase = await createAdminDataClient();
   const [overview, openReservations, readyReservations] = await Promise.all([

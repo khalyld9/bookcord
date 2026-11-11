@@ -9,6 +9,7 @@ import {
   BookOpenCheck,
   CheckCheck,
   KeyRound,
+  MessageCircle,
   PackagePlus,
   PackageSearch,
   UserRoundCheck,
@@ -33,6 +34,7 @@ const TYPE_ICON = {
   RESTOCK_REQUEST: PackagePlus,
   RESTOCK_RESOLVED: PackageSearch,
   RESERVATION_READY: BookOpenCheck,
+  BOOKY_CHAT: MessageCircle,
 } as const;
 
 /**

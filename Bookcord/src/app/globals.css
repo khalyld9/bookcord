@@ -33,7 +33,7 @@
   --sidebar-border: transparent;
   --sidebar-ring: #8b0000;
 
-  /* Bookcord brand palette.
+  /* Bookcords brand palette.
      These live in :root (not only in `@theme`) so they survive Tailwind's
      unused-variable tree shaking and stay available to inline styles. */
   --paper: #f5f4f1;

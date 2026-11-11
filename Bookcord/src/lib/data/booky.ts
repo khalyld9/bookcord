@@ -69,7 +69,7 @@ export async function getChatThread(profileId: string) {
   return data ?? [];
 }
 
-/** Every conversation, for the librarian inbox. */
+/** Every conversation, for the admin inbox. */
 export async function getAdminThreads() {
   // Passcode admins are authenticated by the app's signed cookie rather than
   // Supabase Auth, so their server-side inbox queries need the service client.
@@ -98,10 +98,11 @@ export type ChatThreadSummary = {
   studentId: string | null;
   lastBody: string;
   count: number;
+  lastSender: "STUDENT" | "ADMIN";
 };
 
 /**
- * Grouped inbox state for the live librarian chat: the thread list plus
+ * Grouped inbox state for the live admin chat: the thread list plus
  * the active thread's lines. No active id means the first thread.
  */
 export async function getAdminChatState(activeProfileId?: string): Promise<{
@@ -136,6 +137,7 @@ export async function getAdminChatState(activeProfileId?: string): Promise<{
       studentId: thread.studentId,
       lastBody: thread.lines[thread.lines.length - 1]?.body ?? "",
       count: thread.lines.length,
+      lastSender: thread.lines[thread.lines.length - 1]?.sender ?? "STUDENT",
     }));
 
   const active =

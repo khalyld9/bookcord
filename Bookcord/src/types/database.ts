@@ -30,7 +30,8 @@ export type NotificationType =
   | "PASSWORD_CHANGED"
   | "RESTOCK_REQUEST"
   | "RESTOCK_RESOLVED"
-  | "RESERVATION_READY";
+  | "RESERVATION_READY"
+  | "BOOKY_CHAT";
 
 type Timestamp = string;
 

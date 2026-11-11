@@ -33,7 +33,7 @@ export function SyllabiView({
       <Reveal>
         <HubHeader
           icon={LibraryBig}
-          eyebrow="Customer account, Reading lists"
+          eyebrow="Student account, Reading lists"
           title="Recommended reading"
           description={
             profileIncomplete
@@ -72,7 +72,7 @@ export function SyllabiView({
           <EmptyState
             compact
             title="No textbooks filed for this course yet"
-            description="Once store staff curate titles for your interests, they show up here grouped by subject."
+            description="Once bookstore staff curate titles for your interests, they show up here grouped by subject."
           />
         </Reveal>
       ) : (

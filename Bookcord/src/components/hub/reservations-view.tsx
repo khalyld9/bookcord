@@ -17,7 +17,7 @@ const OPEN: ReservationStatus[] = ["PENDING", "READY"];
 
 /**
  * The student's reservations, the reserve + checkout flow. Open ones carry
- * the QR code the librarian scans at the counter.
+ * the QR code the admin scans at the counter.
  */
 export function ReservationsView({
   items,
@@ -33,9 +33,9 @@ export function ReservationsView({
       <Reveal>
         <HubHeader
           icon={QrCode}
-          eyebrow="Customer account, Pickup"
+          eyebrow="Student account, Pickup"
           title="My reservations"
-          description="Reserve a book, then show its QR code at the counter. Store staff scan it and hand your copy over."
+          description="Reserve a book, then show its QR code at the counter. Bookstore staff scan it and hand your copy over."
           image="/banners/reservations-2.png"
         />
       </Reveal>

@@ -22,7 +22,7 @@ const DEMO_ARRIVALS = [
 ];
 
 /**
- * Live librarian inbox. Polls every few seconds while the tab is visible,
+ * Live admin inbox. Polls every few seconds while the tab is visible,
  * so student messages (and your own replies) appear without a reload.
  * New messages keep the view pinned to the bottom unless the reader has
  * scrolled up.
@@ -87,7 +87,12 @@ export function ChatLive({
           return {
             threads: current.threads.map((thread) =>
               thread.profileId === target
-                ? { ...thread, lastBody: body, count: thread.count + 1 }
+                ? {
+                    ...thread,
+                    lastBody: body,
+                    count: thread.count + 1,
+                    lastSender: "STUDENT" as const,
+                  }
                 : thread,
             ),
             lines: [...current.lines, line],
@@ -135,7 +140,12 @@ export function ChatLive({
       setState((current) => ({
         threads: current.threads.map((thread) =>
           thread.profileId === activeId
-            ? { ...thread, lastBody: body, count: thread.count + 1 }
+            ? {
+                ...thread,
+                lastBody: body,
+                count: thread.count + 1,
+                lastSender: "ADMIN" as const,
+              }
             : thread,
         ),
         lines: [
@@ -187,10 +197,19 @@ export function ChatLive({
               "rounded-2xl px-4 py-3.5 text-left transition-colors",
               thread.profileId === active.profileId
                 ? "bg-card shadow-shelf ring-1 ring-border"
-                : "hover:bg-accent",
+                : thread.lastSender === "STUDENT"
+                  ? "bg-ochre/10 ring-1 ring-ochre/35 hover:bg-ochre/15"
+                  : "hover:bg-accent",
             )}
           >
-            <p className="line-clamp-1 text-sm font-medium">{thread.name}</p>
+            <span className="flex items-center justify-between gap-2">
+              <span className="line-clamp-1 text-sm font-medium">{thread.name}</span>
+              {thread.lastSender === "STUDENT" ? (
+                <span className="shrink-0 rounded-full bg-ochre px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[#2a1512]">
+                  Needs reply
+                </span>
+              ) : null}
+            </span>
             <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">
               {thread.lastBody}
             </p>

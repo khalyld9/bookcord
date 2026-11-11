@@ -14,15 +14,20 @@ import {
   sendChatMessage,
 } from "@/lib/actions/booky";
 import type { ChatThreadLine } from "@/lib/data/booky";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { useMounted } from "@/hooks/use-mounted";
 
-type BotMessage = { id: number; role: "user" | "bot"; text: string };
+type BotMessage = {
+  id: number;
+  role: "user" | "bot";
+  text: string;
+  createdAt?: string;
+};
 
 const GREETING: BotMessage = {
   id: 0,
   role: "bot",
-  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works, or message the store team for more help.",
+  text: "Hi, I'm Booky! Ask me what's restocking, what's available, how reserving works, or message the Bookstore team for more help.",
 };
 
 const QUICK_QUESTIONS = [
@@ -40,13 +45,17 @@ export function BookyPanel({
   open,
   onClose,
   demo = false,
+  unreadCount = 0,
+  onTeamViewed,
 }: {
   open: boolean;
   onClose: () => void;
   /** Preview mode: renders the UI without talking to the database. */
   demo?: boolean;
+  unreadCount?: number;
+  onTeamViewed?: () => void;
 }) {
-  const [tab, setTab] = useState<"bot" | "librarian">("bot");
+  const [tab, setTab] = useState<"bot" | "team">("bot");
   const [botMessages, setBotMessages] = useState<BotMessage[]>([GREETING]);
   const [question, setQuestion] = useState("");
   const [busy, setBusy] = useState(false);
@@ -62,10 +71,14 @@ export function BookyPanel({
   // sidebar, transformed cards) can ever paint above it.
   const mounted = useMounted();
 
-  // Load the librarian thread while the tab is open, and keep polling so
+  useEffect(() => {
+    if (open && tab === "team") onTeamViewed?.();
+  }, [onTeamViewed, open, tab]);
+
+  // Load the Bookstore team thread while the tab is open, and keep polling so
   // replies show up without a refresh.
   useEffect(() => {
-    if (!open || demo || tab !== "librarian") return;
+    if (!open || demo || tab !== "team") return;
 
     let stopped = false;
 
@@ -111,7 +124,7 @@ export function BookyPanel({
     nextMessageId.current += 2;
     setBotMessages((messages) => [
       ...messages,
-      { id, role: "user", text },
+      { id, role: "user", text, createdAt: new Date().toISOString() },
     ]);
 
     try {
@@ -125,7 +138,12 @@ export function BookyPanel({
       if (reply.needsSetup) setNeedsSetup(true);
       setBotMessages((messages) => [
         ...messages,
-        { id: id + 1, role: "bot", text: reply.answer },
+        {
+          id: id + 1,
+          role: "bot",
+          text: reply.answer,
+          createdAt: new Date().toISOString(),
+        },
       ]);
     } catch {
       setBotMessages((messages) => [
@@ -133,7 +151,8 @@ export function BookyPanel({
         {
           id: id + 1,
           role: "bot",
-          text: "I couldn't reach the Bookcords catalog just now. Try again in a moment or message the Store team.",
+          text: "I couldn't reach the Bookcords catalog just now. Try again in a moment or message the Bookstore team.",
+          createdAt: new Date().toISOString(),
         },
       ]);
     } finally {
@@ -213,7 +232,7 @@ export function BookyPanel({
             {(
               [
                 { id: "bot", label: "Ask Booky" },
-                { id: "librarian", label: "Store team" },
+                { id: "team", label: "Bookstore team" },
               ] as const
             ).map((item) => (
               <button
@@ -236,7 +255,14 @@ export function BookyPanel({
                     className="absolute inset-0 rounded-lg bg-espresso"
                   />
                 ) : null}
-                <span className="relative z-10">{item.label}</span>
+                <span className="relative z-10 flex items-center justify-center gap-1.5">
+                  {item.label}
+                  {item.id === "team" && unreadCount > 0 ? (
+                    <span className="grid min-w-4 place-items-center rounded-full bg-ochre px-1 text-[9px] font-bold text-[#2a1512]">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  ) : null}
+                </span>
               </button>
             ))}
           </div>
@@ -259,6 +285,18 @@ export function BookyPanel({
                       )}
                     >
                       {item.text}
+                      {item.createdAt ? (
+                        <span
+                          className={cn(
+                            "mt-1 block font-mono text-[9px] uppercase tracking-[0.12em]",
+                            item.role === "bot"
+                              ? "text-[#a08579]"
+                              : "text-[#fff5ee]/65",
+                          )}
+                        >
+                          {formatDate(item.createdAt, "MMM d, h:mm a")}
+                        </span>
+                      ) : null}
                     </div>
                   ))}
                   {botMessages.length === 1 ? (
@@ -290,7 +328,7 @@ export function BookyPanel({
                 : thread.length === 0
                   ? (
                     <p className="rounded-2xl border border-dashed border-[#e0cdbd] px-4 py-3 text-xs leading-relaxed text-[#8d6a5e]">
-                      No messages yet. Write to the store team below, replies
+                      No messages yet. Write to the Bookstore team below, replies
                       show up here.
                     </p>
                   )
@@ -305,6 +343,16 @@ export function BookyPanel({
                         )}
                       >
                         {line.body}
+                        <span
+                          className={cn(
+                            "mt-1 block font-mono text-[9px] uppercase tracking-[0.12em]",
+                            line.sender === "ADMIN"
+                              ? "text-[#a08579]"
+                              : "text-[#fff5ee]/65",
+                          )}
+                        >
+                          {formatDate(line.created_at, "MMM d, h:mm a")}
+                        </span>
                       </div>
                     ))}
 
@@ -343,8 +391,8 @@ export function BookyPanel({
               <input
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
-                placeholder="Message the store team…"
-                aria-label="Message the store team"
+                placeholder="Message the Bookstore team…"
+                aria-label="Message the Bookstore team"
                 className={inputClasses}
               />
               <button

@@ -8,6 +8,7 @@ import {
   Bookmark,
   LibraryBig,
   QrCode,
+  Info,
   User,
 } from "lucide-react";
 
@@ -28,6 +29,7 @@ const primaryLinks: NavItem[] = [
 const hubLinks: NavItem[] = [
   { href: "/saved", label: "Saved / Wishlist", icon: Bookmark },
   { href: "/syllabi", label: "Course Syllabi", icon: LibraryBig },
+  { href: "/about", label: "About Bookcords", icon: Info },
 ];
 
 function isActive(href: string, pathname: string) {
@@ -89,7 +91,7 @@ export function StudentNav({
 
   return (
     <div className="flex flex-col gap-6">
-      <nav aria-label="Customer" className="flex w-full flex-col gap-1">
+      <nav aria-label="Student" className="flex w-full flex-col gap-1">
         {primaryLinks.map((link) => (
           <NavRow
             key={link.href}

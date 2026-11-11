@@ -45,16 +45,32 @@ export function AuthShell({
 
       {/* Right: the form column. */}
       <section className="relative flex min-h-dvh min-w-0 flex-col px-4 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-16 lg:py-8">
-        <header className="flex items-start justify-between lg:justify-end">
-          {!mobileMascot ? (
-            <Image
-              src={seatedBooky}
-              alt="Booky sitting and reading a book"
-              priority
-              sizes="4rem"
-              className="h-auto w-16 drop-shadow-[0_8px_10px_rgba(23,12,16,0.12)] lg:hidden"
-            />
-          ) : null}
+        <header className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              aria-label="Bookcords home"
+              className="rounded-xl bg-white px-2.5 py-1.5 shadow-sm ring-1 ring-black/10"
+            >
+              <Image
+                src="/loa-logo.png"
+                alt="Lyceum of Alabang"
+                width={169}
+                height={62}
+                priority
+                className="h-8 w-auto object-contain sm:h-9"
+              />
+            </Link>
+            {!mobileMascot ? (
+              <Image
+                src={seatedBooky}
+                alt="Booky sitting and reading a book"
+                priority
+                sizes="4rem"
+                className="h-auto w-14 drop-shadow-[0_8px_10px_rgba(23,12,16,0.12)] lg:hidden"
+              />
+            ) : null}
+          </div>
           <ThemeSwitcher />
         </header>
 
@@ -99,8 +115,14 @@ export function AuthShell({
           ) : null}
         </div>
 
-        <footer className="text-xs text-muted-foreground">
+        <footer className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
           <p>© 2026 Bookcords · Book stock &amp; reservations</p>
+          <Link
+            href="/about"
+            className="font-medium text-foreground transition-colors hover:text-ochre-deep"
+          >
+            About Bookcords
+          </Link>
         </footer>
       </section>
     </main>

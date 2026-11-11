@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
  * Camera QR scanner for the claim desk. A student's reservation QR encodes
  * the claim URL with their code; once decoded we hop straight to
  * {claimHref}?code=… so the desk resolves the reservation. Degrades
- * gracefully: if the camera is blocked or missing, the librarian still
+ * gracefully: if the camera is blocked or missing, the admin can still
  * has the manual code field.
  */
 
@@ -25,11 +25,12 @@ function extractCode(raw: string): string | null {
     const code = new URL(value, "https://bookcord.invalid").searchParams.get(
       "code",
     );
-    if (code) return code.trim().toUpperCase();
+    if (code) return code.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
   } catch {
     // Not a URL, try the whole thing as a bare code below.
   }
-  return /^[A-Za-z0-9-]{6,}$/.test(value) ? value.toUpperCase() : null;
+  const bare = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return /^[A-Z0-9]{6,12}$/.test(bare) ? bare : null;
 }
 
 export function QrScanner({ claimHref = "/admin/claim" }: { claimHref?: string }) {
@@ -191,7 +192,7 @@ export function QrScanner({ claimHref = "/admin/claim" }: { claimHref?: string }
           </p>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Opens the camera and reads the customer&apos;s reservation QR, no
+            Opens the camera and reads the student&apos;s reservation QR, no
             separate scanner app needed.
           </p>
         )}
@@ -231,8 +232,8 @@ export function QrScanner({ claimHref = "/admin/claim" }: { claimHref?: string }
             : camera === "starting"
               ? "Starting the camera…"
               : foreign
-                ? "That QR is not a Bookcord reservation, keep scanning."
-                : "Point the camera at the customer's reservation QR."}
+                ? "That QR is not a Bookcords reservation, keep scanning."
+                : "Point the camera at the student's reservation QR."}
         </p>
         {camera === "live" || camera === "starting" ? (
           <Button

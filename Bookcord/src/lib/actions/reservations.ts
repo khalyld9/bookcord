@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin, requireUser } from "@/lib/auth";
 import { getReservationByCode, isMissingTable } from "@/lib/data/hub";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminDataClient } from "@/lib/supabase/admin-data";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -83,14 +84,14 @@ export async function cancelReservation(
 }
 
 /**
- * Librarian scans (or types) a student's QR code, then marks the reservation
+ * Admin scans (or types) a student's QR code, then marks the reservation
  * CLAIMED. The checkout ledger is written through the existing issue_book
  * RPC so stock stays in sync.
  */
 export async function claimReservation(code: string): Promise<ReservationResult> {
   await requireAdmin();
 
-  const normalized = code.trim().toUpperCase();
+  const normalized = code.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
   if (!CODE_PATTERN.test(normalized)) {
     return { error: "Enter the code printed under the QR code." };
   }
@@ -115,7 +116,7 @@ export async function claimReservation(code: string): Promise<ReservationResult>
     };
   }
 
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
 
   const { error: issueError } = await supabase.rpc("issue_book", {
     p_book_id: reservation.book_id,

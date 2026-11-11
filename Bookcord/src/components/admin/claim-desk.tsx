@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { CheckCircle2, ScanLine, Search } from "lucide-react";
 
 import { QrScanner } from "@/components/admin/qr-scanner";
@@ -12,7 +13,7 @@ import type { ReservationClaimDetail } from "@/lib/data/hub";
 import { formatDate } from "@/lib/utils";
 
 /**
- * Librarian claim desk. The QR on the student's phone links here with
+ * Admin claim desk. The QR on the student's phone links here with
  * ?code=…; scanning it with the camera (or typing the code) resolves the
  * reservation, and one button marks it claimed and writes the checkout.
  */
@@ -31,6 +32,7 @@ export function ClaimDesk({
   /** Guest preview: render the full desk but disable the write actions. */
   previewMode?: boolean;
 }) {
+  const router = useRouter();
   const [state, formAction, pending] = useActionState<ReservationResult, FormData>(
     async (_previous, formData) =>
       claimReservation(String(formData.get("code") ?? "")),
@@ -40,6 +42,10 @@ export function ClaimDesk({
   const claimable =
     reservation !== null &&
     (reservation.status === "PENDING" || reservation.status === "READY");
+
+  useEffect(() => {
+    if (state.success) router.refresh();
+  }, [router, state.success]);
 
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
@@ -67,7 +73,7 @@ export function ClaimDesk({
             <Input
               id="claim-code"
               name="code"
-              placeholder="Type the code from the customer's reservation"
+              placeholder="Type the code from the student's reservation"
               defaultValue={queriedCode ?? ""}
               autoComplete="off"
               className="font-mono uppercase"
@@ -95,7 +101,7 @@ export function ClaimDesk({
         <div className="rounded-2xl border border-dashed border-border bg-card/60 p-4 text-sm text-muted-foreground sm:p-6">
           No reservation matches{" "}
           <code className="font-mono text-xs">{queriedCode}</code>. Ask the
-          customer to open My Reservations and show you their QR code.
+          student to open My Reservations and show you their QR code.
         </div>
       ) : null}
 
@@ -121,10 +127,10 @@ export function ClaimDesk({
           <dl className="grid gap-4 text-sm sm:grid-cols-2">
             <div>
               <dt className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Customer
+                Student
               </dt>
               <dd className="mt-1">
-                {reservation.profile?.full_name ?? "Unknown customer"}
+                {reservation.profile?.full_name ?? "Unknown student"}
               </dd>
               <dd className="text-xs text-muted-foreground">
                 {[reservation.profile?.student_id, reservation.profile?.email]

@@ -56,7 +56,7 @@ export async function requestRestock(
 }
 
 /**
- * Librarian restocks in response to a request: one copy through the audited
+ * Admin restocks in response to a request: one copy through the audited
  * restock RPC, which also resolves every pending request for the title.
  */
 export async function restockFromRequest(
@@ -125,7 +125,7 @@ export async function restockFromRequest(
   return { success: true };
 }
 
-/** Librarian clears a request without restocking (not needed, duplicate…). */
+/** Admin clears a request without restocking (not needed, duplicate…). */
 export async function dismissRestockRequest(
   requestId: string,
 ): Promise<RestockResult> {

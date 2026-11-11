@@ -19,7 +19,9 @@ export default async function ClaimDeskPage({ searchParams }: PageProps) {
 
   const params = await searchParams;
   const rawCode = Array.isArray(params.code) ? params.code[0] : params.code;
-  const queriedCode = rawCode?.trim() ? rawCode.trim().toUpperCase() : null;
+  const queriedCode = rawCode?.trim()
+    ? rawCode.trim().toUpperCase().replace(/[^A-Z0-9]/g, "")
+    : null;
 
   let reservation = null;
   let needsMigration = false;
@@ -42,7 +44,7 @@ export default async function ClaimDeskPage({ searchParams }: PageProps) {
               Claim desk
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Scan a customer&apos;s reservation QR to mark it claimed and prepare
+              Scan a student&apos;s reservation QR to mark it claimed and prepare
               the book for pickup.
             </p>
           </div>
@@ -55,7 +57,7 @@ export default async function ClaimDeskPage({ searchParams }: PageProps) {
               strokeWidth={1.75}
               aria-hidden="true"
             />
-            Back to the store
+            Back to the bookstore
           </Link>
         </div>
 

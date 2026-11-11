@@ -45,7 +45,7 @@ async function answerRestocks(): Promise<BookyReply> {
     if (rows.length === 0) {
       return {
         answer:
-          "No restocks on the calendar right now. The moment a copy lands I'll flip it to available, or message the Store team and ask!",
+          "No restocks on the calendar right now. The moment a copy lands I'll flip it to available, or message the Bookstore team and ask!",
       };
     }
     const lines = rows.map(
@@ -96,7 +96,7 @@ async function answerAvailability(question: string): Promise<BookyReply> {
     return {
       answer: wantsOut
         ? "Nothing is fully out right now—the shelves are stocked!"
-        : "I can't see an available copy right now. Check the restock schedule or message the Store team.",
+        : "I can't see an available copy right now. Check the restock schedule or message the Bookstore team.",
     };
   }
   const lines = books
@@ -174,7 +174,7 @@ function answerNavigation(question: string, pathname?: string) {
   return null;
 }
 
-/** Booky's site-only assistant: natural-language help over live Bookcord data. */
+/** Booky's site-only assistant: natural-language help over live Bookcords data. */
 export async function askBooky(
   question: string,
   context: BookyContext = {},
@@ -213,7 +213,7 @@ export async function askBooky(
   if (/(reserv|claim|qr|check ?out|pick ?up|hold)/.test(intent)) {
     return {
       answer:
-        "Open the book's page and press “Reserve this book”, that creates your claim QR. Find it under My Reservations, show it at the counter, and store staff scan it and hand your copy over.",
+        "Open the book's page and press “Reserve this book”, that creates your claim QR. Find it under My Reservations, show it at the counter, and Bookstore staff scan it and hand your copy over.",
     };
   }
 
@@ -270,14 +270,14 @@ export async function askBooky(
   if (/(staff|team|admin|human|real person)/.test(intent)) {
     return {
       answer:
-        "Flip to the Store team tab up top and say hi, your message lands straight in the staff inbox.",
+        "Flip to the Bookstore team tab up top and say hi, your message lands straight in the admin inbox.",
     };
   }
 
   if (/(what can you do|how can you help|help me|help$|how.*(website|bookcords).*(work|use))/.test(intent)) {
     return {
       answer:
-        "I can search Bookcords, check live stock and restocks, explain reservations and QR claims, and guide you to Saved, Syllabi, History, Profile, or the Store team.",
+        "I can search Bookcords, check live stock and restocks, explain reservations and QR claims, and guide you to Saved, Syllabi, History, Profile, or the Bookstore team.",
     };
   }
 
@@ -298,7 +298,7 @@ export async function askBooky(
   };
 }
 
-/** Customer -> admin message. */
+/** Student -> admin message. */
 export async function sendChatMessage(
   body: string,
 ): Promise<{ error?: string; needsSetup?: boolean }> {
@@ -355,7 +355,7 @@ export async function adminSendChat(formData: FormData): Promise<{
     ? createAdminClient()
     : await createClient();
 
-  // Only reply to an existing customer conversation. This prevents a crafted
+  // Only reply to an existing student conversation. This prevents a crafted
   // action request from turning the inbox into an arbitrary messaging API.
   const { data: conversation, error: conversationError } = await supabase
     .from("chat_messages")
@@ -380,7 +380,7 @@ export async function adminSendChat(formData: FormData): Promise<{
   return {};
 }
 
-/** Poll target for the live librarian inbox. */
+/** Poll target for the live admin inbox. */
 export async function fetchAdminChatState(activeProfileId?: string): Promise<{
   threads: ChatThreadSummary[];
   lines: AdminThreadLine[];

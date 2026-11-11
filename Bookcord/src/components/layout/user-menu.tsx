@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookMarked, History, LayoutDashboard, QrCode, User } from "lucide-react";
+import { BookMarked, History, Info, LayoutDashboard, QrCode, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -67,6 +67,13 @@ export function UserMenu({ profile }: { profile: Profile }) {
           <Link href="/profile" className="flex items-center gap-2">
             <User className="size-4" />
             Profile
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/about" className="flex items-center gap-2">
+            <Info className="size-4" />
+            About Bookcords
           </Link>
         </DropdownMenuItem>
 

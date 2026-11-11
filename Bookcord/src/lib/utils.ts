@@ -16,6 +16,8 @@ export function formatDate(
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
+  const hour24 = date.getHours();
+  const hour12 = hour24 % 12 || 12;
   const parts: Record<string, string> = {
     MMM: months[date.getMonth()] ?? "",
     MMMM: date.toLocaleDateString("en-US", { month: "long" }),
@@ -23,8 +25,15 @@ export function formatDate(
     dd: String(date.getDate()).padStart(2, "0"),
     d: String(date.getDate()),
     yyyy: String(date.getFullYear()),
+    hh: String(hour12).padStart(2, "0"),
+    h: String(hour12),
+    mm: String(date.getMinutes()).padStart(2, "0"),
+    a: hour24 >= 12 ? "PM" : "AM",
   };
-  return pattern.replace(/MMMM|MMM|MM|yyyy|dd|d/g, (key) => parts[key] ?? key);
+  return pattern.replace(
+    /MMMM|yyyy|MMM|MM|dd|hh|mm|d|h|a/g,
+    (key) => parts[key] ?? key,
+  );
 }
 
 export function absoluteUrl(path = "") {

@@ -21,7 +21,7 @@ export default async function LoginPage({ searchParams }: PageProps) {
     redirect("/admin");
   }
 
-  // A customer may also be signed in on this browser. Keep the dedicated
+  // A student may also be signed in on this browser. Keep the dedicated
   // admin entrance accessible so the passcode can elevate this app session.
   if (!adminDesk) {
     const session = await getSessionProfile();
@@ -36,7 +36,7 @@ export default async function LoginPage({ searchParams }: PageProps) {
       mobileMascot={!adminDesk}
       actionLink={
         adminDesk
-          ? { href: "/login", label: "Customer sign in" }
+          ? { href: "/login", label: "Student sign in" }
           : { href: "/signup", label: "Create account" }
       }
     >

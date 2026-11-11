@@ -2,6 +2,7 @@ import "server-only";
 
 import { bookRelations, type BookListItem } from "@/lib/data/books";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminDataClient } from "@/lib/supabase/admin-data";
 import type {
   Book,
   Profile,
@@ -23,7 +24,7 @@ export type ReservationListItem = Reservation & {
   books: ReservationBookRef | null;
 };
 
-/** Full row for the librarian claim desk, resolved from a scanned QR code. */
+/** Full row for the admin claim desk, resolved from a scanned QR code. */
 export type ReservationClaimDetail = Reservation & {
   books: ReservationBookRef | null;
   profile: Pick<Profile, "id" | "full_name" | "student_id" | "email"> | null;
@@ -106,7 +107,8 @@ export async function getReservations(profile: Profile) {
 
 /** Claim-desk lookup: the exact reservation behind a scanned QR code. */
 export async function getReservationByCode(code: string) {
-  const supabase = await createClient();
+  const supabase = await createAdminDataClient();
+  const normalized = code.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
   const { data, error } = await supabase
     .from("reservations")
     .select(
@@ -120,7 +122,7 @@ export async function getReservationByCode(code: string) {
         profile:profiles!reservations_profile_id_fkey(id, full_name, student_id, email)
       `,
     )
-    .eq("code", code.trim().toUpperCase())
+    .eq("code", normalized)
     .limit(1)
     .overrideTypes<ReservationClaimDetail[], { merge: false }>();
 

@@ -39,6 +39,9 @@ export default async function AdminLayout({
   } catch {
     // fall through with the empty state
   }
+  const chatUnreadCount = notifications.filter(
+    (item) => item.type === "BOOKY_CHAT" && !item.read_at,
+  ).length;
 
   return (
     <div className="flex min-h-screen w-full overflow-x-clip bg-paper dark:bg-background">
@@ -49,7 +52,7 @@ export default async function AdminLayout({
           <span className="font-display text-2xl font-bold tracking-tight">Bookcords</span>
         </Link>
         <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
-          <AdminNav />
+          <AdminNav chatUnreadCount={chatUnreadCount} />
         </div>
 
         <div className="flex flex-col gap-4 pt-5">

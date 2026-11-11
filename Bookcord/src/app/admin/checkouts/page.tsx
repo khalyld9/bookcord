@@ -13,7 +13,7 @@ import {
 import { getAdminCheckouts } from "@/lib/data/admin";
 
 export const metadata: Metadata = {
-  title: "Pickups, Store Dashboard",
+  title: "Pickups, Bookstore Dashboard",
 };
 
 function formatDate(value: string | null) {
@@ -34,10 +34,10 @@ export default async function AdminCheckoutsPage() {
     <div className="flex flex-col gap-4 sm:gap-6">
       <header>
         <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
-          Customer pickups
+          Student pickups
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Reserved copies collected by customers and their current status.
+          Reserved copies collected by students and their current status.
         </p>
       </header>
 
@@ -46,7 +46,7 @@ export default async function AdminCheckoutsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Customer</TableHead>
+                <TableHead>Student</TableHead>
                 <TableHead>Title</TableHead>
                 <TableHead className="text-center">Copies</TableHead>
                 <TableHead>Checked out</TableHead>
@@ -73,7 +73,7 @@ export default async function AdminCheckoutsPage() {
                     <TableRow key={checkout.id}>
                       <TableCell>
                         <p className="text-sm font-medium">
-                          {checkout.profile?.full_name ?? "Unknown customer"}
+                          {checkout.profile?.full_name ?? "Unknown student"}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {checkout.profile?.student_id ?? ""}

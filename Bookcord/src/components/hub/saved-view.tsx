@@ -25,7 +25,7 @@ export function SavedView({
       <Reveal>
         <HubHeader
           icon={Bookmark}
-          eyebrow="Customer account, Wishlist"
+          eyebrow="Student account, Wishlist"
           title="Saved for later"
           description="Titles you parked while deciding. Check availability here and reserve one when a copy frees up."
           image="/banners/saved-2.png"

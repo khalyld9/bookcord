@@ -44,10 +44,12 @@ function NavRow({
   link,
   active,
   remap,
+  badge,
 }: {
   link: NavItem;
   active: boolean;
   remap?: Record<string, string>;
+  badge?: number;
 }) {
   const Icon = link.icon;
 
@@ -75,6 +77,19 @@ function NavRow({
         aria-hidden="true"
       />
       <span className="relative z-10">{link.label}</span>
+      {badge ? (
+        <span
+          className={cn(
+            "relative z-10 ml-auto grid min-w-5 place-items-center rounded-full px-1 font-mono text-[10px] font-bold",
+            active
+              ? "bg-primary-foreground text-primary"
+              : "bg-ochre text-[#2a1512]",
+          )}
+          aria-label={`${badge} unread`}
+        >
+          {badge > 9 ? "9+" : badge}
+        </span>
+      ) : null}
     </Link>
   );
 }
@@ -82,15 +97,17 @@ function NavRow({
 export function AdminNav({
   activeHref,
   remap,
+  chatUnreadCount = 0,
 }: {
   activeHref?: string;
   remap?: Record<string, string>;
+  chatUnreadCount?: number;
 }) {
   const routePathname = usePathname();
   const pathname = activeHref ?? routePathname;
 
   return (
-    <nav className="flex flex-col gap-1" aria-label="Store management navigation">
+    <nav className="flex flex-col gap-1" aria-label="Bookstore management navigation">
       <p className="px-4 pb-1 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         Manage
       </p>
@@ -101,7 +118,13 @@ export function AdminNav({
         Desk
       </p>
       {deskLinks.map((link) => (
-        <NavRow key={link.href} link={link} active={isActive(link.href, pathname)} remap={remap} />
+        <NavRow
+          key={link.href}
+          link={link}
+          active={isActive(link.href, pathname)}
+          remap={remap}
+          badge={link.href === "/admin/chat" ? chatUnreadCount : 0}
+        />
       ))}
     </nav>
   );

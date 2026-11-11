@@ -8,7 +8,7 @@ import { reserveBook } from "@/lib/actions/reservations";
 
 /**
  * Primary checkout action: reserve the title, then show the QR that the
- * librarian scans. Success is reflected by the server revalidating, the
+ * admin scans. Success is reflected by the server revalidating, the
  * book page swaps this button for the live reservation state.
  */
 export function ReserveBookButton({

@@ -85,7 +85,7 @@ const DEFAULT_TIP: Tip = {
   mode: "exact",
   pose: pose10,
   alt: "Booky cheering between two shelves of books",
-  text: "Hi, I'm Booky! Press me to ask about restocks or message the store team.",
+  text: "Hi, I'm Booky! Press me to ask about restocks or message the Bookstore team.",
 };
 
 function tipFor(pathname: string): Tip {
@@ -149,11 +149,13 @@ export function MascotTip({
   pathnameOverride,
   onPress,
   open = false,
+  unreadCount = 0,
 }: {
   pathnameOverride?: string;
   /** Makes Booky pressable to open the chat panel. */
   onPress?: () => void;
   open?: boolean;
+  unreadCount?: number;
 }) {
   const routePathname = usePathname();
   const pathname = pathnameOverride ?? routePathname;
@@ -178,7 +180,9 @@ export function MascotTip({
         aria-expanded={open}
         aria-label={open ? "Close the chat with Booky" : "Press Booky to open the chat"}
         title="Chat with Booky"
-        className="relative h-24 w-full cursor-pointer transition-transform duration-200 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ochre xl:h-28"
+        className={`relative h-24 w-full cursor-pointer rounded-2xl transition-all duration-200 hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ochre xl:h-28 ${
+          unreadCount > 0 ? "ring-2 ring-ochre ring-offset-4 ring-offset-background" : ""
+        }`}
       >
         <span className="sr-only">{tip.alt}</span>
         <AnimatePresence initial={false} mode="popLayout">
@@ -197,6 +201,11 @@ export function MascotTip({
             />
           </motion.span>
         </AnimatePresence>
+        {unreadCount > 0 ? (
+          <span className="absolute right-1 top-1 z-20 grid min-w-6 place-items-center rounded-full bg-ochre px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#2a1512] shadow-sm">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        ) : null}
       </button>
     </div>
   );

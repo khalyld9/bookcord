@@ -67,3 +67,17 @@ export async function markAllNotificationsRead(): Promise<NotificationResult> {
 
   return error ? { error: error.message } : { success: true };
 }
+
+/** Clears the Booky launcher highlight once a student opens the team thread. */
+export async function markBookyChatNotificationsRead(): Promise<NotificationResult> {
+  const { profile } = await requireUser();
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("notifications")
+    .update({ read_at: new Date().toISOString() })
+    .eq("profile_id", profile.id)
+    .eq("type", "BOOKY_CHAT")
+    .is("read_at", null);
+
+  return error ? { error: error.message } : { success: true };
+}

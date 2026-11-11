@@ -8,7 +8,7 @@ import { requireAdmin } from "@/lib/auth";
 import { getAdminChatState, isMissingSchemaObject } from "@/lib/data/booky";
 
 export const metadata: Metadata = {
-  title: "Store team inbox",
+  title: "Bookstore team inbox",
 };
 
 type PageProps = {
@@ -42,10 +42,10 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
-            Store team inbox
+            Bookstore team inbox
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Messages customers sent Booky on your behalf. New ones appear live.
+            Messages students sent through Booky. New ones appear live.
           </p>
         </div>
         <Link
@@ -57,7 +57,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
             strokeWidth={1.75}
             aria-hidden="true"
           />
-          Back to the store
+          Back to the bookstore
         </Link>
       </header>
 
@@ -73,7 +73,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
             </code>{" "}
             in <code className="font-mono text-xs">.env.local</code>, then
             restart the preview. This lets the verified six-digit admin session
-            read customer threads and send replies without exposing the key to
+            read student threads and send replies without exposing the key to
             the browser.
           </p>
         </div>
@@ -93,7 +93,7 @@ export default async function AdminChatPage({ searchParams }: PageProps) {
       ) : state.threads.length === 0 ? (
         <EmptyState
           title="No conversations yet"
-          description="When a customer messages the Store team tab, the thread lands here."
+          description="When a student messages the Bookstore team tab, the thread lands here."
         />
       ) : (
         <ChatLive

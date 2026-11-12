@@ -47,6 +47,17 @@
   --espresso-muted: oklch(0.82 0.02 60);
 }
 
+/* On short laptop/desktop windows the full sidebar mascot is intentionally
+   hidden to protect the navigation. Keep chat reachable with its compact
+   launcher instead of hiding both versions at once. */
+@media (min-width: 64rem) and (max-height: 900px) {
+  .booky-short-viewport-fallback {
+    display: grid !important;
+    right: 1rem;
+    bottom: 1rem;
+  }
+}
+
 .dark {
   color-scheme: dark;
 

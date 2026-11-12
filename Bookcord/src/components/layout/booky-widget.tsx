@@ -16,12 +16,15 @@ export function BookyWidget({
   pathnameOverride,
   demo = false,
   compact = false,
+  shortViewportFallback = false,
   unreadCount = 0,
 }: {
   pathnameOverride?: string;
   demo?: boolean;
   /** Small floating launcher used when the desktop sidebar is hidden. */
   compact?: boolean;
+  /** Reappears on wide but short laptop screens when the full mascot is hidden. */
+  shortViewportFallback?: boolean;
   /** Unread replies from the Bookstore team. */
   unreadCount?: number;
 }) {
@@ -53,6 +56,8 @@ export function BookyWidget({
           aria-label={open ? "Close the chat with Booky" : "Chat with Booky"}
           title="Chat with Booky"
           className={`fixed bottom-[calc(4.25rem+env(safe-area-inset-bottom))] right-2.5 z-[60] grid size-12 place-items-center rounded-2xl bg-white shadow-[0_16px_36px_-16px_rgba(23,12,16,0.55)] ring-1 ring-black/10 transition-[opacity,transform] duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ochre dark:ring-white/15 sm:bottom-[calc(4.75rem+env(safe-area-inset-bottom))] sm:right-3 sm:size-14 lg:hidden ${
+            shortViewportFallback ? "booky-short-viewport-fallback" : ""
+          } ${
             open ? "pointer-events-none scale-90 opacity-0" : "opacity-100"
           } ${unread > 0 ? "ring-2 ring-ochre shadow-[0_0_0_6px_rgba(213,146,49,0.14),0_16px_36px_-16px_rgba(23,12,16,0.55)]" : ""}`}
         >

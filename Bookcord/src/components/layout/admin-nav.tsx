@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { motion } from "framer-motion";
 import {
   BookOpenCheck,
@@ -13,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { fetchAdminUnreadChatCount } from "@/lib/actions/booky";
 
 type NavItem = {
   href: string;
@@ -105,6 +107,32 @@ export function AdminNav({
 }) {
   const routePathname = usePathname();
   const pathname = activeHref ?? routePathname;
+  const [liveChatUnread, setLiveChatUnread] = useState(chatUnreadCount);
+  const [, startTransition] = useTransition();
+
+  const [seenChatUnread, setSeenChatUnread] = useState(chatUnreadCount);
+  if (seenChatUnread !== chatUnreadCount) {
+    setSeenChatUnread(chatUnreadCount);
+    setLiveChatUnread(chatUnreadCount);
+  }
+
+  useEffect(() => {
+    const refresh = () => {
+      if (
+        document.visibilityState !== "visible" ||
+        !window.matchMedia("(min-width: 1024px)").matches
+      ) return;
+      startTransition(async () => {
+        setLiveChatUnread(await fetchAdminUnreadChatCount());
+      });
+    };
+    const timer = window.setInterval(refresh, 8_000);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, [startTransition]);
 
   return (
     <nav className="flex flex-col gap-1" aria-label="Bookstore management navigation">
@@ -123,7 +151,7 @@ export function AdminNav({
           link={link}
           active={isActive(link.href, pathname)}
           remap={remap}
-          badge={link.href === "/admin/chat" ? chatUnreadCount : 0}
+          badge={link.href === "/admin/chat" ? liveChatUnread : 0}
         />
       ))}
     </nav>

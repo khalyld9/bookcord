@@ -398,3 +398,16 @@ export async function fetchAdminChatState(activeProfileId?: string): Promise<{
     throw error;
   }
 }
+
+/** Live count of student conversations that still need an admin reply. */
+export async function fetchAdminUnreadChatCount(): Promise<number> {
+  await requireAdmin();
+
+  try {
+    const { threads } = await getAdminChatState();
+    return threads.filter((thread) => thread.lastSender === "STUDENT").length;
+  } catch (error) {
+    if (isMissingSchemaObject(error)) return 0;
+    throw error;
+  }
+}

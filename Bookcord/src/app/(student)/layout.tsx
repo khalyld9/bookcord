@@ -47,7 +47,7 @@ export default async function StudentLayout({
         </div>
 
         <div className="flex flex-col gap-4 pt-5">
-          <div className="relative z-10 [@media(max-height:720px)]:hidden">
+          <div className="relative z-10 [@media(max-height:900px)]:hidden">
             <BookyWidget unreadCount={bookyUnreadCount} />
           </div>
           <ThemeSwitcher />
@@ -61,8 +61,17 @@ export default async function StudentLayout({
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col p-0 sm:p-4 lg:p-6">
+        <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border/70 bg-paper/95 px-4 py-3 backdrop-blur dark:bg-background/95 lg:hidden">
+          <Link href="/books" className="flex items-center gap-2">
+            <BrandMark />
+            <span className="font-display text-lg font-bold tracking-tight">Bookcords</span>
+          </Link>
+          <div className="rounded-xl border border-border bg-card p-0.5 shadow-sm">
+            <UserMenu profile={profile} />
+          </div>
+        </header>
         <BottomNav />
-        <BookyWidget compact unreadCount={bookyUnreadCount} />
+        <BookyWidget compact shortViewportFallback unreadCount={bookyUnreadCount} />
         <main className="mx-auto w-full max-w-7xl flex-1 overflow-x-hidden bg-card p-3 pb-[calc(6.25rem+env(safe-area-inset-bottom))] pt-4 sm:rounded-[28px] sm:p-6 sm:pb-[calc(7rem+env(safe-area-inset-bottom))] sm:shadow-shelf lg:p-8 lg:pb-8">
           {children}
         </main>

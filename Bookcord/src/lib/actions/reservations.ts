@@ -14,7 +14,11 @@ const UUID_PATTERN =
 /** Claim codes are 8 uppercase hex characters; allow a little slack. */
 const CODE_PATTERN = /^[A-Z0-9]{6,12}$/;
 
-export type ReservationResult = { success?: boolean; error?: string };
+export type ReservationResult = {
+  success?: boolean;
+  error?: string;
+  warning?: string;
+};
 
 const SETUP_ERROR =
   "Reservations are not set up yet. Ask the store administrator to run migration 0005.";
@@ -144,18 +148,26 @@ export async function claimReservation(code: string): Promise<ReservationResult>
   if (error) return { error: error.message };
 
   const recipient = reservation.profile;
+  let emailWarning: string | undefined;
   if (recipient?.email) {
     const title = reservation.books?.title ?? "Your reserved book";
     const name = recipient.full_name || "Student";
-    await sendTransactionalEmail({
+    const emailResult = await sendTransactionalEmail({
       to: recipient.email,
       subject: `${title} was claimed and checked out`,
       text: `Hi ${name}, your reservation for ${title} was marked as claimed and checked out. Claim code: ${reservation.code}.`,
       html: `<p>Hi ${escapeEmailHtml(name)},</p><p>Your reservation for <strong>${escapeEmailHtml(title)}</strong> was marked as claimed and checked out.</p><p>Claim code: <strong>${escapeEmailHtml(reservation.code)}</strong></p>`,
       idempotencyKey: `reservation-claimed/${reservation.id}`,
     });
+    if (!emailResult.sent) {
+      emailWarning =
+        "Checkout completed, but the confirmation email was not delivered. Check the transactional email settings.";
+    }
+  } else {
+    emailWarning =
+      "Checkout completed, but this student account does not have an email address.";
   }
 
   revalidatePath("/admin/claim");
-  return { success: true };
+  return { success: true, warning: emailWarning };
 }

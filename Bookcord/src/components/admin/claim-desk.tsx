@@ -192,6 +192,12 @@ export function ClaimDesk({
               Reservation claimed, hand the copy over and you are done.
             </p>
           ) : null}
+
+          {state.warning ? (
+            <p className="rounded-xl border border-ochre/35 bg-ochre/10 px-3 py-2 text-sm text-foreground">
+              {state.warning}
+            </p>
+          ) : null}
         </div>
       ) : null}
     </div>

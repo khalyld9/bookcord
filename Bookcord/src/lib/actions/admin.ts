@@ -37,6 +37,63 @@ function revalidateAll() {
   revalidatePath("/books", "layout");
 }
 
+async function getPendingRestockRecipients(
+  supabase: Awaited<ReturnType<typeof createAdminDataClient>>,
+  bookId: string,
+) {
+  const [{ data: book }, { data: requests }] = await Promise.all([
+    supabase.from("books").select("title").eq("id", bookId).maybeSingle(),
+    supabase
+      .from("restock_requests")
+      .select("id, profile_id")
+      .eq("book_id", bookId)
+      .eq("status", "PENDING"),
+  ]);
+  const profileIds = [
+    ...new Set((requests ?? []).map((request) => request.profile_id)),
+  ];
+  const { data: profiles } = profileIds.length
+    ? await supabase
+        .from("profiles")
+        .select("id, full_name, email")
+        .in("id", profileIds)
+    : { data: [] };
+  const profilesById = new Map(
+    (profiles ?? []).map((profile) => [profile.id, profile]),
+  );
+
+  return {
+    title: book?.title ?? "A requested title",
+    recipients: (requests ?? []).flatMap((request) => {
+      const profile = profilesById.get(request.profile_id);
+      return profile ? [{ ...profile, requestId: request.id }] : [];
+    }),
+  };
+}
+
+async function emailPendingRestockRecipients(
+  title: string,
+  recipients: Awaited<ReturnType<typeof getPendingRestockRecipients>>["recipients"],
+) {
+  const results = await Promise.all(
+    recipients
+      .filter((recipient) => recipient.email)
+      .map((recipient) =>
+        sendTransactionalEmail({
+          to: recipient.email!,
+          subject: `${title} is back in stock`,
+          text: `Hi ${recipient.full_name}, ${title} is available again. Open Bookcords to reserve your copy.`,
+          html: `<p>Hi ${escapeEmailHtml(recipient.full_name)},</p><p><strong>${escapeEmailHtml(title)}</strong> is available again.</p><p>Open Bookcords to reserve your copy.</p>`,
+          idempotencyKey: `restock-resolved/${recipient.requestId}`,
+        }),
+      ),
+  );
+  return {
+    failed: results.filter((result) => !result.sent).length,
+    missingEmail: recipients.filter((recipient) => !recipient.email).length,
+  };
+}
+
 async function uploadBookCover(
   supabase: Awaited<ReturnType<typeof createAdminDataClient>>,
   file: File,
@@ -202,18 +259,7 @@ export async function restockTitle(
   }
 
   const supabase = await createAdminDataClient();
-  const [{ data: book }, { data: pendingRequests }] = await Promise.all([
-    supabase.from("books").select("title").eq("id", bookId).maybeSingle(),
-    supabase
-      .from("restock_requests")
-      .select("profile_id")
-      .eq("book_id", bookId)
-      .eq("status", "PENDING"),
-  ]);
-  const profileIds = [...new Set((pendingRequests ?? []).map((item) => item.profile_id))];
-  const { data: recipients } = profileIds.length
-    ? await supabase.from("profiles").select("id, full_name, email").in("id", profileIds)
-    : { data: [] };
+  const pending = await getPendingRestockRecipients(supabase, bookId);
   const { error } = await supabase.rpc("restock_book", {
     p_book_id: bookId,
     p_quantity: quantity,
@@ -221,19 +267,16 @@ export async function restockTitle(
   });
 
   if (error) return { error: error.message };
-  const title = book?.title ?? "A requested title";
-  await Promise.all(
-    (recipients ?? []).filter((recipient) => recipient.email).map((recipient) =>
-      sendTransactionalEmail({
-        to: recipient.email,
-        subject: `${title} is back in stock`,
-        text: `Hi ${recipient.full_name}, ${title} is back on the shelf. Open Bookcords to reserve your copy.`,
-        html: `<p>Hi ${escapeEmailHtml(recipient.full_name)},</p><p><strong>${escapeEmailHtml(title)}</strong> is back on the shelf.</p><p>Open Bookcords to reserve your copy.</p>`,
-        idempotencyKey: `restock/${bookId}/${recipient.id}`,
-      }),
-    ),
+  const delivery = await emailPendingRestockRecipients(
+    pending.title,
+    pending.recipients,
   );
   revalidateAll();
+  if (delivery.failed || delivery.missingEmail) {
+    return {
+      message: `Added ${quantity} ${quantity === 1 ? "copy" : "copies"}, but ${delivery.failed + delivery.missingEmail} restock email could not be delivered.`,
+    };
+  }
   return { message: `Added ${quantity} ${quantity === 1 ? "copy" : "copies"}.` };
 }
 
@@ -254,6 +297,10 @@ export async function adjustTitleStock(
   }
 
   const supabase = await createAdminDataClient();
+  const pending =
+    change > 0
+      ? await getPendingRestockRecipients(supabase, bookId)
+      : null;
   const { error } = await supabase.rpc("adjust_inventory", {
     p_book_id: bookId,
     p_quantity_change: change,
@@ -269,6 +316,18 @@ export async function adjustTitleStock(
       };
     }
     return { error: error.message };
+  }
+  if (pending) {
+    const delivery = await emailPendingRestockRecipients(
+      pending.title,
+      pending.recipients,
+    );
+    if (delivery.failed || delivery.missingEmail) {
+      revalidateAll();
+      return {
+        message: `Stock adjusted, but ${delivery.failed + delivery.missingEmail} restock email could not be delivered.`,
+      };
+    }
   }
   revalidateAll();
   return { message: "Stock adjusted." };
@@ -289,7 +348,7 @@ export async function returnCheckout(
   const supabase = await createAdminDataClient();
   const { data: issue, error: readError } = await supabase
     .from("book_issues")
-    .select("id, quantity, returned_quantity")
+    .select("id, book_id, quantity, returned_quantity")
     .eq("id", issueId)
     .single();
 
@@ -301,6 +360,8 @@ export async function returnCheckout(
     return { error: "Every copy on this checkout is already back." };
   }
 
+  const pending = await getPendingRestockRecipients(supabase, issue.book_id);
+
   const { error } = await supabase.rpc("return_book", {
     p_issue_id: issueId,
     p_quantity: remaining,
@@ -308,7 +369,16 @@ export async function returnCheckout(
   });
 
   if (error) return { error: error.message };
+  const delivery = await emailPendingRestockRecipients(
+    pending.title,
+    pending.recipients,
+  );
   revalidateAll();
+  if (delivery.failed || delivery.missingEmail) {
+    return {
+      message: `Checked back in, but ${delivery.failed + delivery.missingEmail} restock email could not be delivered.`,
+    };
+  }
   return { message: "Checked back in." };
 }
 

@@ -47,11 +47,14 @@ export function NotificationBell({
   items,
   unreadCount,
   previewMode = false,
+  compact = false,
 }: {
   items: NotificationListItem[];
   unreadCount: number;
   /** Guest preview: show sample notifications, disable the writes. */
   previewMode?: boolean;
+  /** Icon-only trigger for phone and compact headers. */
+  compact?: boolean;
 }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -108,7 +111,8 @@ export function NotificationBell({
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "flex w-full items-center justify-between gap-2 rounded-lg border border-border bg-muted/60 px-3 py-1.5",
+          "relative flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/60",
+          compact ? "size-9 justify-center p-0" : "w-full px-3 py-1.5",
           "text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           unread > 0 && "text-foreground",
@@ -125,18 +129,23 @@ export function NotificationBell({
           ) : (
             <Bell className="size-4" strokeWidth={1.9} aria-hidden="true" />
           )}
-          Notifications
+          <span className={cn(compact && "sr-only")}>Notifications</span>
         </span>
         {unread > 0 ? (
-          <span className="grid min-w-5 place-items-center rounded-full bg-espresso px-1 font-mono text-[11px] font-bold text-espresso-foreground">
+          <span
+            className={cn(
+              "grid min-w-5 place-items-center rounded-full bg-espresso px-1 font-mono text-[11px] font-bold text-espresso-foreground",
+              compact && "absolute -right-1.5 -top-1.5 min-w-4 px-1 text-[9px]",
+            )}
+          >
             {unread > 9 ? "9+" : unread}
           </span>
         ) : null}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align="start"
-        side="top"
+        align={compact ? "end" : "start"}
+        side={compact ? "bottom" : "top"}
         className="w-[min(20rem,calc(100vw-2rem))] overflow-hidden p-0"
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">

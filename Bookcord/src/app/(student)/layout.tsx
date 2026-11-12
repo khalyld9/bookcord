@@ -67,6 +67,11 @@ export default async function StudentLayout({
             <span className="font-display text-lg font-bold tracking-tight">Bookcords</span>
           </Link>
           <div className="flex items-center gap-2">
+            <NotificationBell
+              compact
+              items={notifications}
+              unreadCount={unreadCount}
+            />
             <div className="rounded-xl border border-border bg-card p-0.5 shadow-sm">
               <UserMenu profile={profile} />
             </div>

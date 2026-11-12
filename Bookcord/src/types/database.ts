@@ -417,6 +417,10 @@ export type Database = {
     };
     Views: Record<string, never>;
     Functions: {
+      archive_book: {
+        Args: { p_book_id: string };
+        Returns: string;
+      };
       restock_book: {
         Args: {
           p_book_id: string;

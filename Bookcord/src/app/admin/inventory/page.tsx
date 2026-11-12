@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { AddBookForm } from "@/components/admin/add-book-form";
 import { BookCoverManager } from "@/components/admin/book-cover-manager";
+import { DeleteBookButton } from "@/components/admin/delete-book-button";
 import { RestockRequestsPanel } from "@/components/admin/restock-requests-panel";
 import { StockActions } from "@/components/admin/stock-actions";
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +55,7 @@ export default async function AdminInventoryPage() {
                 <TableHead className="text-center">Checked out</TableHead>
                 <TableHead className="text-center">Total</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Stock</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -109,7 +110,10 @@ export default async function AdminInventoryPage() {
                         )}
                       </TableCell>
                       <TableCell className="text-right">
-                        <StockActions bookId={book.id} />
+                        <div className="flex flex-col items-end gap-1">
+                          <StockActions bookId={book.id} />
+                          <DeleteBookButton bookId={book.id} title={book.title} />
+                        </div>
                       </TableCell>
                     </TableRow>
                   );

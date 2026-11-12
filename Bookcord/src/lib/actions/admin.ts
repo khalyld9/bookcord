@@ -172,6 +172,44 @@ export async function updateBookCover(
   return { message: "Book cover updated." };
 }
 
+/** Removes a title from active catalog and inventory while preserving history. */
+export async function deleteBook(
+  _previous: AdminResult | null,
+  formData: FormData,
+): Promise<AdminResult> {
+  await requireAdmin();
+
+  const bookId = String(formData.get("bookId") ?? "");
+  if (!UUID_PATTERN.test(bookId)) {
+    return { error: "That book does not exist." };
+  }
+
+  const supabase = await createAdminDataClient();
+  const { data: book, error: readError } = await supabase
+    .from("books")
+    .select("title, cover_image_url")
+    .eq("id", bookId)
+    .is("archived_at", null)
+    .maybeSingle();
+
+  if (readError || !book) {
+    return { error: "That book does not exist or was already deleted." };
+  }
+
+  const { data: title, error } = await supabase.rpc("archive_book", {
+    p_book_id: bookId,
+  });
+  if (error) return { error: error.message };
+
+  const coverPath = bookCoverPathFromUrl(book.cover_image_url);
+  if (coverPath) {
+    await supabase.storage.from(BOOK_COVERS_BUCKET).remove([coverPath]);
+  }
+
+  revalidateAll();
+  return { message: `${title ?? book.title} deleted from the catalog.` };
+}
+
 /** Row-level reservation ops from the reservations desk. */
 export async function adminReservationAction(
   _previous: AdminResult | null,

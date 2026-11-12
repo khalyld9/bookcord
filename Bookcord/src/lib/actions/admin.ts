@@ -430,7 +430,7 @@ export async function addBook(
   const title = String(formData.get("title") ?? "").trim();
   const authorName = String(formData.get("author") ?? "").trim();
   const isbn = String(formData.get("isbn") ?? "").trim() || null;
-  const subjectId = String(formData.get("subjectId") ?? "") || null;
+  const subjectName = String(formData.get("subjectName") ?? "").trim();
   const semesterId = String(formData.get("semesterId") ?? "") || null;
   const strandId = String(formData.get("strandId") ?? "") || null;
   const yearLevelId = String(formData.get("yearLevelId") ?? "") || null;
@@ -440,6 +440,9 @@ export async function addBook(
 
   if (title.length < 2) return { error: "Give the title a name." };
   if (authorName.length < 2) return { error: "Give the author a name." };
+  if (subjectName.length > 80) {
+    return { error: "Keep the subject name under 80 characters." };
+  }
   if (
     !Number.isInteger(minimumStock) ||
     minimumStock < 0 ||
@@ -450,6 +453,19 @@ export async function addBook(
   }
 
   const supabase = await createAdminDataClient();
+
+  if (semesterId) {
+    const { data: semester } = await supabase
+      .from("semesters")
+      .select("id")
+      .eq("id", semesterId)
+      .in("name", ["1st Semester", "2nd Semester"])
+      .is("archived_at", null)
+      .maybeSingle();
+    if (!semester) {
+      return { error: "Choose either 1st Semester or 2nd Semester." };
+    }
+  }
 
   if (cover instanceof File && cover.size > 0) {
     const coverError = validateBookCover(cover);
@@ -475,6 +491,37 @@ export async function addBook(
       .single();
     if (authorError) return { error: authorError.message };
     authorId = newAuthor.id;
+  }
+
+  // Custom subject names reuse existing rows case-insensitively. If an old
+  // subject was archived, typing it again makes it active for the new title.
+  let subjectId: string | null = null;
+  if (subjectName) {
+    const { data: existingSubject } = await supabase
+      .from("subjects")
+      .select("id, archived_at")
+      .ilike("name", subjectName)
+      .limit(1)
+      .maybeSingle();
+
+    if (existingSubject) {
+      subjectId = existingSubject.id;
+      if (existingSubject.archived_at) {
+        const { error: restoreError } = await supabase
+          .from("subjects")
+          .update({ archived_at: null })
+          .eq("id", subjectId);
+        if (restoreError) return { error: restoreError.message };
+      }
+    } else {
+      const { data: newSubject, error: subjectError } = await supabase
+        .from("subjects")
+        .insert({ name: subjectName })
+        .select("id")
+        .single();
+      if (subjectError) return { error: subjectError.message };
+      subjectId = newSubject.id;
+    }
   }
 
   const bookId = crypto.randomUUID();

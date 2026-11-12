@@ -25,12 +25,10 @@ export function AddBookForm({
   semesters,
   strands,
   yearLevels,
-  subjects,
 }: {
   semesters: AcademicOptions[];
   strands: AcademicOptions[];
   yearLevels: AcademicOptions[];
-  subjects: AcademicOptions[];
 }) {
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [coverName, setCoverName] = useState("");
@@ -86,18 +84,12 @@ export function AddBookForm({
       </div>
       <div>
         <Label htmlFor="new-subject">Subject</Label>
-        <Select name="subjectId">
-          <SelectTrigger id="new-subject" className="mt-1.5">
-            <SelectValue placeholder="Not set" />
-          </SelectTrigger>
-          <SelectContent>
-            {subjects.map((option) => (
-              <SelectItem key={option.id} value={option.id}>
-                {option.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Input
+          id="new-subject"
+          name="subjectName"
+          placeholder="e.g. Programming"
+          className="mt-1.5"
+        />
       </div>
       <div>
         <Label htmlFor="new-semester">Semester</Label>

@@ -151,7 +151,12 @@ export const ACTIVE_YEAR_LEVELS = ["Grade 11", "Grade 12"];
 export async function getAcademicOptions() {
   const supabase = await createClient();
   const [semesters, strands, yearLevels, subjects, authors] = await Promise.all([
-    supabase.from("semesters").select("*").is("archived_at", null).order("name"),
+    supabase
+      .from("semesters")
+      .select("*")
+      .is("archived_at", null)
+      .in("name", ["1st Semester", "2nd Semester"])
+      .order("name"),
     supabase
       .from("strands")
       .select("*")

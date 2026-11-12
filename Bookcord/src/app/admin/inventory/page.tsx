@@ -135,7 +135,6 @@ export default async function AdminInventoryPage() {
           semesters={options.semesters}
           strands={options.strands}
           yearLevels={options.yearLevels}
-          subjects={options.subjects}
         />
       </section>
     </div>

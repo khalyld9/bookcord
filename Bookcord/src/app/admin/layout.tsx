@@ -90,6 +90,7 @@ export default async function AdminLayout({
             <div className="rounded-xl border border-border bg-card p-0.5 shadow-sm">
               <UserMenu profile={profile} />
             </div>
+            <SignOutButton compact />
           </div>
         </header>
         <BottomNav variant="admin" />

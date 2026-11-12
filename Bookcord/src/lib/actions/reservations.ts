@@ -6,6 +6,7 @@ import { requireAdmin, requireUser } from "@/lib/auth";
 import { getReservationByCode, isMissingTable } from "@/lib/data/hub";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminDataClient } from "@/lib/supabase/admin-data";
+import { escapeEmailHtml, sendTransactionalEmail } from "@/lib/email";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -141,6 +142,19 @@ export async function claimReservation(code: string): Promise<ReservationResult>
     .eq("id", reservation.id);
 
   if (error) return { error: error.message };
+
+  const recipient = reservation.profile;
+  if (recipient?.email) {
+    const title = reservation.books?.title ?? "Your reserved book";
+    const name = recipient.full_name || "Student";
+    await sendTransactionalEmail({
+      to: recipient.email,
+      subject: `${title} was claimed and checked out`,
+      text: `Hi ${name}, your reservation for ${title} was marked as claimed and checked out. Claim code: ${reservation.code}.`,
+      html: `<p>Hi ${escapeEmailHtml(name)},</p><p>Your reservation for <strong>${escapeEmailHtml(title)}</strong> was marked as claimed and checked out.</p><p>Claim code: <strong>${escapeEmailHtml(reservation.code)}</strong></p>`,
+      idempotencyKey: `reservation-claimed/${reservation.id}`,
+    });
+  }
 
   revalidatePath("/admin/claim");
   return { success: true };

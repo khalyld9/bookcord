@@ -66,8 +66,11 @@ export default async function StudentLayout({
             <BrandMark />
             <span className="font-display text-lg font-bold tracking-tight">Bookcords</span>
           </Link>
-          <div className="rounded-xl border border-border bg-card p-0.5 shadow-sm">
-            <UserMenu profile={profile} />
+          <div className="flex items-center gap-2">
+            <div className="rounded-xl border border-border bg-card p-0.5 shadow-sm">
+              <UserMenu profile={profile} />
+            </div>
+            <SignOutButton compact />
           </div>
         </header>
         <BottomNav />

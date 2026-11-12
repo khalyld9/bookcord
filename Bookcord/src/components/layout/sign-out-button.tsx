@@ -6,15 +6,21 @@ import { LogOut, LoaderCircle } from "lucide-react";
 import { signOut } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
 
-export function SignOutButton() {
+export function SignOutButton({ compact = false }: { compact?: boolean }) {
   const [pending, startTransition] = useTransition();
 
   return (
     <Button
       variant="ghost"
-      size="sm"
+      size={compact ? "icon" : "sm"}
       disabled={pending}
-      className="w-full justify-start gap-2 px-2"
+      className={
+        compact
+          ? "border border-border bg-card text-muted-foreground shadow-sm hover:text-foreground"
+          : "w-full justify-start gap-2 px-2"
+      }
+      aria-label={compact ? "Sign out" : undefined}
+      title={compact ? "Sign out" : undefined}
       onClick={() => startTransition(() => signOut())}
     >
       {pending ? (
@@ -22,7 +28,7 @@ export function SignOutButton() {
       ) : (
         <LogOut className="size-4" />
       )}
-      Sign out
+      <span className={compact ? "sr-only" : undefined}>Sign out</span>
     </Button>
   );
 }
